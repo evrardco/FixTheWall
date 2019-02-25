@@ -12,7 +12,6 @@ import com.fixthewall.game.Game;
 public class GameScreen implements Screen {
     private final Game game;
     private SpriteBatch batch;
-    private Texture img;
     private Texture imgWall;
     private Texture imgFond;
     private BitmapFont font;
@@ -20,7 +19,6 @@ public class GameScreen implements Screen {
 
     public GameScreen(final Game game) {
         batch = new SpriteBatch();
-        img = new Texture("badlogic.jpg");
         imgWall = new Texture("theWall.png");
         imgFond = new Texture("fondWall.png");
         this.game = game;
@@ -48,7 +46,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose () {
         batch.dispose();
-        img.dispose();
         imgWall.dispose();
         imgWall.dispose();
     }
