@@ -21,7 +21,6 @@ import java.util.ArrayList;
 public class StartScreen implements Screen {
     private Stage stage;
     private SpriteBatch batch;
-    private Texture img;
     private Texture imgWall;
     private Texture imgFond;
 
@@ -29,7 +28,6 @@ public class StartScreen implements Screen {
     public StartScreen(final Game game){
 
         batch = new SpriteBatch();
-        img = new Texture("badlogic.jpg");
         imgWall = new Texture("theWall.png");
         imgFond = new Texture("fondWall.png");
         stage = new Stage();
@@ -50,8 +48,8 @@ public class StartScreen implements Screen {
 
         //setup Button
         Button playButton = new TextButton("Start", style);
-        float x = Gdx.graphics.getWidth()/2;
-        float y = Gdx.graphics.getHeight()/2;
+        float x = Gdx.graphics.getWidth()/2f;
+        float y = Gdx.graphics.getHeight()/2f;
         x = x - playButton.getWidth()/2;
         y = y - playButton.getHeight()/2;
 
@@ -110,10 +108,8 @@ public class StartScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-
         batch.dispose();
-        img.dispose();
         imgWall.dispose();
-        imgWall.dispose();
+        imgFond.dispose();
     }
 }
