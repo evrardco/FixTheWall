@@ -25,6 +25,7 @@ public class StartScreen implements Screen {
     private Texture imgWall;
     private Texture imgFond;
 
+
     public StartScreen(final Game game){
 
         batch = new SpriteBatch();
@@ -40,7 +41,7 @@ public class StartScreen implements Screen {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 120;
         BitmapFont font12 = generator.generateFont(parameter); // font size 12 pixels
-        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+         // don't forget to dispose to avoid memory leaks!
 
         //create button style
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
