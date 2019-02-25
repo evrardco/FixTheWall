@@ -2,6 +2,7 @@ package com.fixthewall.game;
 
 import android.os.Bundle;
 
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.fixthewall.game.Game;
