@@ -23,11 +23,11 @@ public class WallLogic {
         return health;
     }
 
-    public void setHealth(float health) {
+    public void setHealth(int health) {
         this.health = health;
     }
 
-    public float getMaxHealth() {
+    public int getMaxHealth() {
         return maxHealth;
     }
 

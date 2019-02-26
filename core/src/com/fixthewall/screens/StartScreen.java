@@ -58,6 +58,7 @@ public class StartScreen implements Screen {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
+                dispose();
                 game.setScreen(new GameScreen(game));
             }
         });
