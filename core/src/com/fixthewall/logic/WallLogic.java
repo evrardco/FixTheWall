@@ -1,9 +1,14 @@
 package com.fixthewall.logic;
 
 public class WallLogic {
-    private int health;
-    private int maxHealth;
-    private int bricks;
+    private static int health = 50;
+    private static int maxHealth;
+    private static int bricks;
+
+    public static boolean doLogic() {
+        health--;
+        return health == 0;
+    }
 
     public int getHealth() {
         return health;
