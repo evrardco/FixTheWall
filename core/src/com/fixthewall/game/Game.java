@@ -9,8 +9,8 @@ public class Game extends com.badlogic.gdx.Game {
     public WallLogic wallLogic;
 	@Override
 	public void create () {
-	    WallLogic.getSingleInstance().init(100.0f);
-        BadGuysLogic.getSingleInstance().init(0.016f, 10.0f);
+	    WallLogic.getSingleInstance().init(100.5f);
+        BadGuysLogic.getSingleInstance().init(0.016f, 1.0f);
 		setScreen(new StartScreen(this));
 
 

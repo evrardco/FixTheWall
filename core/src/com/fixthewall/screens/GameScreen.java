@@ -7,10 +7,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fixthewall.game.Game;
@@ -25,6 +28,7 @@ public class GameScreen implements Screen {
     private Texture imgWall;
     private Texture imgFond;
     private BitmapFont font;
+    private BitmapFont fontUps;
     private int healthIncrement;
     private int bricksIncrement;
     private boolean end;
@@ -46,8 +50,26 @@ public class GameScreen implements Screen {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 30;
         font = generator.generateFont(parameter); // font size 12 pixels
+        parameter.size = 60;
+        fontUps = generator.generateFont(parameter);
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
+        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+        style.font = fontUps;
+        Button upsButton = new TextButton("Upgrades", style);
+        float x = 0.95f*Gdx.graphics.getWidth() - upsButton.getWidth();
+        float y = 0.95f*Gdx.graphics.getHeight() - upsButton.getHeight();
+        upsButton.setPosition(x, y);
+
+        upsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                //  dispose();
+                //TODO Ecran upgrades
+                game.setScreen(new UpgradeScreen(game));
+            }
+        });
+        stage.addActor(upsButton);
         //create a image button
         Button wallButton = new ImageButton(new TextureRegionDrawable(imgWall));
         wallButton.setPosition(0, 300);
@@ -94,6 +116,9 @@ public class GameScreen implements Screen {
             dispose();
             game.setScreen(new EndScreen(game));
         }
+
+        stage.act();
+        stage.draw();
     }
 
     @Override
