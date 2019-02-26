@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fixthewall.game.Game;
+import com.fixthewall.logic.BadGuysLogic;
+import com.fixthewall.logic.WallLogic;
 
 public class GameScreen implements Screen {
     private final Game game;
@@ -50,15 +52,15 @@ public class GameScreen implements Screen {
         wallButton.addListener( new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
-                int maxHealth = game.wallLogic.getMaxHealth();
-                int incrementedHealth = game.wallLogic.getHealth()+healthIncrement;
+                float maxHealth = WallLogic.getSingleInstance().getMaxHealth();
+                float incrementedHealth = WallLogic.getSingleInstance().getHealth()+healthIncrement;
                 if(incrementedHealth <= maxHealth){
-                    game.wallLogic.setHealth(incrementedHealth);
+                    WallLogic.getSingleInstance().setHealth(incrementedHealth);
                 }
                 else{
-                    game.wallLogic.setHealth(maxHealth);
+                    WallLogic.getSingleInstance().setHealth(maxHealth);
                 }
-                game.wallLogic.setBricks(game.wallLogic.getBricks()+bricksIncrement);
+                WallLogic.getSingleInstance().setBricks(WallLogic.getSingleInstance().getBricks()+bricksIncrement);
             }
         });
         //Add button to the stage
@@ -70,13 +72,18 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta) {
+        //logic update
+        BadGuysLogic.getSingleInstance().doDamage();
+
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         batch.draw(imgFond, 0, 0);
         batch.draw(imgWall, 0, 300);
-        font.draw(batch, "Bricks: "+game.wallLogic.getBricks(), Gdx.graphics.getWidth()/2f,
+        font.draw(batch, "Bricks: "+WallLogic.getSingleInstance().getBricks(), Gdx.graphics.getWidth()/2f,
                 (float) (Gdx.graphics.getHeight()*0.9));
+        font.draw(batch, "Health: "+(int)WallLogic.getSingleInstance().getHealth()+"/"+(int)WallLogic.getSingleInstance().getMaxHealth(),
+                Gdx.graphics.getWidth()/2f, (float) (Gdx.graphics.getHeight()*0.8));
         batch.end();
     }
 

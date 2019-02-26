@@ -1,19 +1,33 @@
 package com.fixthewall.logic;
 
 public class WallLogic {
-    private int health;
-    private int maxHealth;
+    private float health;
+    private float maxHealth;
     private int bricks;
+    private static WallLogic singleInstance = null;
 
-    public int getHealth() {
+    public static WallLogic getSingleInstance(){
+        if(singleInstance == null) singleInstance = new WallLogic();
+        return singleInstance;
+    }
+
+    private WallLogic(){}
+
+    public void init(float maxHealth){
+        this.maxHealth = maxHealth;
+        health = maxHealth;
+        bricks = 0;
+    }
+
+    public float getHealth() {
         return health;
     }
 
-    public void setHealth(int health) {
+    public void setHealth(float health) {
         this.health = health;
     }
 
-    public int getMaxHealth() {
+    public float getMaxHealth() {
         return maxHealth;
     }
 
@@ -29,10 +43,5 @@ public class WallLogic {
         this.bricks = bricks;
     }
 
-    public WallLogic(int maxHealth){
-        health = maxHealth;
-        this.maxHealth = maxHealth;
-        bricks = 0;
 
-    }
 }
