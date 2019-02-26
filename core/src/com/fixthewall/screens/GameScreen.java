@@ -81,7 +81,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        end = WallLogic.doLogic();
+        end = WallLogic.getSingleInstance().getHealth() <= 0.0f;
         batch.draw(imgFond, 0, 0);
         batch.draw(imgWall, 0, 300);
         font.draw(batch, "Bricks: "+WallLogic.getSingleInstance().getBricks(), Gdx.graphics.getWidth()/2f,
