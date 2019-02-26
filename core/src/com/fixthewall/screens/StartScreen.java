@@ -2,6 +2,7 @@ package com.fixthewall.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.Timer;
 import com.fixthewall.game.Game;
 
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ public class StartScreen implements Screen {
     private SpriteBatch batch;
     private Texture imgWall;
     private Texture imgFond;
+    private Music startSong;
 
 
     public StartScreen(final Game game){
@@ -31,6 +34,23 @@ public class StartScreen implements Screen {
         imgWall = new Texture("theWall.png");
         imgFond = new Texture("fondWall.png");
         stage = new Stage();
+        startSong = Gdx.audio.newMusic(Gdx.files.internal("music/song4.mp3"));
+
+        //Music de Start
+        startSong.setLooping(true);
+        startSong.play();
+        startSong.setPosition(240f);
+        //Fondu avant transistion
+        /*Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                if(startSong.isPlaying()){
+                    if(startSong.getPosition() >= 249f){
+                        startSong.setVolume(startSong.getVolume() - 0.1f);
+                    }
+                }
+            }
+        }, 10,0.4f,20);*/
 
 
 
@@ -59,6 +79,7 @@ public class StartScreen implements Screen {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
                 game.setScreen(new GameScreen(game));
+                startSong.stop();
             }
         });
         //add button to the scene
@@ -111,5 +132,6 @@ public class StartScreen implements Screen {
         batch.dispose();
         imgWall.dispose();
         imgFond.dispose();
+        startSong.dispose();
     }
 }
