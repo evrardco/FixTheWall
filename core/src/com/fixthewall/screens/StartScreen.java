@@ -85,6 +85,7 @@ public class StartScreen implements Screen {
         //add button to the scene
         stage.addActor(playButton);
         //necessaire pour rendre le bouton clickable
+        generator.dispose();
         Gdx.input.setInputProcessor(stage);
     }
 
