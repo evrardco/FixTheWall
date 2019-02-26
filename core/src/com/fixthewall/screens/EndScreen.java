@@ -57,8 +57,7 @@ public class EndScreen implements Screen {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
-                System.out.print("hahahahahahahahah");
-                WallLogic.getSingleInstance().init(100);
+                WallLogic.getSingleInstance().init(100.5f);
                 game.setScreen(new GameScreen(game));
             }
         });

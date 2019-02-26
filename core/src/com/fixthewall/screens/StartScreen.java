@@ -39,17 +39,6 @@ public class StartScreen implements Screen {
         //Music de Start
         startSong.setLooping(true);
         startSong.play();
-        //Fondu avant transistion
-        /*Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                if(startSong.isPlaying()){
-                    if(startSong.getPosition() >= 249f){
-                        startSong.setVolume(startSong.getVolume() - 0.1f);
-                    }
-                }
-            }
-        }, 10,0.4f,20);*/
 
 
 
