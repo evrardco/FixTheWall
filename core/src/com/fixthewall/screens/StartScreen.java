@@ -25,7 +25,6 @@ public class StartScreen implements Screen {
     private SpriteBatch batch;
     private Texture imgWall;
     private Texture imgFond;
-    private Music startSong;
 
 
     public StartScreen(final Game game){
@@ -34,13 +33,6 @@ public class StartScreen implements Screen {
         imgWall = new Texture("theWall.png");
         imgFond = new Texture("fondWall.png");
         stage = new Stage();
-        startSong = Gdx.audio.newMusic(Gdx.files.internal("music/song4.mp3"));
-
-        //Music de Start
-        startSong.setLooping(true);
-        startSong.play();
-
-
 
         //Import font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/Germania.ttf"));
@@ -68,7 +60,6 @@ public class StartScreen implements Screen {
             public void changed (ChangeEvent event, Actor actor) {
                 dispose();
                 game.setScreen(new GameScreen(game));
-                startSong.stop();
             }
         });
         //add button to the scene
@@ -122,6 +113,5 @@ public class StartScreen implements Screen {
         batch.dispose();
         imgWall.dispose();
         imgFond.dispose();
-        startSong.dispose();
     }
 }

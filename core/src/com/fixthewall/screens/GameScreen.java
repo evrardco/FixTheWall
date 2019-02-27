@@ -31,12 +31,6 @@ public class GameScreen implements Screen {
     private Texture imgFond;
     private BitmapFont font;
     private BitmapFont fontUps;
-    private Music song1;
-    private Music song2;
-    private Music song3;
-    private Music song4;
-    private Music song5;
-    private Music song6;
     private int healthIncrement;
     private int bricksIncrement;
     private boolean end;
@@ -48,14 +42,7 @@ public class GameScreen implements Screen {
         imgWall = new Texture("theWall.png");
         imgFond = new Texture("fondWall.png");
         this.game = game;
-        //music
-        song1 = Gdx.audio.newMusic(Gdx.files.internal("music/song1.mp3"));
-        song2 = Gdx.audio.newMusic(Gdx.files.internal("music/song2.mp3"));
-        song3 = Gdx.audio.newMusic(Gdx.files.internal("music/song3.mp3"));
-        song4 = Gdx.audio.newMusic(Gdx.files.internal("music/song4.mp3"));
-        song5 = Gdx.audio.newMusic(Gdx.files.internal("music/song5.mp3"));
-        song6 = Gdx.audio.newMusic(Gdx.files.internal("music/song6.mp3"));
-        musicRunning();
+
         //incrementation de base.
         healthIncrement=1;
         bricksIncrement=1;
@@ -129,7 +116,6 @@ public class GameScreen implements Screen {
         batch.end();
         if (end)
         {
-            dispose();
             game.setScreen(new EndScreen(game));
         }
 
@@ -145,12 +131,6 @@ public class GameScreen implements Screen {
         font.dispose();
         stage.dispose();
         game.dispose();
-        song1.dispose();
-        song2.dispose();
-        song3.dispose();
-        song4.dispose();
-        song5.dispose();
-        song6.dispose();
     }
     @Override
     public void show() {
@@ -178,91 +158,5 @@ public class GameScreen implements Screen {
     public void hide() {
 
     }
-
-    private void musicRunning(){
-        //Lancement
-        song1.play();
-        //Gestion des transitions
-        song1.setOnCompletionListener(new Music.OnCompletionListener() {
-            @Override
-            public void onCompletion(Music music) {
-                song2.play();
-            }
-        });
-        song2.setOnCompletionListener(new Music.OnCompletionListener() {
-            @Override
-            public void onCompletion(Music music) {
-                song3.play();
-            }
-        });
-        song3.setOnCompletionListener(new Music.OnCompletionListener() {
-            @Override
-            public void onCompletion(Music music) {
-                song4.play();
-            }
-        });
-        song4.setOnCompletionListener(new Music.OnCompletionListener() {
-            @Override
-            public void onCompletion(Music music) {
-                song5.play();
-            }
-        });
-        song5.setOnCompletionListener(new Music.OnCompletionListener() {
-            @Override
-            public void onCompletion(Music music) {
-                song6.play();
-            }
-        });
-        song6.setOnCompletionListener(new Music.OnCompletionListener() {
-            @Override
-            public void onCompletion(Music music) {
-                song1.play();
-            }
-        });
-        //Gestion des fondus audio
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                if(song1.isPlaying()){
-                    if(song1.getPosition() >= 215){
-                        song1.setVolume(song1.getVolume() - 0.1f);
-                    }
-                }
-                if(song2.isPlaying()){
-                    if(song2.getPosition() >= 215){
-                        song2.setVolume(song2.getVolume() - 0.1f);
-                    }
-                }
-                if(song3.isPlaying()){
-                    if(song3.getPosition() >= 215){
-                        song3.setVolume(song3.getVolume() - 0.1f);
-                    }
-                }
-                if(song4.isPlaying()){
-                    if(song4.getPosition() >= 215){
-                        song4.setVolume(song4.getVolume() - 0.1f);
-                    }
-                }
-                if(song5.isPlaying()){
-                    if(song5.getPosition() >= 215){
-                        song5.setVolume(song5.getVolume() - 0.1f);
-                    }
-                }
-                if(song6.isPlaying()){
-                    if(song6.getPosition() >= 215){
-                        song6.setVolume(song6.getVolume() - 0.1f);
-                    }
-                }
-                if(!song1.isPlaying()){song1.setVolume(1);}
-                if(!song2.isPlaying()){song2.setVolume(1);}
-                if(!song3.isPlaying()){song3.setVolume(1);}
-                if(!song4.isPlaying()){song4.setVolume(1);}
-                if(!song5.isPlaying()){song5.setVolume(1);}
-                if(!song6.isPlaying()){song6.setVolume(1);}
-            }
-        }, 10,0.4f,20);
-
-    }
-
 
 }
