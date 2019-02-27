@@ -116,7 +116,6 @@ public class UpgradeScreen implements Screen {
                 stage.dispose();
                 batch.dispose();
                 imgWall.dispose();
-                imgFond.dispose();
             }
         }
 
