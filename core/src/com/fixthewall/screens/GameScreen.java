@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.fixthewall.actors.Ennemi;
 import com.fixthewall.game.Game;
 import com.fixthewall.logic.BadGuysLogic;
 import com.fixthewall.logic.WallLogic;
@@ -34,6 +35,7 @@ public class GameScreen implements Screen {
     private BitmapFont font;
     private BitmapFont fontUps;
     private Hammer hammer;
+    //private Ennemi ennemi;
     private boolean end;
     private TextureRegionDrawable txtreg;
     private int wallBefore;
@@ -48,6 +50,7 @@ public class GameScreen implements Screen {
         Image imgFond = new Image(textureFond);
         stage.addActor(imgFond);
         hammer = new Hammer(1);
+        //ennemi = new Ennemi(1);
         this.game = game;
         txtreg = new TextureRegionDrawable(imgWall);
 
@@ -103,6 +106,7 @@ public class GameScreen implements Screen {
         wallAfter = 0;
         //Add button to the stage
         stage.addActor(wallButton);
+        //stage.addActor(ennemi);
         stage.addActor(hammer);
         //Set the InputProcessor with the stage
         Gdx.input.setInputProcessor(stage);
@@ -157,6 +161,7 @@ public class GameScreen implements Screen {
         font.dispose();
         fontUps.dispose();
         hammer.dispose();
+        //ennemi.dispose();
         stage.dispose();
         game.dispose();
     }
