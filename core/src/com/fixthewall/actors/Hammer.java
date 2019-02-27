@@ -32,7 +32,7 @@ public class Hammer extends Actor {
         this.setPowers();
         this.texture = new TextureRegion(new Texture("marteau.png"));
         setBounds(getX(),getY(),texture.getRegionWidth(),texture.getRegionHeight());
-        setOrigin(this.texture.getRegionHeight() / 2f, this.texture.getRegionWidth() / 4f);
+        setOrigin(this.texture.getRegionWidth() / 2f, this.texture.getRegionHeight() / 4f);
         addAction(Actions.rotateBy(10f));
         setRotation(STARTING_ANGLE);
         setTouchable(Touchable.disabled); // clik through
