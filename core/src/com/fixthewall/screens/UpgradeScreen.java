@@ -19,6 +19,11 @@ import com.fixthewall.game.Game;
 
 public class UpgradeScreen implements Screen {
 
+
+
+
+
+
             private Stage stage;
             private SpriteBatch batch;
             private Texture imgWall;
@@ -111,7 +116,7 @@ public class UpgradeScreen implements Screen {
                 stage.dispose();
                 batch.dispose();
                 imgWall.dispose();
-                textureFond.dispose();
+                imgFond.dispose();
             }
         }
 
