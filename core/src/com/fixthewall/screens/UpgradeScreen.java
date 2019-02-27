@@ -12,29 +12,33 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.fixthewall.game.Game;
 
 public class UpgradeScreen implements Screen {
-
-
-
-
-
 
             private Stage stage;
             private SpriteBatch batch;
             private Texture imgWall;
             private Texture textureFond;
             private Game game;
+            private Texture imgButton;
 
             public UpgradeScreen(final Game game){
                 this.game = game;
                 batch = new SpriteBatch();
                 imgWall = new Texture("theWall.png");
                 textureFond = new Texture("fondWall.png");
+                imgButton = new Texture("text_button.png")  ;
+
                 stage = new Stage(game.viewport);
                 Image imgFond = new Image(textureFond);
                 stage.addActor(imgFond);
@@ -52,14 +56,24 @@ public class UpgradeScreen implements Screen {
                 font12.setColor(Color.RED);
                 style.font = font12;
 
-                //setup Button
-                Button playButton = new TextButton("Return to the game", style);
-                float x = game.viewport.getWorldWidth() / 2f;
-                float y = game.viewport.getWorldHeight() * 0.95f;
-                x = x - playButton.getWidth() / 2;
-                y = y - playButton.getHeight();
+                //setup Buttons
+                //button upgrade
+                TiledDrawable tile = new TiledDrawable(new TextureRegionDrawable(imgButton));
+                ImageTextButton.ImageTextButtonStyle imStyle =
+                        new ImageTextButton.ImageTextButtonStyle(tile, tile, tile, font12);
+                Button upgradeTestButton = new ImageTextButton("Upgrade", imStyle);
 
-                playButton.setPosition(x, y);
+
+                Button playButton = new TextButton("Return to the game", style);
+
+
+
+                upgradeTestButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed (ChangeEvent event, Actor actor) {
+                        Gdx.app.log("Update Screen", "Upgrade clicked");
+                    }
+                });
 
                 playButton.addListener(new ChangeListener() {
                     @Override
@@ -67,8 +81,22 @@ public class UpgradeScreen implements Screen {
                         game.setScreen(new GameScreen(game));
                     }
                 });
+
+
+                upgradeTestButton.scaleBy(0.25f);
+
+                Table table = new Table();
+
+                table.add(playButton);
+                table.row();
+                table.add(upgradeTestButton);
+                float x = game.viewport.getWorldWidth()/2f;
+                float y = game.viewport.getWorldHeight() * 0.95f - table.getHeight();
+                table.setPosition(x, y);
                 //add button to the scene
-                stage.addActor(playButton);
+
+                stage.addActor(table);
+
                 //necessaire pour rendre le bouton clickable
                 Gdx.input.setInputProcessor(stage);
             }
@@ -116,6 +144,7 @@ public class UpgradeScreen implements Screen {
                 stage.dispose();
                 batch.dispose();
                 imgWall.dispose();
+                imgButton.dispose();
             }
         }
 

@@ -49,7 +49,7 @@ public class GameScreen implements Screen {
         stage.addActor(imgFond);
         hammer = new Hammer(1);
         this.game = game;
-        txtreg =new TextureRegionDrawable(imgWall);
+        txtreg = new TextureRegionDrawable(imgWall);
 
 
         end = false;
