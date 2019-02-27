@@ -27,7 +27,7 @@ public class Hammer extends Actor {
             this.level = level;
         this.setPower();
         this.sprite = new Sprite(new Texture("marteau.png"));
-        this.sprite.setOrigin(this.sprite.getOriginX(), 50);
+        this.sprite.setOrigin(this.sprite.getOriginX(), this.sprite.getOriginY() / 2);
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         this.sprite.setRotation(STARTING_ANGLE);
         this.show = false;
