@@ -114,7 +114,7 @@ public class GameScreen implements Screen {
             game.setScreen(new EndScreen(game));
         }
 
-        stage.act();
+        stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
 

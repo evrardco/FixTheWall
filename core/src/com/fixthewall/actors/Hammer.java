@@ -1,24 +1,27 @@
 package com.fixthewall.actors;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 public class Hammer extends Actor {
 
-    // TODO disparition en fondu à la fin de la rotation + effet particules
-
-    private final float ANIMATION_DURATION = 0.15f; // in seconds
     private final float STARTING_ANGLE = 20; // sprite rotation at start of the animation
     private final float ANGLE_TO_ROTATE = 45; // angle to be gradually added until the end of the animation
 
-    private Sprite sprite;
+    private TextureRegion texture;
     private int power;
     private int level;
     private boolean show;
     private float posX, posY;
-    private float showTime; // how much of time has it been shown
+
+    private SequenceAction sequence;
 
     public Hammer(int level) {
         if (level < 1)
@@ -26,57 +29,53 @@ public class Hammer extends Actor {
         else
             this.level = level;
         this.setPower();
-        this.sprite = new Sprite(new Texture("marteau.png"));
-        this.sprite.setOrigin(this.sprite.getOriginX(), this.sprite.getOriginY() / 2);
-        setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
-        this.sprite.setRotation(STARTING_ANGLE);
+        this.texture = new TextureRegion(new Texture("marteau.png"));
+        setBounds(getX(),getY(),texture.getRegionWidth(),texture.getRegionHeight());
+        setOrigin(this.texture.getRegionHeight() / 2f, this.texture.getRegionWidth() / 4f);
+        addAction(Actions.rotateBy(10f));
+        setRotation(STARTING_ANGLE);
+        setTouchable(Touchable.disabled); // clik through
         this.show = false;
         this.posX = 0;
         this.posY = 0;
-        this.showTime = 0;
+
+        this.sequence = new SequenceAction();
+        ParallelAction parallel = new ParallelAction();
+        parallel.addAction(new Actions().alpha(1, 0.05f));
+        parallel.addAction(new Actions().rotateBy(ANGLE_TO_ROTATE, 0.15f));
+        sequence.addAction(parallel);
+        sequence.addAction(new Actions().alpha(0, 0.1f));
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
 
-        float frameTime = ANIMATION_DURATION * (1 / delta);
-        float degreesToRotate = ANGLE_TO_ROTATE / frameTime;
-
         if (this.show) {
-            this.showTime += delta;
-            if (this.showTime >= ANIMATION_DURATION) {
-                this.show = false;
-                this.sprite.setRotation(STARTING_ANGLE);
-                this.showTime = 0;
-            } else {
-                this.sprite.setX(this.posX);
-                this.sprite.setY(this.posY);
-                this.sprite.rotate(degreesToRotate);
-            }
+            setX(this.posX);
+            setY(this.posY);
         }
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (this.show)
-            sprite.draw(batch);
+        super.draw(batch, parentAlpha);
+        if (this.show) {
+            Color color = batch.getColor();
+            batch.setColor(color.r, color.g, color.b, getColor().a);
+            batch.draw(this.texture, getX(), getY(), getOriginX(), getOriginY(), getWidth(),
+                    getHeight(), getScaleX(), getScaleY(), getRotation());
+        }
     }
 
     public void show(float posX, float posY) {
-        if (this.show) {
-            this.showTime = 0;
-            this.sprite.setRotation(STARTING_ANGLE);
-        }
-        this.posX = posX - this.sprite.getOriginX();
-        this.posY = posY - this.sprite.getOriginY();
+        this.posX = posX - getOriginX();
+        this.posY = posY - getOriginY();
+        removeAction(sequence); // enlève l'action pour la reset (si on fait juste restart ça suffit pas)
+        sequence.restart();
+        addAction(sequence);
+        setRotation(STARTING_ANGLE);
         this.show = true;
-    }
-
-    public void hide() {
-        this.show = false;
-        this.showTime = 0;
-        this.sprite.setRotation(STARTING_ANGLE);
     }
 
     public int getPower() {
@@ -94,6 +93,6 @@ public class Hammer extends Actor {
     }
 
     public void dispose() {
-        this.sprite.getTexture().dispose();
+        this.texture.getTexture().dispose();
     }
 }
