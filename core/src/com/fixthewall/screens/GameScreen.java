@@ -50,6 +50,8 @@ public class GameScreen implements Screen {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 30;
         font = generator.generateFont(parameter); // font size 12 pixels
+
+
         parameter.size = 60;
         fontUps = generator.generateFont(parameter);
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
@@ -126,6 +128,7 @@ public class GameScreen implements Screen {
         imgWall.dispose();
         imgFond.dispose();
         font.dispose();
+        fontUps.dispose();
         hammer.dispose();
         stage.dispose();
         game.dispose();
