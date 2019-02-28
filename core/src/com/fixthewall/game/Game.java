@@ -8,23 +8,28 @@ import com.fixthewall.logic.WallLogic;
 import com.fixthewall.screens.StartScreen;
 
 public class Game extends com.badlogic.gdx.Game {
-	private Music song1;
-	private Music song2;
-	private Music song3;
-	private Music song4;
-	private Music song5;
-	private Music song6;
+
+	private int sizePlaylist;
+	private Music [] playlist;
 
     public WallLogic wallLogic;
 	@Override
 	public void create () {
 		//music
-		song1 = Gdx.audio.newMusic(Gdx.files.internal("music/song1.mp3"));
-		song2 = Gdx.audio.newMusic(Gdx.files.internal("music/song2.mp3"));
-		song3 = Gdx.audio.newMusic(Gdx.files.internal("music/song3.mp3"));
-		song4 = Gdx.audio.newMusic(Gdx.files.internal("music/song4.mp3"));
-		song5 = Gdx.audio.newMusic(Gdx.files.internal("music/song5.mp3"));
-		song6 = Gdx.audio.newMusic(Gdx.files.internal("music/song6.mp3"));
+		sizePlaylist = 6;
+		playlist = new Music[sizePlaylist];
+		playlist[0] = Gdx.audio.newMusic(Gdx.files.internal("music/song1.mp3"));
+		playlist[0].setVolume(0.6f);
+		playlist[1] = Gdx.audio.newMusic(Gdx.files.internal("music/song2.mp3"));
+		playlist[1].setVolume(0.35f);
+		playlist[2] = Gdx.audio.newMusic(Gdx.files.internal("music/song3.mp3"));
+		playlist[2].setVolume(0.6f);
+		playlist[3] = Gdx.audio.newMusic(Gdx.files.internal("music/song4.mp3"));
+		playlist[3].setVolume(0.6f);
+		playlist[4] = Gdx.audio.newMusic(Gdx.files.internal("music/song5.mp3"));
+		playlist[4].setVolume(0.5f);
+		playlist[5] = Gdx.audio.newMusic(Gdx.files.internal("music/song6.mp3"));
+		playlist[5].setVolume(0.55f);
 		runMusic();
 		//
 
@@ -37,109 +42,86 @@ public class Game extends com.badlogic.gdx.Game {
 	}
 	@Override
 	public void dispose (){
-		song1.dispose();
-		song2.dispose();
-		song3.dispose();
-		song4.dispose();
-		song5.dispose();
-		song6.dispose();
+		for (Music m : playlist) {
+			m.dispose();
+		}
 	}
 
 	private void runMusic() {
 		//Lancement
-		song1.setVolume(0.8f);
-		song1.play();
+		getRandomMusic().play();
 		//Gestion des transitions
-		song1.setOnCompletionListener(new Music.OnCompletionListener() {
+		playlist[0].setOnCompletionListener(new Music.OnCompletionListener() {
 			@Override
 			public void onCompletion(Music music) {
-				song2.play();
+				getRandomMusic().play();
+				playlist[0].setVolume(0.6f);
 			}
 		});
-		song2.setOnCompletionListener(new Music.OnCompletionListener() {
+		playlist[1].setOnCompletionListener(new Music.OnCompletionListener() {
 			@Override
 			public void onCompletion(Music music) {
-				song3.play();
+				getRandomMusic().play();
+				playlist[1].setVolume(0.35f);
 			}
 		});
-		song3.setOnCompletionListener(new Music.OnCompletionListener() {
+		playlist[2].setOnCompletionListener(new Music.OnCompletionListener() {
 			@Override
 			public void onCompletion(Music music) {
-				song4.play();
+				getRandomMusic().play();
+				playlist[2].setVolume(0.6f);
 			}
 		});
-		song4.setOnCompletionListener(new Music.OnCompletionListener() {
+		playlist[3].setOnCompletionListener(new Music.OnCompletionListener() {
 			@Override
 			public void onCompletion(Music music) {
-				song5.play();
+				getRandomMusic().play();
+				playlist[3].setVolume(0.6f);
 			}
 		});
-		song5.setOnCompletionListener(new Music.OnCompletionListener() {
+		playlist[4].setOnCompletionListener(new Music.OnCompletionListener() {
 			@Override
 			public void onCompletion(Music music) {
-				song6.play();
+				getRandomMusic().play();
+				playlist[4].setVolume(0.5f);
 			}
 		});
-		song6.setOnCompletionListener(new Music.OnCompletionListener() {
+		playlist[5].setOnCompletionListener(new Music.OnCompletionListener() {
 			@Override
 			public void onCompletion(Music music) {
-				song1.play();
+				getRandomMusic().play();
+				playlist[5].setVolume(0.55f);
 			}
 		});
 		//Gestion des fondus audio
 		Timer.schedule(new Timer.Task() {
 			@Override
 			public void run() {
-				if (song1.isPlaying()) {
-					if (song1.getPosition() >= 215) {
-						song1.setVolume(song1.getVolume() - 0.1f);
+				if (playlist[3].isPlaying()) {
+					if (playlist[3].getPosition() >= 254) {
+						playlist[3].setVolume(playlist[3].getVolume() - 0.05f);
 					}
 				}
-				if (song2.isPlaying()) {
-					if (song2.getPosition() >= 192) {
-						song2.setVolume(song2.getVolume() - 0.1f);
+				if (playlist[4].isPlaying()) {
+					if (playlist[4].getPosition() >= 178) {
+						playlist[4].setVolume(playlist[4].getVolume() - 0.05f);
 					}
-				}
-				if (song3.isPlaying()) {
-					if (song3.getPosition() >= 143) {
-						song3.setVolume(song3.getVolume() - 0.1f);
-					}
-				}
-				if (song4.isPlaying()) {
-					if (song4.getPosition() >= 249) {
-						song4.setVolume(song4.getVolume() - 0.1f);
-					}
-				}
-				if (song5.isPlaying()) {
-					if (song5.getPosition() >= 173) {
-						song5.setVolume(song5.getVolume() - 0.1f);
-					}
-				}
-				if (song6.isPlaying()) {
-					if (song6.getPosition() >= 231) {
-						song6.setVolume(song6.getVolume() - 0.1f);
-					}
-				}
-				if (!song1.isPlaying()) {
-					song1.setVolume(0.8f);
-				}
-				if (!song2.isPlaying()) {
-					song2.setVolume(0.8f);
-				}
-				if (!song3.isPlaying()) {
-					song3.setVolume(0.8f);
-				}
-				if (!song4.isPlaying()) {
-					song4.setVolume(0.8f);
-				}
-				if (!song5.isPlaying()) {
-					song5.setVolume(0.8f);
-				}
-				if (!song6.isPlaying()) {
-					song6.setVolume(0.8f);
 				}
 			}
-		}, 10, 0.4f, 20);
+		}, 5, 0.2f, 20);
+	}
+
+	private Music getRandomMusic(){
+		int rand = getRandom(sizePlaylist);
+		if (rand >= sizePlaylist){rand = sizePlaylist - 1;}
+		return playlist[rand];
+	}
+
+	/*
+	* Retourne un entier entre 0 et n-1
+	*/
+	public static int getRandom(int n){
+		return (int)(Math.random()*n);//pour 6 music ==> n=7;
 	}
 
 }
