@@ -123,6 +123,7 @@ public class GameScreen implements Screen {
         imgWall.dispose();
         imgFond.dispose();
         font.dispose();
+        fontUps.dispose();
         hammer.dispose();
         stage.dispose();
         game.dispose();
