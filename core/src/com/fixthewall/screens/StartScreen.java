@@ -25,14 +25,14 @@ public class StartScreen implements Screen {
     private SpriteBatch batch;
     private Texture imgWall;
     private Texture imgFond;
-
+    private Game game;
 
     public StartScreen(final Game game){
-
+        this.game = game;
         batch = new SpriteBatch();
         imgWall = new Texture("theWall.png");
         imgFond = new Texture("fondWall.png");
-        stage = new Stage();
+        stage = new Stage(game.viewport);
 
         //Import font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/Germania.ttf"));
@@ -76,7 +76,7 @@ public class StartScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         batch.draw(imgFond, 0, 0);
@@ -89,7 +89,7 @@ public class StartScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        game.viewport.update(width, height, true);
     }
 
     @Override

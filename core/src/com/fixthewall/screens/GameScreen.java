@@ -16,6 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.fixthewall.game.Game;
 import com.fixthewall.logic.BadGuysLogic;
 import com.fixthewall.logic.WallLogic;
@@ -34,7 +37,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(final Game game) {
         batch = new SpriteBatch();
-        stage = new Stage();
+        stage = new Stage(game.viewport);
         imgWall = new Texture("theWall.png");
         imgFond = new Texture("fondWall.png");
         hammer = new Hammer(1);
@@ -98,7 +101,7 @@ public class GameScreen implements Screen {
         //logic update
         BadGuysLogic.getSingleInstance().doDamage();
 
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         end = WallLogic.getSingleInstance().getHealth() <= 0.0f;
@@ -136,7 +139,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        game.viewport.update(width, height, true);
     }
 
     @Override
