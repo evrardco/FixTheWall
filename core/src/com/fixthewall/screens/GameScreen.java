@@ -2,7 +2,6 @@ package com.fixthewall.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -17,11 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Timer;
 import com.fixthewall.game.Game;
 import com.fixthewall.logic.BadGuysLogic;
 import com.fixthewall.logic.WallLogic;
-import com.fixthewall.logic.WallLogic;
+import com.fixthewall.actors.Hammer;
 
 public class GameScreen implements Screen {
     private final Game game;
@@ -31,21 +29,17 @@ public class GameScreen implements Screen {
     private Texture imgFond;
     private BitmapFont font;
     private BitmapFont fontUps;
-    private int healthIncrement;
-    private int bricksIncrement;
+    private Hammer hammer;
     private boolean end;
-
 
     public GameScreen(final Game game) {
         batch = new SpriteBatch();
         stage = new Stage();
         imgWall = new Texture("theWall.png");
         imgFond = new Texture("fondWall.png");
+        hammer = new Hammer(1);
         this.game = game;
 
-        //incrementation de base.
-        healthIncrement=1;
-        bricksIncrement=1;
         end = false;
 
         //Import font
@@ -80,18 +74,20 @@ public class GameScreen implements Screen {
             @Override
             public  void clicked(InputEvent event, float x, float y){
                 float maxHealth = WallLogic.getSingleInstance().getMaxHealth();
-                float incrementedHealth = WallLogic.getSingleInstance().getHealth()+healthIncrement;
+                float incrementedHealth = WallLogic.getSingleInstance().getHealth() + hammer.getPower();
                 if(incrementedHealth <= maxHealth){
                     WallLogic.getSingleInstance().setHealth(incrementedHealth);
                 }
                 else{
                     WallLogic.getSingleInstance().setHealth(maxHealth);
                 }
-                WallLogic.getSingleInstance().setBricks(WallLogic.getSingleInstance().getBricks()+bricksIncrement);
+                WallLogic.getSingleInstance().setBricks(WallLogic.getSingleInstance().getBricks() + hammer.getPower());
+                hammer.show(event.getStageX(), event.getStageY());
             }
         });
         //Add button to the stage
         stage.addActor(wallButton);
+        stage.addActor(hammer);
         //Set the InputProcessor with the stage
         Gdx.input.setInputProcessor(stage);
 
@@ -107,7 +103,6 @@ public class GameScreen implements Screen {
         batch.begin();
         end = WallLogic.getSingleInstance().getHealth() <= 0.0f;
         batch.draw(imgFond, 0, 0);
-        batch.draw(imgWall, 0, 300);
         font.draw(batch, "Bricks: "+WallLogic.getSingleInstance().getBricks(), Gdx.graphics.getWidth()/2f,
                 (float) (Gdx.graphics.getHeight()*0.9));
         font.draw(batch, "Health: "+(int)WallLogic.getSingleInstance().getHealth()+"/"+(int)WallLogic.getSingleInstance().getMaxHealth(),
@@ -128,6 +123,7 @@ public class GameScreen implements Screen {
         imgWall.dispose();
         imgFond.dispose();
         font.dispose();
+        hammer.dispose();
         stage.dispose();
         game.dispose();
     }
