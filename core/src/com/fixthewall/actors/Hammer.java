@@ -16,7 +16,8 @@ public class Hammer extends Actor {
     private final float ANGLE_TO_ROTATE = 45; // angle to be gradually added until the end of the animation
 
     private TextureRegion texture;
-    private int power;
+    private int bricksPower; // amount of bricks the hammer generate
+    private int healPower; // amount of life the hammer heals the wall
     private int level;
     private boolean show;
     private float posX, posY;
@@ -28,7 +29,7 @@ public class Hammer extends Actor {
             this.level = 1;
         else
             this.level = level;
-        this.setPower();
+        this.setPowers();
         this.texture = new TextureRegion(new Texture("marteau.png"));
         setBounds(getX(),getY(),texture.getRegionWidth(),texture.getRegionHeight());
         setOrigin(this.texture.getRegionHeight() / 2f, this.texture.getRegionWidth() / 4f);
@@ -78,18 +79,23 @@ public class Hammer extends Actor {
         this.show = true;
     }
 
-    public int getPower() {
-        return this.power;
+    public int getHealPower() {
+        return this.healPower;
     }
 
-    private void setPower() {
+    public int getBricksPower() {
+        return this.bricksPower;
+    }
+
+    private void setPowers() {
         // TODO equilibrage de ça
-        this.power = 2 * this.level;
+        this.bricksPower = 2 * this.level;
+        this.healPower = 2 * this.level;
     }
 
     public void setLevel(int level) {
         this.level = level;
-        this.setPower();
+        this.setPowers();
     }
 
     public void dispose() {
