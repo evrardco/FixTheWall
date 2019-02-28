@@ -61,7 +61,6 @@ public class GameScreen implements Screen {
         upsButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                //  dispose();
                 //TODO Ecran upgrades
                 game.setScreen(new UpgradeScreen(game));
             }
