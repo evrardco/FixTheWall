@@ -63,7 +63,6 @@ public class GameScreen implements Screen {
         upsButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                //  dispose();
                 //TODO Ecran upgrades
                 game.setScreen(new UpgradeScreen(game));
             }
@@ -77,14 +76,14 @@ public class GameScreen implements Screen {
             @Override
             public  void clicked(InputEvent event, float x, float y){
                 float maxHealth = WallLogic.getSingleInstance().getMaxHealth();
-                float incrementedHealth = WallLogic.getSingleInstance().getHealth() + hammer.getPower();
+                float incrementedHealth = WallLogic.getSingleInstance().getHealth() + hammer.getHealPower();
                 if(incrementedHealth <= maxHealth){
                     WallLogic.getSingleInstance().setHealth(incrementedHealth);
                 }
                 else{
                     WallLogic.getSingleInstance().setHealth(maxHealth);
                 }
-                WallLogic.getSingleInstance().setBricks(WallLogic.getSingleInstance().getBricks() + hammer.getPower());
+                WallLogic.getSingleInstance().setBricks(WallLogic.getSingleInstance().getBricks() + hammer.getBricksPower());
                 hammer.show(event.getStageX(), event.getStageY());
             }
         });
@@ -116,7 +115,7 @@ public class GameScreen implements Screen {
             game.setScreen(new EndScreen(game));
         }
 
-        stage.act();
+        stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
 
