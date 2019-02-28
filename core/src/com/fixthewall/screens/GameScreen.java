@@ -47,6 +47,8 @@ public class GameScreen implements Screen {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 30;
         font = generator.generateFont(parameter); // font size 12 pixels
+
+
         parameter.size = 60;
         fontUps = generator.generateFont(parameter);
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
@@ -74,14 +76,14 @@ public class GameScreen implements Screen {
             @Override
             public  void clicked(InputEvent event, float x, float y){
                 float maxHealth = WallLogic.getSingleInstance().getMaxHealth();
-                float incrementedHealth = WallLogic.getSingleInstance().getHealth() + hammer.getPower();
+                float incrementedHealth = WallLogic.getSingleInstance().getHealth() + hammer.getHealPower();
                 if(incrementedHealth <= maxHealth){
                     WallLogic.getSingleInstance().setHealth(incrementedHealth);
                 }
                 else{
                     WallLogic.getSingleInstance().setHealth(maxHealth);
                 }
-                WallLogic.getSingleInstance().setBricks(WallLogic.getSingleInstance().getBricks() + hammer.getPower());
+                WallLogic.getSingleInstance().setBricks(WallLogic.getSingleInstance().getBricks() + hammer.getBricksPower());
                 hammer.show(event.getStageX(), event.getStageY());
             }
         });
@@ -113,7 +115,7 @@ public class GameScreen implements Screen {
             game.setScreen(new EndScreen(game));
         }
 
-        stage.act();
+        stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
 

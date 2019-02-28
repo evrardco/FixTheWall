@@ -5,6 +5,11 @@ public class WallLogic {
     private float maxHealth;
     private int bricks;
     private static WallLogic singleInstance = null;
+    private float fixingSpeed;
+
+
+
+
 
     public static WallLogic getSingleInstance(){
         if(singleInstance == null) singleInstance = new WallLogic();
@@ -17,12 +22,20 @@ public class WallLogic {
         this.maxHealth = maxHealth;
         health = maxHealth;
         bricks = 0;
+        fixingSpeed = 1.0f;
     }
 
     public float getHealth() {
         return health;
     }
 
+    public float getFixingSpeed() {
+        return fixingSpeed;
+    }
+
+    public void setFixingSpeed(float fixingSpeed) {
+        this.fixingSpeed = fixingSpeed;
+    }
     public void setHealth(float health) {
         this.health = health;
     }
