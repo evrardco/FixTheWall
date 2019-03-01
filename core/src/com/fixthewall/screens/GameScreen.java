@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -27,22 +28,29 @@ public class GameScreen implements Screen {
     private final Game game;
     private Stage stage;
     private SpriteBatch batch;
-    private Texture imgWall;
+    private TextureRegion imgWall;
+    private TextureRegion imgWall2;
     private Texture textureFond;
     private BitmapFont font;
     private BitmapFont fontUps;
     private Hammer hammer;
     private boolean end;
+    private TextureRegionDrawable txtreg;
+    private int wallBefore;
+    private int wallAfter;
 
     public GameScreen(final Game game) {
         batch = new SpriteBatch();
         stage = new Stage(game.viewport);
-        imgWall = new Texture("theWall.png");
+        imgWall = new TextureRegion(new Texture("theWall.png"));
+        imgWall2 = new TextureRegion(new Texture("theWallHalf.png"));
         textureFond = new Texture("fondWall.png");
         Image imgFond = new Image(textureFond);
         stage.addActor(imgFond);
         hammer = new Hammer(1);
         this.game = game;
+        txtreg =new TextureRegionDrawable(imgWall);
+
 
         end = false;
 
@@ -73,7 +81,7 @@ public class GameScreen implements Screen {
         });
         stage.addActor(upsButton);
         //create a image button
-        Button wallButton = new ImageButton(new TextureRegionDrawable(imgWall));
+        Button wallButton = new ImageButton(txtreg);
         wallButton.setPosition(0, 300);
         //add Listener to the wall
         wallButton.addListener( new ClickListener(){
@@ -91,6 +99,8 @@ public class GameScreen implements Screen {
                 hammer.show(event.getStageX(), event.getStageY());
             }
         });
+        wallBefore = 0;
+        wallAfter = 0;
         //Add button to the stage
         stage.addActor(wallButton);
         stage.addActor(hammer);
@@ -103,9 +113,29 @@ public class GameScreen implements Screen {
     public void render (float delta) {
         //logic update
         BadGuysLogic.getSingleInstance().doDamage();
+        if (WallLogic.getSingleInstance().getHealth() < 50.0) {
+            wallAfter = 0;
+            txtreg.setRegion(imgWall2);
+        }
+        else {
+                wallAfter = 1;
+        }
+        if (wallAfter != wallBefore)
+        {
+            switch (wallAfter) {
+                case 0: txtreg.setRegion(imgWall2);
+                break;
+                case 1: txtreg.setRegion(imgWall);
+                break;
+            }
+        }
+        wallBefore = wallAfter;
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
 
         batch.begin();
         end = WallLogic.getSingleInstance().getHealth() <= 0.0f;
@@ -115,9 +145,6 @@ public class GameScreen implements Screen {
                 game.viewport.getWorldWidth() / 2f, game.viewport.getWorldWidth() * 0.8f);
         batch.end();
 
-        stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
-
         if (end) {
             game.setScreen(new EndScreen(game));
         }
@@ -126,7 +153,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose () {
         batch.dispose();
-        imgWall.dispose();
         textureFond.dispose();
         font.dispose();
         fontUps.dispose();
