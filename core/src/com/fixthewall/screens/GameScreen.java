@@ -118,7 +118,7 @@ public class GameScreen implements Screen {
             txtreg.setRegion(imgWall2);
         }
         else {
-                wallAfter = 1;
+                wallAfter = 1;//Let's buuild this wall
         }
         if (wallAfter != wallBefore)
         {
