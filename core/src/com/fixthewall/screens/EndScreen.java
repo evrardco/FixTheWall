@@ -29,7 +29,7 @@ public class EndScreen implements Screen {
     private SpriteBatch batch;
     private Texture textureFond;
     private BitmapFont font;
-    private Texture imgWall;
+    private Texture textureWall;
 
 
     public EndScreen(final Game game) {
@@ -40,8 +40,9 @@ public class EndScreen implements Screen {
         stage = new Stage(game.viewport);
         Image imgFond = new Image(textureFond);
         stage.addActor(imgFond);
-        imgWall = new Texture("theWallBreaked.png");
-        stage.addActor(imgFond);
+        textureWall = new Texture("theWallBreaked.png");
+        Image imgWall = new Image(textureWall);
+        stage.addActor(imgWall);
 
         //incrementation de base.
 
