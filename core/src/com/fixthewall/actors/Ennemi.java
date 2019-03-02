@@ -20,11 +20,11 @@ public class Ennemi extends Actor {
     private int level;
     private boolean fromLeft;
     //variables d'animation:
-    private static final int FRAME_COLS = 2, FRAME_ROWS = 1;
+    private static final int FRAME_COLS = 4, FRAME_ROWS = 5;
     private Animation<TextureRegion> ennemiAnimation;
     private Texture texture;
     // Variable for tracking elapsed time for the animation
-    float elapsedTime;
+    private float elapsedTime;
 
 
     public Ennemi (int level){
@@ -35,7 +35,7 @@ public class Ennemi extends Actor {
         this.setPower();
         this.setSide();
         //Set animation
-        texture = new Texture("badGuysRSheet.png");
+        texture = new Texture("Frames/SheetFrameEnnemi.png");
         TextureRegion[][] tmp = TextureRegion.split(texture,
                         texture.getWidth() / FRAME_COLS,
                         texture.getHeight() / FRAME_ROWS);
@@ -43,17 +43,18 @@ public class Ennemi extends Actor {
         int index = 0;
         for (int i = 0; i < FRAME_ROWS; i++) {
             for (int j = 0; j < FRAME_COLS; j++) {
-                if(fromLeft)
-                    ennemiFrames[index++] = tmp[i][j];
-                else{
+                if(fromLeft) {
                     TextureRegion flipped = tmp[i][j];
                     flipped.flip(true, false);
                     ennemiFrames[index++] = flipped;
                 }
+                else{
+                    ennemiFrames[index++] = tmp[i][j];
+                }
             }
         }
-        float duration = getRandom(3)+3f;
-        ennemiAnimation = new Animation<TextureRegion>(duration/7f, ennemiFrames);
+        float duration = getRandom(4)+3f;
+        ennemiAnimation = new Animation<TextureRegion>(0.5f/duration, ennemiFrames);
         //
         setTouchable(Touchable.disabled); // clik through
         this.setCoor();
@@ -80,17 +81,16 @@ public class Ennemi extends Actor {
 
     private void setSide(){
         int rand = getRandom(2);
-        if(rand == 0) fromLeft=true;
-        else fromLeft=false;
+        fromLeft = rand == 0;
     }
 
     private void setCoor(){
         float randY = (float)getRandom(49);
         if(fromLeft){
-            this.setX(-texture.getWidth()/2f);
+            this.setX(-(96f+50f));
         }
         else{
-            this.setX(1080f);
+            this.setX(1080f+50f);
         }
         this.setY(250f+randY);
     }
@@ -98,7 +98,7 @@ public class Ennemi extends Actor {
     /*
      * Retourne un entier entre 0 et n-1
      */
-    public static int getRandom(int n){
+    private static int getRandom(int n){
         int size = (int)(Math.random()*n);
         if(size == n)size -= 1;
         return size;
