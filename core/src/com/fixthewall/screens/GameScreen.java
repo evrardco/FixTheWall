@@ -37,7 +37,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(final Game game) {
         stage = new Stage(game.viewport);
-        textureFond = new Texture("fondWall-jour.png");
+        textureFond = new Texture("fondWall.png");
         Image imgFond = new Image(textureFond);
         stage.addActor(imgFond);
         wall = new Wall();
