@@ -60,7 +60,6 @@ public class Hammer extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
         if (this.show) {
             Color color = batch.getColor();
             batch.setColor(color.r, color.g, color.b, getColor().a);

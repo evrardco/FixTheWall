@@ -1,25 +1,22 @@
 package com.fixthewall.logic;
 
-public class WallLogic {
+public class GameLogic {
     private double health;
     private double maxHealth;
-    private int bricks;
-    private static WallLogic singleInstance = null;
-    private float fixingSpeed;
+    private double bricks;
+    private static GameLogic singleInstance = null;
+    private double fixingSpeed;
 
 
-
-
-
-    public static WallLogic getSingleInstance(){
-        if(singleInstance == null) singleInstance = new WallLogic();
+    public static GameLogic getSingleInstance(){
+        if(singleInstance == null) singleInstance = new GameLogic();
         return singleInstance;
     }
 
-    private WallLogic(){}
+    private GameLogic(){}
 
-    public void init(float maxHealth){
-        this.maxHealth = maxHealth;
+    public void init(){
+        this.maxHealth = 100.5f;
         health = maxHealth;
         bricks = 0;
         fixingSpeed = 1.0f;
@@ -29,11 +26,11 @@ public class WallLogic {
         return health;
     }
 
-    public float getFixingSpeed() {
+    public double getFixingSpeed() {
         return fixingSpeed;
     }
 
-    public void setFixingSpeed(float fixingSpeed) {
+    public void setFixingSpeed(double fixingSpeed) {
         this.fixingSpeed = fixingSpeed;
     }
     public void setHealth(double health) {
@@ -48,11 +45,11 @@ public class WallLogic {
         this.maxHealth = maxHealth;
     }
 
-    public int getBricks() {
+    public double getBricks() {
         return bricks;
     }
 
-    public void setBricks(int bricks) {
+    public void setBricks(double bricks) {
         this.bricks = bricks;
     }
 
