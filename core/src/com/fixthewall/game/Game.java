@@ -1,6 +1,7 @@
 package com.fixthewall.game;
 
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.fixthewall.game.upgrades.AbstractManager;
 import com.fixthewall.logic.BadGuysLogic;
 import com.fixthewall.logic.MusicLogic;
 import com.fixthewall.logic.WallLogic;
@@ -22,9 +23,9 @@ public class Game extends com.badlogic.gdx.Game {
 		playlist = new MusicLogic();
 		playlist.runPlaylist();
 		//
-
+		AbstractManager.getSingleInstance();
 	    WallLogic.getSingleInstance().init(100.5f);
-        BadGuysLogic.getSingleInstance().init(1.0, 1.0f);
+        BadGuysLogic.getSingleInstance().init(1.0f, 1.0f);
 		viewport = new FitViewport(Game.GAME_WIDTH, Game.GAME_HEIGHT);
 		setScreen(new StartScreen(this));
 	}

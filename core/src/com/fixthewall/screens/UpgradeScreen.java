@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.fixthewall.game.Game;
+import com.fixthewall.game.upgrades.AbstractManager;
 
 public class UpgradeScreen implements Screen {
 
@@ -73,13 +74,8 @@ public class UpgradeScreen implements Screen {
 
 
 
-                upgradeTestButton.addListener(new ChangeListener() {
-                    @Override
-                    public void changed (ChangeEvent event, Actor actor) {
-                        Gdx.app.log("Update Screen", "Upgrade clicked");
-                    }
-                });
-
+                upgradeTestButton.addListener(AbstractManager.getSingleInstance().getAllUpgrade()[0].getListener());
+                
                 playButton.addListener(new ChangeListener() {
                     @Override
                     public void changed (ChangeEvent event, Actor actor) {

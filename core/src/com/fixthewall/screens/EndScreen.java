@@ -40,7 +40,7 @@ public class EndScreen implements Screen {
         stage = new Stage(game.viewport);
         Image imgFond = new Image(textureFond);
         stage.addActor(imgFond);
-        textureWall = new Texture("theWallBreaked.png");
+        textureWall = new Texture("theWallBreak.png");
         Image imgWall = new Image(textureWall);
         stage.addActor(imgWall);
 

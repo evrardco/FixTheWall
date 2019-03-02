@@ -90,8 +90,8 @@ public class GameScreen implements Screen {
         wallButton.addListener( new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
-                float maxHealth = WallLogic.getSingleInstance().getMaxHealth();
-                float incrementedHealth = WallLogic.getSingleInstance().getHealth() + hammer.getHealPower();
+                float maxHealth = (float)WallLogic.getSingleInstance().getMaxHealth();
+                float incrementedHealth = (float)WallLogic.getSingleInstance().getHealth() + hammer.getHealPower();
                 if(incrementedHealth <= maxHealth){
                     WallLogic.getSingleInstance().setHealth(incrementedHealth);
                 }
