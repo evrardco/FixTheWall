@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.fixthewall.actors.Ennemi;
 import com.fixthewall.actors.Wall;
 import com.fixthewall.game.Game;
 import com.fixthewall.logic.BadGuysLogic;
@@ -30,7 +31,7 @@ public class GameScreen implements Screen {
     private BitmapFont fontUps;
     private Hammer hammer;
     private Wall wall;
-    //private Ennemi ennemi;
+    private Ennemi ennemi;
     private Label bricksLabel;
     private Label healthLabel;
 
@@ -42,7 +43,7 @@ public class GameScreen implements Screen {
         wall = new Wall();
         wall.setPosition(0, 300);
         hammer = new Hammer(1);
-        //ennemi = new Ennemi(1);
+        ennemi = new Ennemi(1);
         this.game = game;
 
         //Import font
@@ -90,7 +91,7 @@ public class GameScreen implements Screen {
         });
         //Add button to the stage
         stage.addActor(wall);
-        //stage.addActor(ennemi);
+        stage.addActor(ennemi);
         stage.addActor(hammer);
         //Set the InputProcessor with the stage
         Gdx.input.setInputProcessor(stage);
@@ -129,7 +130,7 @@ public class GameScreen implements Screen {
         fontUps.dispose();
         hammer.dispose();
         wall.dispose();
-        //ennemi.dispose();
+        ennemi.dispose();
         stage.dispose();
         game.dispose();
     }
