@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -26,15 +27,22 @@ public class EndScreen implements Screen {
     private final Game game;
     private Stage stage;
     private SpriteBatch batch;
-    private Texture imgFond;
+    private Texture textureFond;
     private BitmapFont font;
+    private Texture imgWall;
 
 
     public EndScreen(final Game game) {
-        batch = new SpriteBatch();
-        stage = new Stage();
-        imgFond = new Texture("fondWall.png");
         this.game = game;
+        batch = new SpriteBatch();
+        stage = new Stage(game.viewport);
+        textureFond = new Texture("fondWall.png");
+        stage = new Stage(game.viewport);
+        Image imgFond = new Image(textureFond);
+        stage.addActor(imgFond);
+        imgWall = new Texture("theWallBreaked.png");
+        stage.addActor(imgFond);
+
         //incrementation de base.
 
         //Import font
@@ -47,10 +55,10 @@ public class EndScreen implements Screen {
         style.font = font12;
         //setup Button
         Button playButton = new TextButton("Restart", style);
-        float x = Gdx.graphics.getWidth()/2f;
-        float y = Gdx.graphics.getHeight()/2f;
-        x = x - playButton.getWidth()/2;
-        y = y - playButton.getHeight()/2;
+        float x = game.viewport.getWorldWidth() / 2f;
+        float y = game.viewport.getWorldHeight() / 2f;
+        x = x - playButton.getWidth() / 2;
+        y = y - playButton.getHeight() / 2;
 
         playButton.setPosition(x, y);
 
@@ -71,21 +79,22 @@ public class EndScreen implements Screen {
 
     @Override
     public void render (float delta) {
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         batch.begin();
-        batch.draw(imgFond, 0, 0);
-        font.draw(batch, "Trump lost", Gdx.graphics.getWidth()/3f,
-                (float) (Gdx.graphics.getHeight()*0.9));
+        font.draw(batch, "Trump lost", game.viewport.getWorldWidth() / 3f,
+                game.viewport.getWorldHeight() * 0.9f);
         batch.end();
-        stage.act();
+
+        stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
 
     @Override
     public void dispose () {
         batch.dispose();
-        imgFond.dispose();
+        textureFond.dispose();
         font.dispose();
         stage.dispose();
         game.dispose();
@@ -99,7 +108,7 @@ public class EndScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        game.viewport.update(width, height, true);
     }
 
     @Override
