@@ -21,8 +21,6 @@ public class Game extends com.badlogic.gdx.Game {
         BadGuysLogic.getSingleInstance().init(0.016f, 1.0f);
 		setScreen(new StartScreen(this));
 
-
-
 	}
 	@Override
 	public void dispose (){

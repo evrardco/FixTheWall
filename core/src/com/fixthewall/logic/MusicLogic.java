@@ -132,7 +132,7 @@ public class MusicLogic {
     /*
      * Retourne un entier entre 0 et n-1
      */
-    private static int getRandom(int n){
+    public static int getRandom(int n){
         int size = (int)(Math.random()*n);
         if(size == n)size -= 1;
         return size;
