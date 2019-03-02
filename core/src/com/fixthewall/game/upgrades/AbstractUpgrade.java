@@ -26,7 +26,7 @@ public abstract class AbstractUpgrade {
 
     }
 
-    public void unAplly(){
+    public void apply(){
 
     }
 
