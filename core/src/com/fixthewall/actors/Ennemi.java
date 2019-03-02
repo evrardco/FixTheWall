@@ -54,7 +54,7 @@ public class Ennemi extends Actor {
             }
         }
         float duration = getRandom(4)+3f;
-        ennemiAnimation = new Animation<TextureRegion>(0.5f/duration, ennemiFrames);
+        ennemiAnimation = new Animation<TextureRegion>(1f/(duration*4), ennemiFrames);
         //
         setTouchable(Touchable.disabled); // clik through
         this.setCoor();
@@ -81,16 +81,16 @@ public class Ennemi extends Actor {
 
     private void setSide(){
         int rand = getRandom(2);
-        fromLeft = rand == 0;
+        fromLeft = (rand==0);
     }
 
     private void setCoor(){
         float randY = (float)getRandom(49);
         if(fromLeft){
-            this.setX(-(96f+50f));
+            this.setX(-(96f+100f));
         }
         else{
-            this.setX(1080f+50f);
+            this.setX(1080f+100f);
         }
         this.setY(250f+randY);
     }
