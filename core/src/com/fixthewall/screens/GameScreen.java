@@ -52,7 +52,7 @@ public class GameScreen implements Screen {
         hammer = new Hammer(1);
         //ennemi = new Ennemi(1);
         this.game = game;
-        txtreg =new TextureRegionDrawable(imgWall);
+        txtreg = new TextureRegionDrawable(imgWall);
 
 
         end = false;
