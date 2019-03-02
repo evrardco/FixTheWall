@@ -34,8 +34,10 @@ public class UpgradeScreen implements Screen {
             private Game game;
             private Texture imgButton;
             private Texture imgButtonReturn;
+            private Texture imgButtonReturnDown;
             private TiledDrawable tileButton;
             private TiledDrawable tileButtonReturn;
+            private TiledDrawable tileButtonReturnDown;
 
             public UpgradeScreen(final Game game){
                 this.game = game;
@@ -44,6 +46,8 @@ public class UpgradeScreen implements Screen {
                 textureFond = new Texture("fondWall.png");
                 imgButton = new Texture("texture_button.png");
                 imgButtonReturn = new Texture("texture_button_return.png");
+                imgButtonReturnDown = new Texture("texture_button_return_down.png");
+
 
                 stage = new Stage(game.viewport);
                 Image imgFond = new Image(textureFond);
@@ -65,17 +69,18 @@ public class UpgradeScreen implements Screen {
                 //button upgrade
                 tileButton = new TiledDrawable(new TextureRegionDrawable(imgButton));
                 tileButtonReturn = new TiledDrawable(new TextureRegionDrawable(imgButtonReturn));
+                tileButtonReturnDown = new TiledDrawable(new TextureRegionDrawable(imgButtonReturnDown));
                 ImageTextButton.ImageTextButtonStyle imStyle =
                         new ImageTextButton.ImageTextButtonStyle(tileButton, tileButton, tileButton, font12);
                 Button upgradeTestButton = new ImageTextButton("Upgrade", imStyle);
 
 
-                Button playButton = new ImageButton(tileButtonReturn);
+                Button playButton = new ImageButton(tileButtonReturn, tileButtonReturnDown);
 
 
 
                 upgradeTestButton.addListener(AbstractManager.getSingleInstance().getAllUpgrade()[0].getListener());
-                
+
                 playButton.addListener(new ChangeListener() {
                     @Override
                     public void changed (ChangeEvent event, Actor actor) {
