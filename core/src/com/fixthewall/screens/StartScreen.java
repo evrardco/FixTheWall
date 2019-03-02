@@ -14,20 +14,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.fixthewall.actors.Wall;
 import com.fixthewall.game.Game;
 
 
 public class StartScreen implements Screen {
     private Stage stage;
-    private SpriteBatch batch;
-    private Texture imgWall;
     private Texture textureFond;
     private Game game;
+    private Wall wall;
 
     public StartScreen(final Game game){
         this.game = game;
-        batch = new SpriteBatch();
-        imgWall = new Texture("theWall.png");
         textureFond = new Texture("fondWall.png");
         Image imgFond = new Image(textureFond);
         stage = new Stage(game.viewport);
@@ -36,13 +34,12 @@ public class StartScreen implements Screen {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/Germania.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 120;
+        parameter.color = Color.BLACK;
         BitmapFont font12 = generator.generateFont(parameter); // font size 12 pixels
-         // don't forget to dispose to avoid memory leaks!
-
         //create button style
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        font12.setColor(Color.RED);
         style.font = font12;
+        generator.dispose();
 
         //setup Button
         Button playButton = new TextButton("Start", style);
@@ -61,10 +58,12 @@ public class StartScreen implements Screen {
             }
         });
         stage.addActor(imgFond);
+        wall = new Wall();
+        wall.setPosition(0, 300);
+        stage.addActor(wall);
         //add button to the scene
         stage.addActor(playButton);
         //necessaire pour rendre le bouton clickable
-        generator.dispose();
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -77,10 +76,6 @@ public class StartScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.begin();
-        batch.draw(imgWall, 0, 300);
-        batch.end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -109,8 +104,7 @@ public class StartScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        batch.dispose();
-        imgWall.dispose();
+        wall.dispose();
         textureFond.dispose();
     }
 }

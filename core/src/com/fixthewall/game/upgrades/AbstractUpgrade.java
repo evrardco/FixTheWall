@@ -1,6 +1,9 @@
 package com.fixthewall.game.upgrades;
 
-import com.fixthewall.logic.WallLogic;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.fixthewall.logic.GameLogic;
 
 public abstract class AbstractUpgrade {
 
@@ -17,6 +20,23 @@ public abstract class AbstractUpgrade {
         this.applied = false;
     }
 
+    public ClickListener getListener(){
+        return  new ClickListener(){
+            @Override
+            public  void clicked(InputEvent event, float x, float y){
+                if(GameLogic.getSingleInstance().getBricks() >= cost) {
+                    GameLogic.getSingleInstance().setBricks(GameLogic.getSingleInstance().getBricks() - cost);
+                    level++;
+                    applied = true;
+                }else{
+                    Gdx.app.log("Upgrade", "not enough bricks");
+                }
+                AbstractManager.getSingleInstance().update();
+            }
+        };
+
+    }
+
     public void levelUp(){
         level++;
         cost = cost*2;
@@ -26,7 +46,7 @@ public abstract class AbstractUpgrade {
 
     }
 
-    public void unAplly(){
+    public void apply(){
 
     }
 
