@@ -116,7 +116,7 @@ public class GameScreen implements Screen {
     @Override
     public void render (float delta) {
         //logic update
-        BadGuysLogic.getSingleInstance().doDamage();
+        BadGuysLogic.getSingleInstance().doDamage(delta);
         if (WallLogic.getSingleInstance().getHealth() < 50.0) {
             wallAfter = 0;
             txtreg.setRegion(imgWall2);

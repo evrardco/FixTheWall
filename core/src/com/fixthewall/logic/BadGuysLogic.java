@@ -1,8 +1,8 @@
 package com.fixthewall.logic;
 
 public class BadGuysLogic {
-    private float damagePerFrame;
-    private float mul;
+    private double damagePerSec;
+    private double mul;
 
     private static BadGuysLogic singleInstance = null;
 
@@ -14,20 +14,20 @@ public class BadGuysLogic {
 
     private BadGuysLogic(){}
 
-    public void init(float dpf, float mul){
-        damagePerFrame = dpf;
+    public void init(double dpf, float mul){
+        damagePerSec = dpf;
         this.mul = mul;
     }
 
-    public float getDamagePerFrame() {
-        return damagePerFrame;
+    public double getDamagePerSec() {
+        return damagePerSec;
     }
 
-    public void setDamagePerFrame(float damagePerFrame) {
-        this.damagePerFrame = damagePerFrame;
+    public void setDamagePerFrame(double damagePerFrame) {
+        this.damagePerSec = damagePerFrame;
     }
 
-    public float getMul() {
+    public double getMul() {
         return mul;
     }
 
@@ -35,9 +35,9 @@ public class BadGuysLogic {
         this.mul = mul;
     }
 
-    public void doDamage(){
+    public void doDamage(double delta){
         WallLogic.getSingleInstance().setHealth(
-                WallLogic.getSingleInstance().getHealth()-damagePerFrame*mul);
+                 WallLogic.getSingleInstance().getHealth()-(damagePerSec*mul*delta));
     }
 
 

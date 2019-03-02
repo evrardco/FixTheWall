@@ -1,8 +1,8 @@
 package com.fixthewall.logic;
 
 public class WallLogic {
-    private float health;
-    private float maxHealth;
+    private double health;
+    private double maxHealth;
     private int bricks;
     private static WallLogic singleInstance = null;
     private float fixingSpeed;
@@ -25,7 +25,7 @@ public class WallLogic {
         fixingSpeed = 1.0f;
     }
 
-    public float getHealth() {
+    public double getHealth() {
         return health;
     }
 
@@ -36,15 +36,15 @@ public class WallLogic {
     public void setFixingSpeed(float fixingSpeed) {
         this.fixingSpeed = fixingSpeed;
     }
-    public void setHealth(float health) {
+    public void setHealth(double health) {
         this.health = health;
     }
 
-    public float getMaxHealth() {
+    public double getMaxHealth() {
         return maxHealth;
     }
 
-    public void setMaxHealth(int maxHealth) {
+    public void setMaxHealth(double maxHealth) {
         this.maxHealth = maxHealth;
     }
 

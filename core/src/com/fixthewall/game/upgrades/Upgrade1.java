@@ -8,7 +8,8 @@ public class Upgrade1 extends AbstractUpgrade {
     }
     @Override
     public void apply() {
-        WallLogic.getSingleInstance().setMaxHealth(200);
+        WallLogic Instance = WallLogic.getSingleInstance();
+        Instance.setMaxHealth((int) Instance.getMaxHealth()*2);
 
     }
 }
