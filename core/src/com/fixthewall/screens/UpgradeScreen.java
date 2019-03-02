@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -31,17 +32,22 @@ public class UpgradeScreen implements Screen {
             private Texture textureFond;
             private Game game;
             private Texture imgButton;
+            private Texture imgButtonReturn;
+            private TiledDrawable tileButton;
+            private TiledDrawable tileButtonReturn;
 
             public UpgradeScreen(final Game game){
                 this.game = game;
                 batch = new SpriteBatch();
                 imgWall = new Texture("theWall.png");
                 textureFond = new Texture("fondWall.png");
-                imgButton = new Texture("text_button.png")  ;
+                imgButton = new Texture("texture_button.png");
+                imgButtonReturn = new Texture("texture_button_return.png");
 
                 stage = new Stage(game.viewport);
                 Image imgFond = new Image(textureFond);
                 stage.addActor(imgFond);
+
 
 
                 //Import font
@@ -52,19 +58,18 @@ public class UpgradeScreen implements Screen {
                 // don't forget to dispose to avoid memory leaks!
 
                 //create button style
-                TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-                font12.setColor(Color.RED);
-                style.font = font12;
+
 
                 //setup Buttons
                 //button upgrade
-                TiledDrawable tile = new TiledDrawable(new TextureRegionDrawable(imgButton));
+                tileButton = new TiledDrawable(new TextureRegionDrawable(imgButton));
+                tileButtonReturn = new TiledDrawable(new TextureRegionDrawable(imgButtonReturn));
                 ImageTextButton.ImageTextButtonStyle imStyle =
-                        new ImageTextButton.ImageTextButtonStyle(tile, tile, tile, font12);
+                        new ImageTextButton.ImageTextButtonStyle(tileButton, tileButton, tileButton, font12);
                 Button upgradeTestButton = new ImageTextButton("Upgrade", imStyle);
 
 
-                Button playButton = new TextButton("Return to the game", style);
+                Button playButton = new ImageButton(tileButtonReturn);
 
 
 
@@ -86,12 +91,10 @@ public class UpgradeScreen implements Screen {
                 upgradeTestButton.scaleBy(0.25f);
 
                 Table table = new Table();
-
                 table.add(playButton);
-                table.row();
                 table.add(upgradeTestButton);
                 float x = game.viewport.getWorldWidth()/2f;
-                float y = game.viewport.getWorldHeight() * 0.95f - table.getHeight();
+                float y = game.viewport.getWorldHeight() * 0.95f - table.getPrefHeight();
                 table.setPosition(x, y);
                 //add button to the scene
 
@@ -145,6 +148,7 @@ public class UpgradeScreen implements Screen {
                 batch.dispose();
                 imgWall.dispose();
                 imgButton.dispose();
+
             }
         }
 
