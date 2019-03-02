@@ -22,13 +22,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.fixthewall.actors.Wall;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.upgrades.AbstractManager;
 
 public class UpgradeScreen implements Screen {
 
             private Stage stage;
-            private SpriteBatch batch;
             private Texture imgWall;
             private Texture textureFond;
             private Game game;
@@ -39,10 +39,9 @@ public class UpgradeScreen implements Screen {
             private TiledDrawable tileButtonReturn;
             private TiledDrawable tileButtonReturnDown;
 
-            public UpgradeScreen(final Game game){
+            public UpgradeScreen(final Game game, Wall wall){
                 this.game = game;
-                batch = new SpriteBatch();
-                imgWall = new Texture("theWall.png");
+                imgWall = new Texture("wallStates/theWall.png");
                 textureFond = new Texture("fondWall.png");
                 imgButton = new Texture("texture_button.png");
                 imgButtonReturn = new Texture("texture_button_return.png");
@@ -53,17 +52,14 @@ public class UpgradeScreen implements Screen {
                 Image imgFond = new Image(textureFond);
                 stage.addActor(imgFond);
 
-
+                stage.addActor(wall);
 
                 //Import font
                 FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/Germania.ttf"));
                 FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
                 parameter.size = 60;
                 BitmapFont font12 = generator.generateFont(parameter); // font size 12 pixels
-                // don't forget to dispose to avoid memory leaks!
-
-                //create button style
-
+                generator.dispose();// don't forget to dispose to avoid memory leaks!
 
                 //setup Buttons
                 //button upgrade
@@ -78,7 +74,6 @@ public class UpgradeScreen implements Screen {
                 Button playButton = new ImageButton(tileButtonReturn, tileButtonReturnDown);
 
 
-
                 upgradeTestButton.addListener(AbstractManager.getSingleInstance().getAllUpgrade()[0].getListener());
 
                 playButton.addListener(new ChangeListener() {
@@ -88,7 +83,6 @@ public class UpgradeScreen implements Screen {
                     }
                 });
 
-
                 upgradeTestButton.scaleBy(0.25f);
 
                 Table table = new Table();
@@ -97,7 +91,6 @@ public class UpgradeScreen implements Screen {
                 float x = game.viewport.getWorldWidth()/2f;
                 float y = game.viewport.getWorldHeight() * 0.95f - table.getPrefHeight();
                 table.setPosition(x, y);
-                //add button to the scene
 
                 stage.addActor(table);
 
@@ -114,10 +107,6 @@ public class UpgradeScreen implements Screen {
             public void render(float delta) {
                 Gdx.gl.glClearColor(0, 0, 0, 1);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-                batch.begin();
-                batch.draw(imgWall, 0, 300);
-                batch.end();
 
                 stage.act(Gdx.graphics.getDeltaTime());
                 stage.draw();
@@ -146,7 +135,6 @@ public class UpgradeScreen implements Screen {
             @Override
             public void dispose() {
                 stage.dispose();
-                batch.dispose();
                 imgWall.dispose();
                 imgButton.dispose();
 

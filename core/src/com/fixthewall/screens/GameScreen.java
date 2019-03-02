@@ -2,67 +2,55 @@ package com.fixthewall.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.fixthewall.actors.Ennemi;
+import com.fixthewall.actors.Wall;
 import com.fixthewall.game.Game;
 import com.fixthewall.logic.BadGuysLogic;
-import com.fixthewall.logic.WallLogic;
+import com.fixthewall.logic.GameLogic;
 import com.fixthewall.actors.Hammer;
 
 public class GameScreen implements Screen {
     private final Game game;
     private Stage stage;
-    private SpriteBatch batch;
-    private TextureRegion imgWall;
-    private TextureRegion imgWall2;
     private Texture textureFond;
     private BitmapFont font;
     private BitmapFont fontUps;
     private Hammer hammer;
+    private Wall wall;
     //private Ennemi ennemi;
-    private boolean end;
-    private TextureRegionDrawable txtreg;
-    private int wallBefore;
-    private int wallAfter;
+    private Label bricksLabel;
+    private Label healthLabel;
 
     public GameScreen(final Game game) {
-        batch = new SpriteBatch();
         stage = new Stage(game.viewport);
-        imgWall = new TextureRegion(new Texture("theWall.png"));
-        imgWall2 = new TextureRegion(new Texture("theWallHalf.png"));
         textureFond = new Texture("fondWall.png");
         Image imgFond = new Image(textureFond);
         stage.addActor(imgFond);
+        wall = new Wall();
+        wall.setPosition(0, 300);
         hammer = new Hammer(1);
         //ennemi = new Ennemi(1);
         this.game = game;
-        txtreg = new TextureRegionDrawable(imgWall);
-
-
-        end = false;
 
         //Import font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/Germania.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 30;
+        parameter.color = Color.BLACK;
         font = generator.generateFont(parameter); // font size 12 pixels
-
 
         parameter.size = 60;
         fontUps = generator.generateFont(parameter);
@@ -79,88 +67,68 @@ public class GameScreen implements Screen {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
                 //TODO Ecran upgrades
-                game.setScreen(new UpgradeScreen(game));
+                game.setScreen(new UpgradeScreen(game, wall));
             }
         });
         stage.addActor(upsButton);
-        //create a image button
-        Button wallButton = new ImageButton(txtreg);
-        wallButton.setPosition(0, 300);
+
         //add Listener to the wall
-        wallButton.addListener( new ClickListener(){
+        wall.addListener( new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
-                float maxHealth = (float)WallLogic.getSingleInstance().getMaxHealth();
-                float incrementedHealth = (float)WallLogic.getSingleInstance().getHealth() + hammer.getHealPower();
+                double maxHealth = GameLogic.getSingleInstance().getMaxHealth();
+                double incrementedHealth = GameLogic.getSingleInstance().getHealth() + hammer.getHealPower();
                 if(incrementedHealth <= maxHealth){
-                    WallLogic.getSingleInstance().setHealth(incrementedHealth);
+                    GameLogic.getSingleInstance().setHealth(incrementedHealth);
                 }
-                else{
-                    WallLogic.getSingleInstance().setHealth(maxHealth);
+                else {
+                    GameLogic.getSingleInstance().setHealth(maxHealth);
                 }
-                WallLogic.getSingleInstance().setBricks(WallLogic.getSingleInstance().getBricks() + hammer.getBricksPower());
+                GameLogic.getSingleInstance().setBricks(GameLogic.getSingleInstance().getBricks() + hammer.getBricksPower());
                 hammer.show(event.getStageX(), event.getStageY());
             }
         });
-        wallBefore = 0;
-        wallAfter = 0;
         //Add button to the stage
-        stage.addActor(wallButton);
+        stage.addActor(wall);
         //stage.addActor(ennemi);
         stage.addActor(hammer);
         //Set the InputProcessor with the stage
         Gdx.input.setInputProcessor(stage);
 
+        bricksLabel = new Label("Bricks: " + (int) GameLogic.getSingleInstance().getBricks(), new Label.LabelStyle(font, Color.BLACK));
+        healthLabel = new Label("Health: " + (int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth(), new Label.LabelStyle(font, Color.BLACK));
+        bricksLabel.setPosition(game.viewport.getWorldWidth() / 2f, game.viewport.getWorldHeight() * 0.9f);
+        healthLabel.setPosition(game.viewport.getWorldWidth() / 2f, game.viewport.getWorldHeight() * 0.8f);
+        stage.addActor(bricksLabel);
+        stage.addActor(healthLabel);
     }
 
     @Override
     public void render (float delta) {
         //logic update
         BadGuysLogic.getSingleInstance().doDamage(delta);
-        if (WallLogic.getSingleInstance().getHealth() < 50.0) {
-            wallAfter = 0;
-            txtreg.setRegion(imgWall2);
-        }
-        else {
-                wallAfter = 1;//Let's buuild this wall
-        }
-        if (wallAfter != wallBefore)
-        {
-            switch (wallAfter) {
-                case 0: txtreg.setRegion(imgWall2);
-                break;
-                case 1: txtreg.setRegion(imgWall);
-                break;
-            }
-        }
-        wallBefore = wallAfter;
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        bricksLabel.setText("Bricks: " + (int) GameLogic.getSingleInstance().getBricks());
+        healthLabel.setText("Health: " + (int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth());
+
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
-        batch.begin();
-        end = WallLogic.getSingleInstance().getHealth() <= 0.0f;
-        font.draw(batch, "Bricks: " + WallLogic.getSingleInstance().getBricks(), game.viewport.getWorldWidth() / 2f,
-                game.viewport.getWorldWidth() * 0.9f);
-        font.draw(batch, "Health: " + (int) WallLogic.getSingleInstance().getHealth() + "/" + (int) WallLogic.getSingleInstance().getMaxHealth(),
-                game.viewport.getWorldWidth() / 2f, game.viewport.getWorldWidth() * 0.8f);
-        batch.end();
-
-        if (end) {
+        if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
             game.setScreen(new EndScreen(game));
         }
     }
 
     @Override
     public void dispose () {
-        batch.dispose();
         textureFond.dispose();
         font.dispose();
         fontUps.dispose();
         hammer.dispose();
+        wall.dispose();
         //ennemi.dispose();
         stage.dispose();
         game.dispose();
@@ -169,8 +137,6 @@ public class GameScreen implements Screen {
     public void show() {
 
     }
-
-
 
     @Override
     public void resize(int width, int height) {
