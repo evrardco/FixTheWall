@@ -63,7 +63,8 @@ public class Ennemi extends Actor {
         }
         float duration = getRandom(4)+3f;
         targetX = (float)getRandom(985);
-        float frame1Speed = 1f/(duration*3.6f);
+        float distance = Math.abs(targetX-this.getX());
+        float frame1Speed = (duration/distance)*4f;//Vitesse = (distance/temps)^-1 ici car c'est le temps des frames et non la vitesse.
         ennemiAnimation = new Animation<TextureRegion>(frame1Speed, ennemiFrames);
         this.addAction(Actions.moveTo(targetX, this.getY(), duration));
         //
