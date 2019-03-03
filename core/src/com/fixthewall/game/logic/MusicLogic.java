@@ -1,4 +1,4 @@
-package com.fixthewall.logic;
+package com.fixthewall.game.logic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;

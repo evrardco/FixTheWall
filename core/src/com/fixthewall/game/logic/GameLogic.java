@@ -1,4 +1,4 @@
-package com.fixthewall.logic;
+package com.fixthewall.game.logic;
 
 public class GameLogic {
     private double health;

@@ -1,4 +1,4 @@
-package com.fixthewall.screens;
+package com.fixthewall.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,11 +13,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.fixthewall.actors.Wall;
+import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
 
 
 public class StartScreen implements Screen {
+
     private Stage stage;
     private Texture textureFond;
     private Game game;
@@ -59,7 +59,6 @@ public class StartScreen implements Screen {
         });
         stage.addActor(imgFond);
         wall = new Wall();
-        wall.setPosition(0, 300);
         stage.addActor(wall);
         //add button to the scene
         stage.addActor(playButton);

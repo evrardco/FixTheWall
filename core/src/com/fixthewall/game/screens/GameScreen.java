@@ -1,4 +1,4 @@
-package com.fixthewall.screens;
+package com.fixthewall.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -16,14 +16,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.fixthewall.actors.Ennemi;
-import com.fixthewall.actors.Wall;
+import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
-import com.fixthewall.logic.BadGuysLogic;
-import com.fixthewall.logic.GameLogic;
-import com.fixthewall.actors.Hammer;
+import com.fixthewall.game.logic.BadGuysLogic;
+import com.fixthewall.game.logic.GameLogic;
+import com.fixthewall.game.actors.Hammer;
 
 public class GameScreen implements Screen {
+
     private final Game game;
     private Stage stage;
     private Texture textureFond;
@@ -41,7 +42,6 @@ public class GameScreen implements Screen {
         Image imgFond = new Image(textureFond);
         stage.addActor(imgFond);
         wall = new Wall();
-        wall.setPosition(0, 300);
         hammer = new Hammer(1);
         ennemi = new Ennemi(1);
         this.game = game;
@@ -67,8 +67,8 @@ public class GameScreen implements Screen {
         upsButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                //TODO Ecran upgrades
-                game.setScreen(new UpgradeScreen(game, wall));
+                dispose();
+                game.setScreen(new UpgradeScreen(game));
             }
         });
         stage.addActor(upsButton);

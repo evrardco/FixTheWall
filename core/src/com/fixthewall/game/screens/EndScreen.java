@@ -1,4 +1,4 @@
-package com.fixthewall.screens;
+package com.fixthewall.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -14,11 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.fixthewall.actors.Wall;
+import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
-import com.fixthewall.logic.GameLogic;
+import com.fixthewall.game.logic.GameLogic;
 
 public class EndScreen implements Screen {
+
     private final Game game;
     private Stage stage;
     private Texture textureFond;
@@ -34,7 +35,6 @@ public class EndScreen implements Screen {
         stage.addActor(imgFond);
 
         wall = new Wall();
-        wall.setPosition(0, 300);
         stage.addActor(wall);
 
         //Import font
@@ -60,6 +60,7 @@ public class EndScreen implements Screen {
             @Override
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
                 GameLogic.getSingleInstance().init();
+                dispose();
                 game.setScreen(new GameScreen(game));
             }
         });

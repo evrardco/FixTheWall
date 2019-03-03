@@ -1,6 +1,6 @@
 package com.fixthewall.game.upgrades;
 
-import com.fixthewall.logic.GameLogic;
+import com.fixthewall.game.logic.GameLogic;
 import com.badlogic.gdx.Gdx;
 
 public class Upgrade1 extends AbstractUpgrade {

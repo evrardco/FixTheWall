@@ -1,9 +1,9 @@
-package com.fixthewall.actors;
+package com.fixthewall.game.actors;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.fixthewall.logic.GameLogic;
+import com.fixthewall.game.logic.GameLogic;
 
 public class Wall extends Actor {
 
@@ -22,6 +22,7 @@ public class Wall extends Actor {
         setWidth(textures[0].getWidth());
         setHeight(textures[0].getHeight());
         setBounds(0, 0, getWidth(), getHeight());
+        setPosition(0, 300);
     }
 
     @Override

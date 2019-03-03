@@ -1,4 +1,4 @@
-package com.fixthewall.actors;
+package com.fixthewall.game.actors;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
