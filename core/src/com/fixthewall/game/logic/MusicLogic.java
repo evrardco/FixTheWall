@@ -130,12 +130,10 @@ public class MusicLogic {
     }
 
     /*
-     * Retourne un entier entre 0 et n-1
+     * Retourne un entier aléatoire entre 0 et n-1
      */
-    public static int getRandom(int n){
-        int size = (int)(Math.random()*n);
-        if(size == n)size -= 1;
-        return size;
+    private static int getRandom(int n){
+        return (int)(Math.random()*n);
     }
 
     public void dispose (){
