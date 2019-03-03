@@ -9,12 +9,12 @@ public abstract class AbstractUpgrade {
 
     private int level;
     private float base;
-    private int cost;
+    private double cost;
 
 
     private boolean applied;
 
-    public AbstractUpgrade(int level, int cost){
+    public AbstractUpgrade(int level, double cost){
         this.level = level;
         this.cost = cost;
         this.applied = false;
@@ -24,14 +24,17 @@ public abstract class AbstractUpgrade {
         return  new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
-                if(GameLogic.getSingleInstance().getBricks() >= cost) {
+
+                GameLogic Instance = GameLogic.getSingleInstance();
+                if(Instance.getBricks() >= cost) {
                     GameLogic.getSingleInstance().setBricks(GameLogic.getSingleInstance().getBricks() - cost);
                     level++;
+                    setCost(level*10+cost*Math.log(cost));
                     applied = true;
+                    AbstractManager.getSingleInstance().update();
                 }else{
                     Gdx.app.log("Upgrade", "not enough bricks");
                 }
-                AbstractManager.getSingleInstance().update();
             }
         };
 
@@ -58,11 +61,11 @@ public abstract class AbstractUpgrade {
         this.level = level;
     }
 
-    public int getCost() {
+    public double getCost() {
         return cost;
     }
 
-    public void setCost(int cost) {
+    public void setCost(double cost) {
         this.cost = cost;
     }
 

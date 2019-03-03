@@ -12,6 +12,7 @@ public class Upgrade1 extends AbstractUpgrade {
         GameLogic Instance = GameLogic.getSingleInstance();
         Instance.setMaxHealth((int) Instance.getMaxHealth() * 2);
         Gdx.app.log("Upgrade 1","max: " + Instance.getMaxHealth());
+        Instance.setHealth(Instance.getMaxHealth());
 
     }
 }

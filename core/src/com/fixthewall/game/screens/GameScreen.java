@@ -119,6 +119,7 @@ public class GameScreen implements Screen {
         stage.draw();
 
         if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
+            dispose();
             game.setScreen(new EndScreen(game));
         }
     }
@@ -132,7 +133,6 @@ public class GameScreen implements Screen {
         wall.dispose();
         ennemi.dispose();
         stage.dispose();
-        game.dispose();
     }
     @Override
     public void show() {

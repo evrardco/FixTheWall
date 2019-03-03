@@ -89,7 +89,6 @@ public class EndScreen implements Screen {
         textureFond.dispose();
         font.dispose();
         stage.dispose();
-        game.dispose();
     }
     @Override
     public void show() {
