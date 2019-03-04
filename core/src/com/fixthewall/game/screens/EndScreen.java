@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.logic.GameLogic;
+import com.fixthewall.game.upgrades.AbstractManager;
 
 public class EndScreen implements Screen {
 
@@ -60,6 +61,7 @@ public class EndScreen implements Screen {
             @Override
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
                 GameLogic.getSingleInstance().init();
+                AbstractManager.getSingleInstance().reset();
                 dispose();
                 GameScreen.gameScreen = new GameScreen(game);
                 game.setScreen(GameScreen.gameScreen);
