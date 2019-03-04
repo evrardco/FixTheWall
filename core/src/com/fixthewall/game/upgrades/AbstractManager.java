@@ -26,6 +26,19 @@ public class AbstractManager {
         this.allUpgrade = allUpgrade;
     }
 
+    public void reset()
+    {
+        AbstractUpgrade currentUpgrade = null;
+        for (int i = 0; i < allUpgrade.length; i++) {
+            currentUpgrade = new Upgrade1(0, 10);
+            allUpgrade[i] = currentUpgrade;
+            currentUpgrade.setLevel(0);
+
+        }
+        update();
+
+    }
+
     public void update()
     {
         AbstractUpgrade currentUpgrade = null;
