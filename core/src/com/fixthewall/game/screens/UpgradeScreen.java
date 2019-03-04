@@ -71,13 +71,13 @@ public class UpgradeScreen implements Screen {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
                 dispose();
-                game.setScreen(new GameScreen(game));
+                game.setScreen(GameScreen.gameScreen);
             }
         });
 
         upgradeTestButton.scaleBy(0.25f);
 
-        Table table = new Table();
+        Table table = new Table(); //test
         table.add(playButton);
         table.add(upgradeTestButton);
         float x = game.viewport.getWorldWidth() / 2f;

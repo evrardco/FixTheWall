@@ -54,7 +54,8 @@ public class StartScreen implements Screen {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
                 dispose();
-                game.setScreen(new GameScreen(game));
+                GameScreen.gameScreen = new GameScreen(game);
+                game.setScreen(GameScreen.gameScreen);
             }
         });
         stage.addActor(imgFond);

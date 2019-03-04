@@ -35,6 +35,7 @@ public class GameScreen implements Screen {
     private Ennemi ennemi;
     private Label bricksLabel;
     private Label healthLabel;
+    public static GameScreen gameScreen;
 
     public GameScreen(final Game game) {
         stage = new Stage(game.viewport);
@@ -67,7 +68,6 @@ public class GameScreen implements Screen {
         upsButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                dispose();
                 game.setScreen(new UpgradeScreen(game));
             }
         });
@@ -120,6 +120,7 @@ public class GameScreen implements Screen {
 
         if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
             dispose();
+            gameScreen = null;
             game.setScreen(new EndScreen(game));
         }
     }
@@ -136,6 +137,7 @@ public class GameScreen implements Screen {
     }
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
 
     }
 

@@ -61,7 +61,8 @@ public class EndScreen implements Screen {
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
                 GameLogic.getSingleInstance().init();
                 dispose();
-                game.setScreen(new GameScreen(game));
+                GameScreen.gameScreen = new GameScreen(game);
+                game.setScreen(GameScreen.gameScreen);
             }
         });
         //add button to the scene
