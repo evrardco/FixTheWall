@@ -98,6 +98,7 @@ public class Hammer extends Actor {
     }
 
     public void dispose() {
+
         this.texture.getTexture().dispose();
     }
 }

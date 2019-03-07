@@ -39,27 +39,22 @@ public class GameScreen implements Screen {
 
     public GameScreen(final Game game) {
         stage = new Stage(game.viewport);
-        textureFond = new Texture("fondWall.png");
+        textureFond = game.ass.get("fondWall.png");
+
         Image imgFond = new Image(textureFond);
-        stage.addActor(imgFond);
         wall = new Wall();
         hammer = new Hammer(1);
         ennemi = new Ennemi(1);
+
         this.game = game;
 
         //Import font
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/Germania.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 30;
-        parameter.color = Color.BLACK;
-        font = generator.generateFont(parameter); // font size 12 pixels
 
-        parameter.size = 60;
-        fontUps = generator.generateFont(parameter);
-        generator.dispose(); // don't forget to dispose to avoid memory leaks!
-
+        font = game.ass.get("Germania30.ttf"); // font size 12 pixels
+        fontUps = game.ass.get("Germania60.ttf");
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.font = fontUps;
+        //Setting up listeners
         Button upsButton = new TextButton("Upgrades", style);
         float x = 0.95f * game.viewport.getWorldWidth() - upsButton.getWidth();
         float y = 0.95f * game.viewport.getWorldHeight() - upsButton.getHeight();
@@ -71,7 +66,6 @@ public class GameScreen implements Screen {
                 game.setScreen(new UpgradeScreen(game));
             }
         });
-        stage.addActor(upsButton);
 
         //add Listener to the wall
         wall.addListener( new ClickListener(){
@@ -89,19 +83,23 @@ public class GameScreen implements Screen {
                 hammer.show(event.getStageX(), event.getStageY());
             }
         });
-        //Add button to the stage
-        stage.addActor(wall);
-        stage.addActor(ennemi);
-        stage.addActor(hammer);
-        //Set the InputProcessor with the stage
-        Gdx.input.setInputProcessor(stage);
 
         bricksLabel = new Label("Bricks: " + (int) GameLogic.getSingleInstance().getBricks(), new Label.LabelStyle(font, Color.BLACK));
         healthLabel = new Label("Health: " + (int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth(), new Label.LabelStyle(font, Color.BLACK));
         bricksLabel.setPosition(game.viewport.getWorldWidth() / 2f, game.viewport.getWorldHeight() * 0.9f);
         healthLabel.setPosition(game.viewport.getWorldWidth() / 2f, game.viewport.getWorldHeight() * 0.8f);
+
+        //Add all the things to runescape
+        stage.addActor(imgFond);
+        stage.addActor(wall);
+        stage.addActor(ennemi);
+        stage.addActor(hammer);
+        stage.addActor(upsButton);
         stage.addActor(bricksLabel);
         stage.addActor(healthLabel);
+
+
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -127,12 +125,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose () {
-        textureFond.dispose();
-        font.dispose();
-        fontUps.dispose();
-        hammer.dispose();
-        wall.dispose();
-        ennemi.dispose();
+        //textureFond.dispose();
+        //font.dispose();
+        //fontUps.dispose();
+        //hammer.dispose();
+        //wall.dispose();
+        //ennemi.dispose();
         stage.dispose();
     }
     @Override

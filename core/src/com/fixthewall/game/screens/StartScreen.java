@@ -26,7 +26,7 @@ public class StartScreen implements Screen {
 
     public StartScreen(final Game game){
         this.game = game;
-        textureFond = new Texture("fondWall.png");
+        textureFond = game.ass.get("fondWall.png");
         Image imgFond = new Image(textureFond);
         stage = new Stage(game.viewport);
 
@@ -104,7 +104,7 @@ public class StartScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        wall.dispose();
-        textureFond.dispose();
+        //wall.dispose();
+        //textureFond.dispose();
     }
 }
