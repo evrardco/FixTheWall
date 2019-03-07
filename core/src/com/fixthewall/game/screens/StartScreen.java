@@ -31,15 +31,11 @@ public class StartScreen implements Screen {
         stage = new Stage(game.viewport);
 
         //Import font
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/Germania.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 120;
-        parameter.color = Color.BLACK;
-        BitmapFont font12 = generator.generateFont(parameter); // font size 12 pixels
+        BitmapFont font12 = game.ass.get("Germania120.ttf"); // font size 12 pixels
         //create button style
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.font = font12;
-        generator.dispose();
+
 
         //setup Button
         Button playButton = new TextButton("Start", style);

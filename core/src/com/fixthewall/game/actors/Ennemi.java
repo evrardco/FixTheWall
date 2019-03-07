@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.fixthewall.game.Game;
 
 /*
 * Ennemis avance entre Y = [242; 298] (intervale de 56 pixels)
@@ -30,9 +31,11 @@ public class Ennemi extends Actor {
     // Variable for tracking elapsed time for the animation
     private float elapsedTime;
     private float elapsedTimeHit;
+    private Game game;
 
 
-    public Ennemi (int level){
+    public Ennemi (int level, Game game){
+        this.game = game;
         if (level < 1)
             this.level = 1;
         else
@@ -43,7 +46,7 @@ public class Ennemi extends Actor {
         setTouchable(Touchable.disabled); // clik through
 
         //Set animation move
-        texture = new Texture("Frames/SheetFrameEnnemi.png");
+        texture = game.ass.get("Frames/SheetFrameEnnemi.png");
         TextureRegion[][] tmp = TextureRegion.split(texture,
                         texture.getWidth() / FRAME_COLS,
                         texture.getHeight() / FRAME_ROWS);

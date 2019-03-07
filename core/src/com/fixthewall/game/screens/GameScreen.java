@@ -44,7 +44,7 @@ public class GameScreen implements Screen {
         Image imgFond = new Image(textureFond);
         wall = new Wall();
         hammer = new Hammer(1);
-        ennemi = new Ennemi(1);
+        ennemi = new Ennemi(1, game);
 
         this.game = game;
 

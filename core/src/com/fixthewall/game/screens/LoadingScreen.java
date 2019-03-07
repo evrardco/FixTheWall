@@ -18,7 +18,7 @@ public class LoadingScreen implements Screen {
     public LoadingScreen(final Game game) {
         stage = new Stage(game.viewport);
         this.game = game;
-        BitmapFont font = game.ass.get("Germania30.ttf");
+        BitmapFont font = game.ass.get("GermaniaLoading.ttf");
         loadLabel = new Label("Progress: 0/100", new Label.LabelStyle(font, Color.WHITE));
         stage.addActor(loadLabel);
         //centering label
