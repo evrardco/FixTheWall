@@ -39,11 +39,7 @@ public class GameScreen implements Screen {
         Image imgFond = new Image(textureFond);
         Wall wall = new Wall(game.ass);
         hammer = new Hammer(game.ass);
-        Ennemi[] ennemis = new Ennemi[10000];
-        for (int i = 0; i < ennemis.length; i++) {
-            ennemis[i] = new Ennemi(1, game.ass);
-        }
-//        Ennemi ennemi = new Ennemi(1, game.ass);
+        Ennemi ennemi = new Ennemi(1, game.ass);
 
         this.game = game;
 
@@ -91,9 +87,7 @@ public class GameScreen implements Screen {
         //Add all the things to runescape
         stage.addActor(imgFond);
         stage.addActor(wall);
-        for (int i = 0; i < ennemis.length; i++) {
-            stage.addActor(ennemis[i]);
-        }
+        stage.addActor(ennemi);
         stage.addActor(hammer);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);
