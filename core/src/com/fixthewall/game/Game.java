@@ -53,6 +53,7 @@ public class Game extends com.badlogic.gdx.Game {
 	@Override
 	public void dispose (){
 		playlist.dispose();
+		ass.dispose();
 	}
 
     /**
@@ -82,7 +83,6 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("texture_button.png", Texture.class);
         ass.load("texture_button_return.png", Texture.class);
         ass.load("texture_button_return_down.png", Texture.class);
-        ass.load("fondWall.png", Texture.class);
 
         // dossier wallStates
         ass.load("wallStates/theWall.png", Texture.class);

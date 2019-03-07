@@ -1,5 +1,6 @@
 package com.fixthewall.game.actors;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -24,15 +25,15 @@ public class Hammer extends Actor {
 
     private SequenceAction sequence;
 
-    public Hammer(int level) {
+    public Hammer(AssetManager ass) {
         if (level < 1)
             this.level = 1;
         else
             this.level = level;
         this.setPowers();
-        this.texture = new TextureRegion(new Texture("marteau.png"));
+        texture = new TextureRegion(ass.get("marteau.png", Texture.class));
         setBounds(getX(),getY(),texture.getRegionWidth(),texture.getRegionHeight());
-        setOrigin(this.texture.getRegionWidth() / 2f, this.texture.getRegionHeight() / 4f);
+        setOrigin(texture.getRegionWidth() / 2f, texture.getRegionHeight() / 4f);
         addAction(Actions.rotateBy(10f));
         setRotation(STARTING_ANGLE);
         setTouchable(Touchable.disabled); // clik through
@@ -95,10 +96,5 @@ public class Hammer extends Actor {
     public void setLevel(int level) {
         this.level = level;
         this.setPowers();
-    }
-
-    public void dispose() {
-
-        this.texture.getTexture().dispose();
     }
 }

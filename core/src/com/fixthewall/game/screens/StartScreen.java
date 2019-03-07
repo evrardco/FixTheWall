@@ -2,11 +2,9 @@ package com.fixthewall.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -20,13 +18,11 @@ import com.fixthewall.game.Game;
 public class StartScreen implements Screen {
 
     private Stage stage;
-    private Texture textureFond;
     private Game game;
-    private Wall wall;
 
     public StartScreen(final Game game){
         this.game = game;
-        textureFond = game.ass.get("fondWall.png");
+        Texture textureFond = game.ass.get("fondWall.png");
         Image imgFond = new Image(textureFond);
         stage = new Stage(game.viewport);
 
@@ -55,7 +51,7 @@ public class StartScreen implements Screen {
             }
         });
         stage.addActor(imgFond);
-        wall = new Wall();
+        Wall wall = new Wall(game.ass);
         stage.addActor(wall);
         //add button to the scene
         stage.addActor(playButton);
@@ -73,7 +69,7 @@ public class StartScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        stage.act(Gdx.graphics.getDeltaTime());
+        stage.act(delta);
         stage.draw();
     }
 
@@ -100,7 +96,5 @@ public class StartScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        //wall.dispose();
-        //textureFond.dispose();
     }
 }

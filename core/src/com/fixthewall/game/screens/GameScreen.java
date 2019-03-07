@@ -27,31 +27,30 @@ public class GameScreen implements Screen {
 
     private final Game game;
     private Stage stage;
-    private Texture textureFond;
-    private BitmapFont font;
-    private BitmapFont fontUps;
     private Hammer hammer;
-    private Wall wall;
-    private Ennemi ennemi;
     private Label bricksLabel;
     private Label healthLabel;
     public static GameScreen gameScreen;
 
     public GameScreen(final Game game) {
         stage = new Stage(game.viewport);
-        textureFond = game.ass.get("fondWall.png");
+        Texture textureFond = game.ass.get("fondWall.png");
 
         Image imgFond = new Image(textureFond);
-        wall = new Wall();
-        hammer = new Hammer(1);
-        ennemi = new Ennemi(1, game);
+        Wall wall = new Wall(game.ass);
+        hammer = new Hammer(game.ass);
+        Ennemi[] ennemis = new Ennemi[10000];
+        for (int i = 0; i < ennemis.length; i++) {
+            ennemis[i] = new Ennemi(1, game.ass);
+        }
+//        Ennemi ennemi = new Ennemi(1, game.ass);
 
         this.game = game;
 
         //Import font
 
-        font = game.ass.get("Germania30.ttf"); // font size 12 pixels
-        fontUps = game.ass.get("Germania60.ttf");
+        BitmapFont font = game.ass.get("Germania30.ttf"); // font size 12 pixels
+        BitmapFont fontUps = game.ass.get("Germania60.ttf");
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.font = fontUps;
         //Setting up listeners
@@ -92,7 +91,9 @@ public class GameScreen implements Screen {
         //Add all the things to runescape
         stage.addActor(imgFond);
         stage.addActor(wall);
-        stage.addActor(ennemi);
+        for (int i = 0; i < ennemis.length; i++) {
+            stage.addActor(ennemis[i]);
+        }
         stage.addActor(hammer);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);
@@ -113,7 +114,7 @@ public class GameScreen implements Screen {
         bricksLabel.setText("Bricks: " + (int) GameLogic.getSingleInstance().getBricks());
         healthLabel.setText("Health: " + (int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth());
 
-        stage.act(Gdx.graphics.getDeltaTime());
+        stage.act(delta);
         stage.draw();
 
         if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
@@ -125,12 +126,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose () {
-        //textureFond.dispose();
-        //font.dispose();
-        //fontUps.dispose();
-        //hammer.dispose();
-        //wall.dispose();
-        //ennemi.dispose();
         stage.dispose();
     }
     @Override

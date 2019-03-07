@@ -22,9 +22,13 @@ public class LoadingScreen implements Screen {
         loadLabel = new Label("Progress: 0/100", new Label.LabelStyle(font, Color.WHITE));
         stage.addActor(loadLabel);
         //centering label
-        loadLabel.setPosition(game.viewport.getWorldWidth()/2 - loadLabel.getWidth()/2,
-                game.viewport.getWorldHeight()/2 - loadLabel.getHeight()/2);
+        loadLabel.setPosition(game.viewport.getWorldWidth() / 2 - loadLabel.getWidth() / 2,
+                game.viewport.getWorldHeight() / 2 - loadLabel.getHeight() / 2);
 
+        Label studioLabel = new Label("Gunray Interactive", new Label.LabelStyle(font, Color.WHITE));
+        studioLabel.setPosition(game.viewport.getWorldWidth() / 2 - loadLabel.getWidth() / 2,
+                game.viewport.getWorldHeight() * 0.1f - loadLabel.getHeight() / 2);
+        stage.addActor(studioLabel);
     }
 
     @Override
@@ -34,23 +38,18 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
-
-
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        float progress = game.ass.getProgress();
-        loadLabel.setText("Progress: "+(int)progress*100+"/100");
-        stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
         if (game.ass.update()) {
-            // c'est loadé, changer le screen
-
             game.setScreen(new StartScreen(game));
         }
 
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // afficher le logo de chargement
+        float progress = game.ass.getProgress();
+        loadLabel.setText("Progress: " + (int) (progress * 100) + "/100");
+
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
