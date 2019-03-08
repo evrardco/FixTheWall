@@ -1,11 +1,11 @@
 package com.fixthewall.game.upgrades;
 
-public class AbstractManager {
+public class UpgradeManager {
 
    private AbstractUpgrade [] allUpgrade = new AbstractUpgrade[10];
-    private static AbstractManager singleInstance = null;
+    private static UpgradeManager singleInstance = null;
 
-   public AbstractManager()
+   public UpgradeManager()
    {
        AbstractUpgrade currentUpgrade = null;
        for (int i = 0; i < allUpgrade.length; i++) {
@@ -78,8 +78,8 @@ public class AbstractManager {
 
     }
 
-    public static AbstractManager getSingleInstance(){
-        if(singleInstance == null) singleInstance = new AbstractManager();
+    public static UpgradeManager getSingleInstance(){
+        if(singleInstance == null) singleInstance = new UpgradeManager();
         return singleInstance;
     }
 

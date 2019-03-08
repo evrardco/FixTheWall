@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -17,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.logic.GameLogic;
-import com.fixthewall.game.upgrades.AbstractManager;
+import com.fixthewall.game.upgrades.UpgradeManager;
 
 public class EndScreen implements Screen {
 
@@ -54,7 +53,7 @@ public class EndScreen implements Screen {
             @Override
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
                 GameLogic.getSingleInstance().init();
-                AbstractManager.getSingleInstance().reset();
+                UpgradeManager.getSingleInstance().reset();
                 dispose();
                 GameScreen.gameScreen = new GameScreen(game);
                 game.setScreen(GameScreen.gameScreen);

@@ -31,7 +31,7 @@ public abstract class AbstractUpgrade {
                     level++;
                     setCost(level*10+cost*Math.log(cost));
                     applied = true;
-                    AbstractManager.getSingleInstance().update();
+                    UpgradeManager.getSingleInstance().update();
                 }else{
                     Gdx.app.log("Upgrade", "not enough bricks");
                 }

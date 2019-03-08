@@ -5,7 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -18,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
-import com.fixthewall.game.upgrades.AbstractManager;
+import com.fixthewall.game.upgrades.UpgradeManager;
 
 public class UpgradeScreen implements Screen {
 
@@ -55,7 +54,7 @@ public class UpgradeScreen implements Screen {
         Button playButton = new ImageButton(tileButtonReturn, tileButtonReturnDown);
 
 
-        upgradeTestButton.addListener(AbstractManager.getSingleInstance().getAllUpgrade()[0].getListener());
+        upgradeTestButton.addListener(UpgradeManager.getSingleInstance().getAllUpgrade()[0].getListener());
 
         playButton.addListener(new ChangeListener() {
             @Override

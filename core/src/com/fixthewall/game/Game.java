@@ -11,13 +11,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.fixthewall.game.screens.GameScreen;
 import com.fixthewall.game.screens.LoadingScreen;
-import com.fixthewall.game.upgrades.AbstractManager;
+import com.fixthewall.game.upgrades.UpgradeManager;
 import com.fixthewall.game.logic.BadGuysLogic;
 import com.fixthewall.game.logic.MusicLogic;
 import com.fixthewall.game.logic.GameLogic;
-import com.fixthewall.game.screens.StartScreen;
 
 public class Game extends com.badlogic.gdx.Game {
 
@@ -44,7 +42,7 @@ public class Game extends com.badlogic.gdx.Game {
         loadVIPAssets();
         loadAssets();
 
-        AbstractManager.getSingleInstance();
+        UpgradeManager.getSingleInstance();
         GameLogic.getSingleInstance().init();
         BadGuysLogic.getSingleInstance().init(9.0, 1.0f);
 		viewport = new FitViewport(GAME_WIDTH, GAME_HEIGHT);
