@@ -19,34 +19,28 @@ public class Hammer extends Actor {
     private TextureRegion texture;
     private int bricksPower; // amount of bricks the hammer generate
     private int healPower; // amount of life the hammer heals the wall
-    private int level;
     private boolean show;
     private float posX, posY;
 
     private SequenceAction sequence;
 
     public Hammer(AssetManager ass) {
-        if (level < 1)
-            this.level = 1;
-        else
-            this.level = level;
         this.setPowers();
         texture = new TextureRegion(ass.get("marteau.png", Texture.class));
         setBounds(getX(),getY(),texture.getRegionWidth(),texture.getRegionHeight());
         setOrigin(texture.getRegionWidth() / 2f, texture.getRegionHeight() / 4f);
-        addAction(Actions.rotateBy(10f));
         setRotation(STARTING_ANGLE);
-        setTouchable(Touchable.disabled); // clik through
+        setTouchable(Touchable.disabled); // click through
         this.show = false;
         this.posX = 0;
         this.posY = 0;
 
         this.sequence = new SequenceAction();
         ParallelAction parallel = new ParallelAction();
-        parallel.addAction(new Actions().alpha(1, 0.05f));
-        parallel.addAction(new Actions().rotateBy(ANGLE_TO_ROTATE, 0.15f));
+        parallel.addAction(Actions.alpha(1, 0.05f));
+        parallel.addAction(Actions.rotateBy(ANGLE_TO_ROTATE, 0.15f));
         sequence.addAction(parallel);
-        sequence.addAction(new Actions().alpha(0, 0.1f));
+        sequence.addAction(Actions.alpha(0, 0.1f));
     }
 
     @Override
@@ -62,20 +56,22 @@ public class Hammer extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (this.show) {
-            Color color = batch.getColor();
-            batch.setColor(color.r, color.g, color.b, getColor().a);
+            Color color = getColor();
+            batch.setColor(color.r, color.g, color.b, getColor().a * parentAlpha);
             batch.draw(this.texture, getX(), getY(), getOriginX(), getOriginY(), getWidth(),
                     getHeight(), getScaleX(), getScaleY(), getRotation());
+            batch.setColor(color.r, color.g, color.b, parentAlpha);
         }
     }
 
     public void show(float posX, float posY) {
         this.posX = posX - getOriginX();
         this.posY = posY - getOriginY();
+
+        setRotation(STARTING_ANGLE);
         removeAction(sequence); // enlève l'action pour la reset (si on fait juste restart ça suffit pas)
         sequence.restart();
         addAction(sequence);
-        setRotation(STARTING_ANGLE);
         this.show = true;
     }
 
@@ -89,12 +85,8 @@ public class Hammer extends Actor {
 
     private void setPowers() {
         // TODO equilibrage de ça
-        this.bricksPower = 2 * this.level;
-        this.healPower = 2 * this.level;
+        this.bricksPower = 2;
+        this.healPower = 2;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
-        this.setPowers();
-    }
 }
