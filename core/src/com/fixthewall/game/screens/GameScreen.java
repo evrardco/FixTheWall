@@ -16,15 +16,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.logic.BadGuysLogic;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.actors.Hammer;
-
-import java.util.ArrayList;
 
 public class GameScreen implements Screen {
 
@@ -98,9 +95,6 @@ public class GameScreen implements Screen {
         stage.addActor(bricksLabel);
         stage.addActor(healthLabel);
         stage.addActor(hammer);
-        //FROM HERE, USE ADDBEFOREHAMMER
-
-
 
         Gdx.input.setInputProcessor(stage);
     }
