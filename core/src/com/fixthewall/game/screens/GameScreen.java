@@ -16,12 +16,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.logic.BadGuysLogic;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.actors.Hammer;
+
+import java.util.ArrayList;
 
 public class GameScreen implements Screen {
 
@@ -31,6 +34,17 @@ public class GameScreen implements Screen {
     private Label bricksLabel;
     private Label healthLabel;
     public static GameScreen gameScreen;
+    //Probably buggy af
+    private void moveUpHammer(){
+        Array<Actor> actors = stage.getActors();
+        for(int i = 0; i < actors.size; i++){
+            if(actors.get(i) instanceof Hammer){
+                Actor last = actors.get(actors.size-1);
+                actors.set(actors.size-1, hammer);
+                actors.set(i, last);
+            }
+        }
+    }
 
     public GameScreen(final Game game) {
         stage = new Stage(game.viewport);
@@ -107,7 +121,8 @@ public class GameScreen implements Screen {
 
         bricksLabel.setText("Bricks: " + (int) GameLogic.getSingleInstance().getBricks());
         healthLabel.setText("Health: " + (int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth());
-
+        stage.addActor(new Ennemi(0, game.ass));
+        moveUpHammer();
         stage.act(delta);
         stage.draw();
 
