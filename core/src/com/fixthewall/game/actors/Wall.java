@@ -23,7 +23,7 @@ public class Wall extends Actor {
 
         setWidth(textures[0].getWidth());
         setHeight(textures[0].getHeight());
-        setBounds(0, 0, getWidth(), getHeight());
+        setBounds(getX(), getY(), getWidth(), getHeight());
         setPosition(0, 300);
     }
 
