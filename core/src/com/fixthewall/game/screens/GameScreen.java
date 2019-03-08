@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
@@ -23,43 +24,37 @@ import com.fixthewall.game.logic.BadGuysLogic;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.actors.Hammer;
 
+import java.util.ArrayList;
+
 public class GameScreen implements Screen {
 
     private final Game game;
     private Stage stage;
-    private Texture textureFond;
-    private BitmapFont font;
-    private BitmapFont fontUps;
     private Hammer hammer;
-    private Wall wall;
-    private Ennemi ennemi;
     private Label bricksLabel;
     private Label healthLabel;
+    private Group ennemiGroup;
     public static GameScreen gameScreen;
 
     public GameScreen(final Game game) {
         stage = new Stage(game.viewport);
-        textureFond = new Texture("fondWall.png");
+        Texture textureFond = game.ass.get("fondWall.png");
+
         Image imgFond = new Image(textureFond);
-        stage.addActor(imgFond);
-        wall = new Wall();
-        hammer = new Hammer(1);
-        ennemi = new Ennemi(1);
+        Wall wall = new Wall(game.ass);
+        ennemiGroup = new Group();
+        hammer = new Hammer(game.ass);
+        Ennemi ennemi = new Ennemi(1, game.ass);
+
         this.game = game;
 
         //Import font
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/Germania.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 30;
-        parameter.color = Color.BLACK;
-        font = generator.generateFont(parameter); // font size 12 pixels
 
-        parameter.size = 60;
-        fontUps = generator.generateFont(parameter);
-        generator.dispose(); // don't forget to dispose to avoid memory leaks!
-
+        BitmapFont font = game.ass.get("Germania30.ttf"); // font size 12 pixels
+        BitmapFont fontUps = game.ass.get("Germania60.ttf");
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.font = fontUps;
+        //Setting up listeners
         Button upsButton = new TextButton("Upgrades", style);
         float x = 0.95f * game.viewport.getWorldWidth() - upsButton.getWidth();
         float y = 0.95f * game.viewport.getWorldHeight() - upsButton.getHeight();
@@ -71,7 +66,6 @@ public class GameScreen implements Screen {
                 game.setScreen(new UpgradeScreen(game));
             }
         });
-        stage.addActor(upsButton);
 
         //add Listener to the wall
         wall.addListener( new ClickListener(){
@@ -89,19 +83,26 @@ public class GameScreen implements Screen {
                 hammer.show(event.getStageX(), event.getStageY());
             }
         });
-        //Add button to the stage
-        stage.addActor(wall);
-        stage.addActor(ennemi);
-        stage.addActor(hammer);
-        //Set the InputProcessor with the stage
-        Gdx.input.setInputProcessor(stage);
 
         bricksLabel = new Label("Bricks: " + (int) GameLogic.getSingleInstance().getBricks(), new Label.LabelStyle(font, Color.BLACK));
         healthLabel = new Label("Health: " + (int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth(), new Label.LabelStyle(font, Color.BLACK));
         bricksLabel.setPosition(game.viewport.getWorldWidth() / 2f, game.viewport.getWorldHeight() * 0.9f);
         healthLabel.setPosition(game.viewport.getWorldWidth() / 2f, game.viewport.getWorldHeight() * 0.8f);
+
+        //Add all the things to runescape
+        stage.addActor(imgFond);
+        stage.addActor(wall);
+        stage.addActor(ennemiGroup);
+        ennemiGroup.addActor(ennemi);
+        stage.addActor(upsButton);
         stage.addActor(bricksLabel);
         stage.addActor(healthLabel);
+        stage.addActor(hammer);
+        //FROM HERE, USE ADDBEFOREHAMMER
+
+
+
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -114,8 +115,9 @@ public class GameScreen implements Screen {
 
         bricksLabel.setText("Bricks: " + (int) GameLogic.getSingleInstance().getBricks());
         healthLabel.setText("Health: " + (int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth());
+        ennemiGroup.addActor(new Ennemi(0, game.ass));
 
-        stage.act(Gdx.graphics.getDeltaTime());
+        stage.act(delta);
         stage.draw();
 
         if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
@@ -127,18 +129,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose () {
-        textureFond.dispose();
-        font.dispose();
-        fontUps.dispose();
-        hammer.dispose();
-        wall.dispose();
-        ennemi.dispose();
         stage.dispose();
     }
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-
     }
 
     @Override

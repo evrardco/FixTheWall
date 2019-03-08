@@ -1,6 +1,7 @@
 package com.fixthewall.game.actors;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.fixthewall.game.Game;
 
 /*
 * Ennemis avance entre Y = [242; 298] (intervale de 56 pixels)
@@ -25,14 +27,11 @@ public class Ennemi extends Actor {
     private static final int FRAME_COLS2 = 4, FRAME_ROWS2 = 2;
     private Animation<TextureRegion> ennemiAnimation;
     private Animation<TextureRegion> ennemiAnimationHit;
-    private Texture texture;
-    private Texture texture2;
     // Variable for tracking elapsed time for the animation
     private float elapsedTime;
     private float elapsedTimeHit;
 
-
-    public Ennemi (int level){
+    public Ennemi (int level, AssetManager ass){
         if (level < 1)
             this.level = 1;
         else
@@ -43,7 +42,7 @@ public class Ennemi extends Actor {
         setTouchable(Touchable.disabled); // clik through
 
         //Set animation move
-        texture = new Texture("Frames/SheetFrameEnnemi.png");
+        Texture texture = ass.get("Frames/SheetFrameEnnemi.png");
         TextureRegion[][] tmp = TextureRegion.split(texture,
                         texture.getWidth() / FRAME_COLS,
                         texture.getHeight() / FRAME_ROWS);
@@ -69,7 +68,7 @@ public class Ennemi extends Actor {
         this.addAction(Actions.moveTo(targetX, this.getY(), duration));
         //
         //Set animation hit
-        texture2 = new Texture("Frames/SheetFrameEnnemiHit.png");
+        Texture texture2 = ass.get("Frames/SheetFrameEnnemiHit.png");
         TextureRegion[][] tmp2 = TextureRegion.split(texture2,
                 texture2.getWidth() / FRAME_COLS2,
                 texture2.getHeight() / FRAME_ROWS2);
@@ -138,8 +137,4 @@ public class Ennemi extends Actor {
         return (int)(Math.random()*n);
     }
 
-    public void dispose (){
-        texture.dispose();
-        texture2.dispose();
-    }
 }
