@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -32,13 +33,8 @@ public class GameScreen implements Screen {
     private Hammer hammer;
     private Label bricksLabel;
     private Label healthLabel;
+    private Group ennemiGroup;
     public static GameScreen gameScreen;
-    //Probably buggy af
-    private void addBeforeHammer(Actor a){
-        stage.addActor(a);
-        Array<Actor> actors = stage.getActors();
-        actors.swap(actors.size-1, actors.size-2);
-    }
 
     public GameScreen(final Game game) {
         stage = new Stage(game.viewport);
@@ -46,6 +42,7 @@ public class GameScreen implements Screen {
 
         Image imgFond = new Image(textureFond);
         Wall wall = new Wall(game.ass);
+        ennemiGroup = new Group();
         hammer = new Hammer(game.ass);
         Ennemi ennemi = new Ennemi(1, game.ass);
 
@@ -95,7 +92,8 @@ public class GameScreen implements Screen {
         //Add all the things to runescape
         stage.addActor(imgFond);
         stage.addActor(wall);
-        stage.addActor(ennemi);
+        stage.addActor(ennemiGroup);
+        ennemiGroup.addActor(ennemi);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);
         stage.addActor(healthLabel);
@@ -117,7 +115,7 @@ public class GameScreen implements Screen {
 
         bricksLabel.setText("Bricks: " + (int) GameLogic.getSingleInstance().getBricks());
         healthLabel.setText("Health: " + (int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth());
-        addBeforeHammer(new Ennemi(0, game.ass));
+        ennemiGroup.addActor(new Ennemi(0, game.ass));
 
         stage.act(delta);
         stage.draw();
