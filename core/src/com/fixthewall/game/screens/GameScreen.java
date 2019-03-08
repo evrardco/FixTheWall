@@ -34,15 +34,10 @@ public class GameScreen implements Screen {
     private Label healthLabel;
     public static GameScreen gameScreen;
     //Probably buggy af
-    private void moveUpHammer(){
+    private void addBeforeHammer(Actor a){
+        stage.addActor(a);
         Array<Actor> actors = stage.getActors();
-        for(int i = 0; i < actors.size; i++){
-            if(actors.get(i) instanceof Hammer){
-                Actor last = actors.get(actors.size-1);
-                actors.set(actors.size-1, hammer);
-                actors.set(i, last);
-            }
-        }
+        actors.swap(actors.size-1, actors.size-2);
     }
 
     public GameScreen(final Game game) {
@@ -101,10 +96,12 @@ public class GameScreen implements Screen {
         stage.addActor(imgFond);
         stage.addActor(wall);
         stage.addActor(ennemi);
-        stage.addActor(hammer);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);
         stage.addActor(healthLabel);
+        stage.addActor(hammer);
+        //FROM HERE, USE ADDBEFOREHAMMER
+
 
 
         Gdx.input.setInputProcessor(stage);
@@ -120,8 +117,8 @@ public class GameScreen implements Screen {
 
         bricksLabel.setText("Bricks: " + (int) GameLogic.getSingleInstance().getBricks());
         healthLabel.setText("Health: " + (int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth());
-        stage.addActor(new Ennemi(0, game.ass));
-        moveUpHammer();
+        addBeforeHammer(new Ennemi(0, game.ass));
+
         stage.act(delta);
         stage.draw();
 
