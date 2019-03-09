@@ -5,8 +5,8 @@ public class GameLogic {
     private double maxHealth;
     private double bricks;
     private static GameLogic singleInstance = null;
-    private double fixingSpeed;
-
+    private double healingPower;
+    private double bricksPower;
 
     public static GameLogic getSingleInstance(){
         if(singleInstance == null) singleInstance = new GameLogic();
@@ -19,19 +19,28 @@ public class GameLogic {
         this.maxHealth = 100.5f;
         health = maxHealth;
         bricks = 0;
-        fixingSpeed = 1.0f;
+        healingPower = 1.0;
+        bricksPower = 1.0;
     }
 
     public double getHealth() {
         return health;
     }
 
-    public double getFixingSpeed() {
-        return fixingSpeed;
+    public double getHealingPower() {
+        return healingPower;
     }
 
-    public void setFixingSpeed(double fixingSpeed) {
-        this.fixingSpeed = fixingSpeed;
+    public void setBricksPower(double bricksPower) {
+        this.bricksPower = bricksPower;
+    }
+
+    public double getBricksPower() {
+        return bricksPower;
+    }
+
+    public void setHealingPower(double healingPower) {
+        this.healingPower = healingPower;
     }
     public void setHealth(double health) {
         if (health < 0)

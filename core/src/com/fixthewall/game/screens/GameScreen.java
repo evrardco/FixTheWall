@@ -70,15 +70,16 @@ public class GameScreen implements Screen {
         wall.addListener( new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
-                double maxHealth = GameLogic.getSingleInstance().getMaxHealth();
-                double incrementedHealth = GameLogic.getSingleInstance().getHealth() + hammer.getHealPower();
+                GameLogic instance = GameLogic.getSingleInstance();
+                double maxHealth = instance.getMaxHealth();
+                double incrementedHealth = instance.getHealth() + instance.getHealingPower();
                 if(incrementedHealth <= maxHealth){
-                    GameLogic.getSingleInstance().setHealth(incrementedHealth);
+                    instance.setHealth(incrementedHealth);
                 }
                 else {
-                    GameLogic.getSingleInstance().setHealth(maxHealth);
+                    instance.setHealth(maxHealth);
                 }
-                GameLogic.getSingleInstance().setBricks(GameLogic.getSingleInstance().getBricks() + hammer.getBricksPower());
+                instance.setBricks(instance.getBricks() + instance.getBricksPower());
                 hammer.show(event.getStageX(), event.getStageY());
             }
         });
@@ -92,9 +93,8 @@ public class GameScreen implements Screen {
         stage.addActor(imgFond);
         stage.addActor(nuages);
         stage.addActor(wall);
-        //stage.addActor(ennemiGroup);
-        stage.addActor(ennemi);
-        //ennemiGroup.addActor(ennemi);
+        stage.addActor(ennemiGroup);
+        ennemiGroup.addActor(ennemi);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);
         stage.addActor(healthLabel);
@@ -113,7 +113,7 @@ public class GameScreen implements Screen {
 
         bricksLabel.setText("Bricks: " + (int) GameLogic.getSingleInstance().getBricks());
         healthLabel.setText("Health: " + (int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth());
-        ennemiGroup.addActor(new Ennemi(0, game.ass));
+        //ennemiGroup.addActor(new Ennemi(0, game.ass));
 
         stage.act(delta);
         stage.draw();

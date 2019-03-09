@@ -9,10 +9,10 @@ public class Upgrade1 extends AbstractUpgrade {
     }
     @Override
     public void apply() {
-        GameLogic Instance = GameLogic.getSingleInstance();
-        Instance.setMaxHealth((int) Instance.getMaxHealth() * 2);
-        Gdx.app.log("Upgrade 1","max: " + Instance.getMaxHealth());
-        Instance.setHealth(Instance.getMaxHealth());
+        GameLogic instance = GameLogic.getSingleInstance();
+        instance.setMaxHealth((int) instance.getMaxHealth() * 2);
+        Gdx.app.log("Upgrade 1","max: " + instance.getMaxHealth());
+        instance.setHealth(instance.getHealth() * 2);
 
     }
 }
