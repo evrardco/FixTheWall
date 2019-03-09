@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.actors.Nuages;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.logic.BadGuysLogic;
@@ -38,6 +39,7 @@ public class GameScreen implements Screen {
         Texture textureFond = game.ass.get("fondWall.png");
 
         Image imgFond = new Image(textureFond);
+        Nuages nuages = new Nuages(game.ass);
         Wall wall = new Wall(game.ass);
         ennemiGroup = new Group();
         hammer = new Hammer(game.ass);
@@ -88,9 +90,11 @@ public class GameScreen implements Screen {
 
         //Add all the things to runescape
         stage.addActor(imgFond);
+        stage.addActor(nuages);
         stage.addActor(wall);
-        stage.addActor(ennemiGroup);
-        ennemiGroup.addActor(ennemi);
+        //stage.addActor(ennemiGroup);
+        stage.addActor(ennemi);
+        //ennemiGroup.addActor(ennemi);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);
         stage.addActor(healthLabel);
