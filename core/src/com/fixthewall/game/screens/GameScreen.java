@@ -18,13 +18,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.Nuages;
+import com.fixthewall.game.actors.PopupLabel;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.logic.BadGuysLogic;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.actors.Hammer;
 
+import java.util.LinkedList;
+
 public class GameScreen implements Screen {
+
+    private final int MAX_POPUP_LABELS = 10;
 
     private final Game game;
     private Stage stage;
@@ -32,20 +37,33 @@ public class GameScreen implements Screen {
     private Label bricksLabel;
     private Label healthLabel;
     private Group ennemiGroup;
+    private LinkedList<PopupLabel> popupLabels;
+
     public static GameScreen gameScreen;
 
     public GameScreen(final Game game) {
+        this.game = game;
+
         stage = new Stage(game.viewport);
         Texture textureFond = game.ass.get("fondWall.png");
 
         Image imgFond = new Image(textureFond);
         Nuages nuages = new Nuages(game.ass);
         Wall wall = new Wall(game.ass);
-        ennemiGroup = new Group();
-        hammer = new Hammer(game.ass);
-        Ennemi ennemi = new Ennemi(1, game.ass);
 
-        this.game = game;
+        ennemiGroup = new Group();
+        Ennemi ennemi = new Ennemi(1, game.ass);
+        ennemiGroup.addActor(ennemi);
+
+        Group hammerGroup = new Group();
+        hammer = new Hammer(game.ass);
+        popupLabels = new LinkedList<PopupLabel>();
+        for (int i = 0; i < MAX_POPUP_LABELS; i++) {
+            PopupLabel temp = new PopupLabel(game.ass);
+            popupLabels.add(temp);
+            hammerGroup.addActor(temp);
+        }
+        hammerGroup.addActor(hammer);
 
         //Import font
 
@@ -81,6 +99,11 @@ public class GameScreen implements Screen {
                 }
                 instance.setBricks(instance.getBricks() + instance.getBricksPower());
                 hammer.show(event.getStageX(), event.getStageY());
+
+                //spawn digit popup here
+                PopupLabel temp = popupLabels.remove();
+                temp.show(event.getStageX() - hammer.getWidth(), event.getStageY() + hammer.getHeight() / 2f);
+                popupLabels.add(temp);
             }
         });
 
@@ -94,11 +117,10 @@ public class GameScreen implements Screen {
         stage.addActor(nuages);
         stage.addActor(wall);
         stage.addActor(ennemiGroup);
-        ennemiGroup.addActor(ennemi);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);
         stage.addActor(healthLabel);
-        stage.addActor(hammer);
+        stage.addActor(hammerGroup);
 
         Gdx.input.setInputProcessor(stage);
     }

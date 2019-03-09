@@ -17,9 +17,6 @@ public class Hammer extends Actor {
     private final float ANGLE_TO_ROTATE = 45; // angle to be gradually added until the end of the animation
 
     private TextureRegion texture;
-    private boolean show;
-    private float posX, posY;
-
     private SequenceAction sequence;
 
     public Hammer(AssetManager ass) {
@@ -28,9 +25,8 @@ public class Hammer extends Actor {
         setOrigin(texture.getRegionWidth() / 2f, texture.getRegionHeight() / 4f);
         setRotation(STARTING_ANGLE);
         setTouchable(Touchable.disabled); // click through
-        this.show = false;
-        this.posX = 0;
-        this.posY = 0;
+        // make the hammer invisible by default
+        setColor(getColor().r, getColor().g, getColor().b, 0);
 
         this.sequence = new SequenceAction();
         ParallelAction parallel = new ParallelAction();
@@ -43,33 +39,24 @@ public class Hammer extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
-
-        if (this.show) {
-            setX(this.posX);
-            setY(this.posY);
-        }
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (this.show) {
-            Color color = getColor();
-            batch.setColor(color.r, color.g, color.b, getColor().a * parentAlpha);
-            batch.draw(this.texture, getX(), getY(), getOriginX(), getOriginY(), getWidth(),
-                    getHeight(), getScaleX(), getScaleY(), getRotation());
-            batch.setColor(color.r, color.g, color.b, parentAlpha);
-        }
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, getColor().a * parentAlpha);
+        batch.draw(this.texture, getX(), getY(), getOriginX(), getOriginY(), getWidth(),
+                getHeight(), getScaleX(), getScaleY(), getRotation());
+        batch.setColor(color.r, color.g, color.b, parentAlpha);
     }
 
     public void show(float posX, float posY) {
-        this.posX = posX - getOriginX();
-        this.posY = posY - getOriginY();
-
+        setX(posX - getOriginX());
+        setY(posY - getOriginY());
         setRotation(STARTING_ANGLE);
         removeAction(sequence); // enlève l'action pour la reset (si on fait juste restart ça suffit pas)
         sequence.restart();
         addAction(sequence);
-        this.show = true;
     }
 
 }

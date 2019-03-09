@@ -14,8 +14,8 @@ public class BadGuysLogic {
 
     private BadGuysLogic(){}
 
-    public void init(double dpf, float mul){
-        damagePerSec = dpf;
+    public void init(double dps, float mul){
+        damagePerSec = dps;
         this.mul = mul;
     }
 
@@ -23,7 +23,7 @@ public class BadGuysLogic {
         return damagePerSec;
     }
 
-    public void setDamagePerFrame(double damagePerSec) {
+    public void setDamagePerSec(double damagePerSec) {
         this.damagePerSec = damagePerSec;
     }
 
