@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
+import com.fixthewall.game.logic.MusicLogic;
 
 
 public class StartScreen implements Screen {
@@ -22,6 +23,12 @@ public class StartScreen implements Screen {
 
     public StartScreen(final Game game){
         this.game = game;
+
+        //music
+        game.playlist = new MusicLogic(game.ass);
+        game.playlist.runPlaylist();
+        //
+
         Texture textureFond = game.ass.get("fondWall.png");
         Image imgFond = new Image(textureFond);
         stage = new Stage(game.viewport);

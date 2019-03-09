@@ -25,14 +25,10 @@ public class Game extends com.badlogic.gdx.Game {
     public static final float GAME_WIDTH = 1080;
     public static final int GAME_HEIGHT = 1920;
 
-	private MusicLogic playlist;
+	public MusicLogic playlist;
 
 	@Override
 	public void create () {
-		//music
-		playlist = new MusicLogic();
-		playlist.runPlaylist();
-		//
         ass = new AssetManager();
         FileHandleResolver resolver = new InternalFileHandleResolver();
         ass.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
@@ -49,8 +45,7 @@ public class Game extends com.badlogic.gdx.Game {
 		setScreen(new LoadingScreen(this));
 	}
 	@Override
-	public void dispose (){
-		playlist.dispose();
+	public void dispose () {
 		ass.dispose();
 	}
 

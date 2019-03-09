@@ -1,6 +1,6 @@
 package com.fixthewall.game.logic;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.Timer;
 
@@ -10,20 +10,20 @@ public class MusicLogic {
     private int sizePlaylist;
     private Music inPlaying;
 
-    public MusicLogic(){
+    public MusicLogic(AssetManager ass) {
         sizePlaylist=6;
         playlist = new Music[sizePlaylist];
-        playlist[0] = Gdx.audio.newMusic(Gdx.files.internal("music/song1.mp3"));
+        playlist[0] = ass.get("music/song1.mp3");
         playlist[0].setVolume(0.6f);
-        playlist[1] = Gdx.audio.newMusic(Gdx.files.internal("music/song2.mp3"));
+        playlist[1] = ass.get("music/song2.mp3");
         playlist[1].setVolume(0.35f);
-        playlist[2] = Gdx.audio.newMusic(Gdx.files.internal("music/song3.mp3"));
+        playlist[2] = ass.get("music/song3.mp3");
         playlist[2].setVolume(0.6f);
-        playlist[3] = Gdx.audio.newMusic(Gdx.files.internal("music/song4.mp3"));
+        playlist[3] = ass.get("music/song4.mp3");
         playlist[3].setVolume(0.6f);
-        playlist[4] = Gdx.audio.newMusic(Gdx.files.internal("music/song5.mp3"));
+        playlist[4] = ass.get("music/song5.mp3");
         playlist[4].setVolume(0.5f);
-        playlist[5] = Gdx.audio.newMusic(Gdx.files.internal("music/song6.mp3"));
+        playlist[5] = ass.get("music/song6.mp3");
         playlist[5].setVolume(0.55f);
         inPlaying = null;
     }
@@ -134,11 +134,5 @@ public class MusicLogic {
      */
     private static int getRandom(int n){
         return (int)(Math.random()*n);
-    }
-
-    public void dispose (){
-        for (Music m : playlist) {
-            m.dispose();
-        }
     }
 }
