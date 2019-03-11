@@ -90,9 +90,16 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("nuages.png", Texture.class);
         ass.load("marteau.png", Texture.class);
         ass.load("pioche.png", Texture.class);
-        ass.load("texture_button.png", Texture.class);
-        ass.load("texture_button_return.png", Texture.class);
-        ass.load("texture_button_return_down.png", Texture.class);
+
+        // dossier ui
+        ass.load("ui/texture_button.png", Texture.class);
+        ass.load("ui/texture_button_return.png", Texture.class);
+        ass.load("ui/texture_button_return_down.png", Texture.class);
+        ass.load("ui/texture_button_settings.png", Texture.class);
+        ass.load("ui/texture_button_settings_down.png", Texture.class);
+        ass.load("ui/texture_button_volume.png", Texture.class);
+        ass.load("ui/texture_button_volume_down.png", Texture.class);
+        ass.load("ui/white_background.png", Texture.class);
 
         // dossier wallStates
         ass.load("wallStates/theWall.png", Texture.class);

@@ -6,11 +6,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.fixthewall.game.actors.MenuTable;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.logic.MusicLogic;
@@ -57,11 +62,46 @@ public class StartScreen implements Screen {
                 game.setScreen(GameScreen.gameScreen);
             }
         });
+
+        // Settings menu
+        // TODO: ajouter d'autres entrées aux settings
+        final MenuTable settingsTable = new MenuTable(game.ass, "Settings");
+        settingsTable.setVisible(false);
+
+        Button volumeButton = new ImageButton(
+                new TextureRegionDrawable(game.ass.get("ui/texture_button_volume.png", Texture.class)),
+                new TextureRegionDrawable(game.ass.get("ui/texture_button_volume_down.png", Texture.class))
+        );
+        volumeButton.addListener(new ClickListener() {
+            @Override
+            public  void clicked(InputEvent event, float x, float y) {
+                if (game.playlist.isPlaying())
+                    game.playlist.pause();
+                else
+                    game.playlist.play();
+            }
+        });
+        settingsTable.addEntry("Volume ON/OFF", volumeButton);
+        // End settings menu
+
+        Texture imgButton = game.ass.get("ui/texture_button_settings.png");
+        Texture imgButtonDown = game.ass.get("ui/texture_button_settings_down.png");
+        Button settingsButton = new ImageButton(new TextureRegionDrawable(imgButton), new TextureRegionDrawable(imgButtonDown));
+        settingsButton.setPosition(game.viewport.getWorldWidth() * 0.1f, game.viewport.getWorldHeight() * 0.9f);
+        settingsButton.addListener(new ClickListener() {
+            @Override
+            public  void clicked(InputEvent event, float x, float y) {
+                settingsTable.setVisible(!settingsTable.isVisible());
+            }
+        });
+
         stage.addActor(imgFond);
         Wall wall = new Wall(game.ass);
         stage.addActor(wall);
         //add button to the scene
         stage.addActor(playButton);
+        stage.addActor(settingsButton);
+        stage.addActor(settingsTable);
         //necessaire pour rendre le bouton clickable
         Gdx.input.setInputProcessor(stage);
     }

@@ -27,9 +27,9 @@ public class UpgradeScreen implements Screen {
     public UpgradeScreen(final Game game){
         this.game = game;
         Texture textureFond = game.ass.get("fondWall.png");
-        Texture imgButton = game.ass.get("texture_button.png");
-        Texture imgButtonReturn = game.ass.get("texture_button_return.png");
-        Texture imgButtonReturnDown = game.ass.get("texture_button_return_down.png");
+        Texture imgButton = game.ass.get("ui/texture_button.png");
+        Texture imgButtonReturn = game.ass.get("ui/texture_button_return.png");
+        Texture imgButtonReturnDown = game.ass.get("ui/texture_button_return_down.png");
 
         stage = new Stage(game.viewport);
         Image imgFond = new Image(textureFond);

@@ -109,19 +109,23 @@ public class MusicLogic {
         return inPlaying;
     }
 
+    public boolean isPlaying() {
+        return inPlaying != null && inPlaying.isPlaying();
+    }
+
     public void play(){
         if(inPlaying!=null)
-        inPlaying.play();
+            inPlaying.play();
     }
 
     public void pause(){
         if(inPlaying!=null)
-        inPlaying.pause();
+            inPlaying.pause();
     }
 
     public void stop(){
         if(inPlaying!=null)
-        inPlaying.stop();
+            inPlaying.stop();
     }
 
     private Music getRandomMusic(){
