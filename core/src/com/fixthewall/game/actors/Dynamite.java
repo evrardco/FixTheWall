@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.logic.GameLogic;
-import com.fixthewall.game.upgrades.AbstractManager;
 
 public class Dynamite extends Actor{
 
@@ -58,10 +57,10 @@ public class Dynamite extends Actor{
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (getRandom(100) == 10)
+        if (getRandom(300) == 10 && !visible)
         {
             visible = true;
-            this.setPosition(0, 600);
+            this.setPosition(getRandom(700), 300+getRandom(300));
         }
         batch.draw(texture, getX(), getY());
     }
