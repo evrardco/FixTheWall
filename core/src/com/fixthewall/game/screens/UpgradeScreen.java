@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import com.fixthewall.game.actors.UpgradeButton;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.upgrades.UpgradeManager;
@@ -26,35 +28,21 @@ public class UpgradeScreen implements Screen {
 
     public UpgradeScreen(final Game game){
         this.game = game;
+        stage = new Stage(game.viewport);
+
         Texture textureFond = game.ass.get("fondWall.png");
         Texture imgButton = game.ass.get("ui/texture_button.png");
         Texture imgButtonReturn = game.ass.get("ui/texture_button_return.png");
         Texture imgButtonReturnDown = game.ass.get("ui/texture_button_return_down.png");
-
-        stage = new Stage(game.viewport);
-        Image imgFond = new Image(textureFond);
-        stage.addActor(imgFond);
-
-        Wall wall = new Wall(game.ass);
-        stage.addActor(wall);
-
-        //Import font
         BitmapFont font = game.ass.get("Germania60.ttf");
+        Wall wall = new Wall(game.ass);
+        Image imgFond = new Image(textureFond);
 
-        //setup Buttons
-        //button upgrade
-        TiledDrawable tileButton = new TiledDrawable(new TextureRegionDrawable(imgButton));
+        //button retour
         TiledDrawable tileButtonReturn = new TiledDrawable(new TextureRegionDrawable(imgButtonReturn));
         TiledDrawable tileButtonReturnDown = new TiledDrawable(new TextureRegionDrawable(imgButtonReturnDown));
-        ImageTextButton.ImageTextButtonStyle imStyle =
-                new ImageTextButton.ImageTextButtonStyle(tileButton, tileButton, tileButton, font);
-        Button upgradeTestButton = new ImageTextButton("Upgrade", imStyle);
-
 
         Button playButton = new ImageButton(tileButtonReturn, tileButtonReturnDown);
-
-
-        upgradeTestButton.addListener(UpgradeManager.getSingleInstance().getAllUpgrade()[0].getListener());
 
         playButton.addListener(new ChangeListener() {
             @Override
@@ -63,16 +51,39 @@ public class UpgradeScreen implements Screen {
                 game.setScreen(GameScreen.gameScreen);
             }
         });
+        //button upgrade
 
-        upgradeTestButton.scaleBy(0.25f);
+        UpgradeButton but = new UpgradeButton(
+                game.ass,
+                UpgradeManager.getSingleInstance().getAllUpgrade()[0]
+        );
+
+        //table setup
 
         Table table = new Table(); //test
-        table.add(playButton);
-        table.add(upgradeTestButton);
-        float x = game.viewport.getWorldWidth() / 2f;
-        float y = game.viewport.getWorldHeight() * 0.95f - table.getPrefHeight();
-        table.setPosition(x, y);
+        table.top().left().add(playButton).padBottom(25).row();
+        table.setWidth(Game.GAME_WIDTH * 0.9f);
+        table.setHeight(Game.GAME_HEIGHT * 0.9f);
+        table.setPosition(
+                Game.GAME_WIDTH / 2f - table.getWidth() / 2f,
+                Game.GAME_HEIGHT / 2f - table.getHeight() / 2f
+        );
+        table.setTouchable(Touchable.enabled);
+        table.setBackground(
+                new TextureRegionDrawable(
+                        game.ass.get(
+                                "ui/white_background.png",
+                                Texture.class)
+                )
+        );
+        table.padTop(25).left().add(but);
+        table.debug();
 
+        //testing upgrade button
+
+
+        stage.addActor(wall);
+        stage.addActor(imgFond);
         stage.addActor(table);
 
         //necessaire pour rendre le bouton clickable
@@ -88,7 +99,6 @@ public class UpgradeScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         stage.act(delta);
         stage.draw();
     }

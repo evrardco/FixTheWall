@@ -93,6 +93,8 @@ public class Game extends com.badlogic.gdx.Game {
 
         // dossier ui
         ass.load("ui/texture_button.png", Texture.class);
+        ass.load("ui/texture_button_down.png", Texture.class);
+        ass.load("ui/texture_button_disabled.png", Texture.class);
         ass.load("ui/texture_button_return.png", Texture.class);
         ass.load("ui/texture_button_return_down.png", Texture.class);
         ass.load("ui/texture_button_settings.png", Texture.class);
@@ -100,6 +102,7 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("ui/texture_button_volume.png", Texture.class);
         ass.load("ui/texture_button_volume_down.png", Texture.class);
         ass.load("ui/white_background.png", Texture.class);
+        ass.load("ui/texture_upgrade_pannel.png", Texture.class);
 
         // dossier wallStates
         ass.load("wallStates/theWall.png", Texture.class);
