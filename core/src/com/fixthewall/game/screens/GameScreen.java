@@ -13,12 +13,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.actors.HealthBar;
 import com.fixthewall.game.actors.Nuages;
 import com.fixthewall.game.actors.PopupLabel;
 import com.fixthewall.game.actors.Wall;
@@ -37,7 +40,6 @@ public class GameScreen implements Screen {
     private Stage stage;
     private Hammer hammer;
     private Label bricksLabel;
-    private Label healthLabel;
     private Group ennemiGroup;
     private LinkedList<PopupLabel> popupLabels;
 
@@ -112,9 +114,12 @@ public class GameScreen implements Screen {
         });
         dyn.addListener(dyn.getListener());
         bricksLabel = new Label("Bricks: " + (int) GameLogic.getSingleInstance().getBricks(), new Label.LabelStyle(font, Color.BLACK));
-        healthLabel = new Label("Health: " + (int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth(), new Label.LabelStyle(font, Color.BLACK));
         bricksLabel.setPosition(game.viewport.getWorldWidth() / 2f, game.viewport.getWorldHeight() * 0.9f);
-        healthLabel.setPosition(game.viewport.getWorldWidth() / 2f, game.viewport.getWorldHeight() * 0.8f);
+
+        // health bar
+        HealthBar healthBar = new HealthBar(game.ass);
+        healthBar.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.90f);
+        //
 
         //Add all the things to runescape
         stage.addActor(imgFond);
@@ -125,7 +130,7 @@ public class GameScreen implements Screen {
         stage.addActor(ennemiGroup);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);
-        stage.addActor(healthLabel);
+        stage.addActor(healthBar);
         stage.addActor(hammerGroup);
 
         Gdx.input.setInputProcessor(stage);
@@ -140,7 +145,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         bricksLabel.setText("Bricks: " + (int) GameLogic.getSingleInstance().getBricks());
-        healthLabel.setText("Health: " + (int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth());
         //ennemiGroup.addActor(new Ennemi(0, game.ass));
 
         stage.act(delta);
