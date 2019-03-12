@@ -38,7 +38,7 @@ public class Game extends com.badlogic.gdx.Game {
         loadVIPAssets();
         loadAssets();
 
-        UpgradeManager.getSingleInstance();
+        UpgradeManager.getSingleInstance().init();
         GameLogic.getSingleInstance().init();
         BadGuysLogic.getSingleInstance().init(3.0, 1.0f);
 		viewport = new FitViewport(GAME_WIDTH, GAME_HEIGHT);

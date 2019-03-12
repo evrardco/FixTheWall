@@ -3,31 +3,14 @@ package com.fixthewall.game.upgrades;
 public class UpgradeManager {
 
    private AbstractUpgrade [] allUpgrade = new AbstractUpgrade[10];
-    private static UpgradeManager singleInstance = null;
+   private static UpgradeManager singleInstance = null;
 
-   public UpgradeManager()
-   {
-       AbstractUpgrade currentUpgrade = null;
-       for (int i = 0; i < allUpgrade.length; i++) {
-           currentUpgrade = new Upgrade1(0, 10);
-           allUpgrade[i] = currentUpgrade;
-           currentUpgrade.setLevel(0);
-
-       }
-       update();
-
-   }
+   private UpgradeManager() {}
 
     public AbstractUpgrade[] getAllUpgrade() {
         return allUpgrade;
     }
-
-    public void setAllUpgrade(AbstractUpgrade[] allUpgrade) {
-        this.allUpgrade = allUpgrade;
-    }
-
-    public void reset()
-    {
+    public void init(){
         AbstractUpgrade currentUpgrade = null;
         for (int i = 0; i < allUpgrade.length; i++) {
             currentUpgrade = new Upgrade1(0, 10);
@@ -36,8 +19,8 @@ public class UpgradeManager {
 
         }
         update();
-
     }
+
 
     public void update()
     {

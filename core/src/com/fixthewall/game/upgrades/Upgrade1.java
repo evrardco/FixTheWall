@@ -6,6 +6,8 @@ import com.badlogic.gdx.Gdx;
 public class Upgrade1 extends AbstractUpgrade {
     public Upgrade1(int level, int cost) {
         super(level, cost);
+        this.setName("Life++");
+        this.setDesc("Increase your wall's life !");
     }
     @Override
     public void apply() {
@@ -13,7 +15,6 @@ public class Upgrade1 extends AbstractUpgrade {
         instance.setMaxHealth((int) instance.getMaxHealth() * 2);
         Gdx.app.log("Upgrade 1","max: " + instance.getMaxHealth());
         instance.setHealth(instance.getHealth() * 2);
-        this.setName("Life++");
-        this.setDesc("Increase your wall's life !");
+
     }
 }
