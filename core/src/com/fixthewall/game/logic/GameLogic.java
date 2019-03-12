@@ -66,7 +66,7 @@ public class GameLogic {
     }
 
     public void reduceHealth() {
-        health = health - 50;
+        health = health - 25;
     }
 
 

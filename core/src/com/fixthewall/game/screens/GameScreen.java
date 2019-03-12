@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -18,40 +19,55 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.actors.Nuages;
+import com.fixthewall.game.actors.PopupLabel;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.logic.BadGuysLogic;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.actors.Hammer;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class GameScreen implements Screen {
+
+    private final int MAX_POPUP_LABELS = 10;
 
     private final Game game;
     private Stage stage;
     private Hammer hammer;
     private Label bricksLabel;
     private Label healthLabel;
+    private Group ennemiGroup;
+    private LinkedList<PopupLabel> popupLabels;
+
     public static GameScreen gameScreen;
-    //Probably buggy af
-    private void addBeforeHammer(Actor a){
-        stage.addActor(a);
-        Array<Actor> actors = stage.getActors();
-        actors.swap(actors.size-1, actors.size-2);
-    }
 
     public GameScreen(final Game game) {
+        this.game = game;
+
         stage = new Stage(game.viewport);
         Texture textureFond = game.ass.get("fondWall.png");
 
         Image imgFond = new Image(textureFond);
+        Nuages nuages = new Nuages(game.ass);
         Wall wall = new Wall(game.ass);
         Dynamite dyn = new Dynamite(game.ass);
         hammer = new Hammer(game.ass);
-        Ennemi ennemi = new Ennemi(1, game.ass);
 
-        this.game = game;
+        ennemiGroup = new Group();
+        Ennemi ennemi = new Ennemi(1, game.ass);
+        ennemiGroup.addActor(ennemi);
+
+        Group hammerGroup = new Group();
+        hammer = new Hammer(game.ass);
+        popupLabels = new LinkedList<PopupLabel>();
+        for (int i = 0; i < MAX_POPUP_LABELS; i++) {
+            PopupLabel temp = new PopupLabel(game.ass);
+            popupLabels.add(temp);
+            hammerGroup.addActor(temp);
+        }
+        hammerGroup.addActor(hammer);
 
         //Import font
 
@@ -76,16 +92,22 @@ public class GameScreen implements Screen {
         wall.addListener( new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
-                double maxHealth = GameLogic.getSingleInstance().getMaxHealth();
-                double incrementedHealth = GameLogic.getSingleInstance().getHealth() + hammer.getHealPower();
+                GameLogic instance = GameLogic.getSingleInstance();
+                double maxHealth = instance.getMaxHealth();
+                double incrementedHealth = instance.getHealth() + instance.getHealingPower();
                 if(incrementedHealth <= maxHealth){
-                    GameLogic.getSingleInstance().setHealth(incrementedHealth);
+                    instance.setHealth(incrementedHealth);
                 }
                 else {
-                    GameLogic.getSingleInstance().setHealth(maxHealth);
+                    instance.setHealth(maxHealth);
                 }
-                GameLogic.getSingleInstance().setBricks(GameLogic.getSingleInstance().getBricks() + hammer.getBricksPower());
+                instance.setBricks(instance.getBricks() + instance.getBricksPower());
                 hammer.show(event.getStageX(), event.getStageY());
+
+                //spawn digit popup here
+                PopupLabel temp = popupLabels.remove();
+                temp.show(event.getStageX() - hammer.getWidth(), event.getStageY() + hammer.getHeight() / 2f);
+                popupLabels.add(temp);
             }
         });
         dyn.addListener(dyn.getListener());
@@ -96,16 +118,15 @@ public class GameScreen implements Screen {
 
         //Add all the things to runescape
         stage.addActor(imgFond);
+        stage.addActor(nuages);
         stage.addActor(wall);
         stage.addActor(dyn);
         stage.addActor(ennemi);
+        stage.addActor(ennemiGroup);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);
         stage.addActor(healthLabel);
-        stage.addActor(hammer);
-        //FROM HERE, USE ADDBEFOREHAMMER
-
-
+        stage.addActor(hammerGroup);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -120,7 +141,7 @@ public class GameScreen implements Screen {
 
         bricksLabel.setText("Bricks: " + (int) GameLogic.getSingleInstance().getBricks());
         healthLabel.setText("Health: " + (int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth());
-        addBeforeHammer(new Ennemi(0, game.ass));
+        //ennemiGroup.addActor(new Ennemi(0, game.ass));
 
         stage.act(delta);
         stage.draw();
