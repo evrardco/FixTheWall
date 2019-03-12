@@ -40,6 +40,7 @@ public class GameScreen implements Screen {
     private Stage stage;
     private Hammer hammer;
     private Label bricksLabel;
+    private Label scoreLabel;
     private Group ennemiGroup;
     private LinkedList<PopupLabel> popupLabels;
 
@@ -104,6 +105,7 @@ public class GameScreen implements Screen {
                     instance.setHealth(maxHealth);
                 }
                 instance.setBricks(instance.getBricks() + instance.getBricksPower());
+                instance.setScore(instance.getScore() + instance.getBricksPower());
                 hammer.show(event.getStageX(), event.getStageY());
 
                 //spawn digit popup here
@@ -113,12 +115,16 @@ public class GameScreen implements Screen {
             }
         });
         dyn.addListener(dyn.getListener());
+
         bricksLabel = new Label("Bricks: " + (int) GameLogic.getSingleInstance().getBricks(), new Label.LabelStyle(font, Color.BLACK));
-        bricksLabel.setPosition(game.viewport.getWorldWidth() / 2f, game.viewport.getWorldHeight() * 0.9f);
+        bricksLabel.setPosition(game.viewport.getWorldWidth() * 0.05f, game.viewport.getWorldHeight() * 0.85f);
+
+        scoreLabel = new Label("Score: " + (int) GameLogic.getSingleInstance().getScore(), new Label.LabelStyle(font, Color.BLACK));
+        scoreLabel.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.8f);
 
         // health bar
         HealthBar healthBar = new HealthBar(game.ass);
-        healthBar.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.90f);
+        healthBar.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.9f);
         //
 
         //Add all the things to runescape
@@ -130,6 +136,7 @@ public class GameScreen implements Screen {
         stage.addActor(ennemiGroup);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);
+        stage.addActor(scoreLabel);
         stage.addActor(healthBar);
         stage.addActor(hammerGroup);
 
@@ -145,6 +152,8 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         bricksLabel.setText("Bricks: " + (int) GameLogic.getSingleInstance().getBricks());
+        scoreLabel.setText("Score: " + (int) GameLogic.getSingleInstance().getScore());
+
         //ennemiGroup.addActor(new Ennemi(0, game.ass));
 
         stage.act(delta);

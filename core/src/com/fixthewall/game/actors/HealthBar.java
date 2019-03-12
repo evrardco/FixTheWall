@@ -32,7 +32,7 @@ public class HealthBar extends Group {
 
         BitmapFont font30 = ass.get("Germania30.ttf");
         Label label = new Label("Health", new Label.LabelStyle(font30, Color.BLACK));
-        label.setPosition(healthBar.getWidth() / 2f - label.getWidth() / 2f,
+        label.setPosition(0,
                 healthBar.getHeight() + 10);
         addActor(label);
 

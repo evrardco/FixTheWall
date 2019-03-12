@@ -7,6 +7,7 @@ public class GameLogic {
     private static GameLogic singleInstance = null;
     private double healingPower;
     private double bricksPower;
+    private double score;
 
     public static GameLogic getSingleInstance(){
         if(singleInstance == null) singleInstance = new GameLogic();
@@ -21,6 +22,7 @@ public class GameLogic {
         bricks = 0;
         healingPower = 1.0;
         bricksPower = 1.0;
+        score = 0.0;
     }
 
     public double getHealth() {
@@ -69,5 +71,12 @@ public class GameLogic {
         health = health - 25;
     }
 
+    public void setScore(double score) {
+        this.score = score;
+    }
+
+    public double getScore() {
+        return score;
+    }
 
 }
