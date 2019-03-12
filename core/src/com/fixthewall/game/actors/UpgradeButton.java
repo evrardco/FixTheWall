@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.fixthewall.game.upgrades.AbstractUpgrade;
@@ -62,15 +63,18 @@ public class UpgradeButton extends Table {
 
         //setting up elements in the table
 
-        this.left().top().add(new Label(upgrade.getName()+":\n", style));
-        this.padBottom(10);
-        this.add(new Label(upgrade.getDesc(), style));
-        this.padBottom(10);
-        this.right().top().add(level).padBottom(5);
-        this.add(button).pad(5);
-        this.add(cost);
+        this.add(new Label(upgrade.getName()+":", style)).expand().top().left().padLeft(30).padTop(30);
+        this.add(level).expand().center().uniform().row();
+        this.left().add(new Label(upgrade.getDesc(), style));
+        this.add(button).padBottom(10);
+        this.row();
+        //this.right().top().add(level).padBottom(5);
+        //this.add(button).pad(5);
+        this.add().expand().fill();
+        this.add(cost).padBottom(10);
         this.setTouchable(Touchable.enabled);
         this.setVisible(true);
+
 
     }
 
