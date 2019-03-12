@@ -28,12 +28,9 @@ import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.fixthewall.game.upgrades.AbstractUpgrade;
 import com.fixthewall.game.upgrades.UpgradeManager;
 
-public class UpgradeButton extends Actor {
+public class UpgradeButton extends Table {
     private AbstractUpgrade upgrade;
-    private int len;
-    private int height;
     private Texture pannelTex;
-    private Table table;
     private Label cost;
     private Label level;
     private Button button;
@@ -44,12 +41,12 @@ public class UpgradeButton extends Actor {
     public UpgradeButton(AssetManager ass, AbstractUpgrade upgrade) {
         super();
         this.upgrade = upgrade;
-        table = new Table();
+
         pannelTex = ass.get("ui/texture_upgrade_pannel.png");
-        table.setBackground(new TextureRegionDrawable(pannelTex));
+        this.setBackground(new TextureRegionDrawable(pannelTex));
         Label.LabelStyle style = new Label.LabelStyle((BitmapFont)ass.get("Germania30.ttf"), Color.BLACK);
-        cost = new Label(""+upgrade.getCost(), style);
-        level = new Label(""+upgrade.getLevel(), style);
+        cost = new Label(""+(int)upgrade.getCost(), style);
+        level = new Label(""+(int)upgrade.getLevel(), style);
 
         //setting up Button.
         ImageTextButton.ImageTextButtonStyle imTxtStyle = new ImageTextButton.ImageTextButtonStyle(
@@ -65,32 +62,26 @@ public class UpgradeButton extends Actor {
 
         //setting up elements in the table
 
-        table.left().top().add(new Label(upgrade.getName(), style));
-        table.padBottom(10);
-        table.add(new Label(upgrade.getName(), style));
-        table.padBottom(10);
-        table.right().top().add(level).padBottom(10);
-        table.add(button).pad(10);
-        table.add(cost);
-        table.setTouchable(Touchable.enabled);
-        table.setVisible(true);
-        table.debug();
+        this.left().top().add(new Label(upgrade.getName(), style));
+        this.padBottom(10);
+        this.add(new Label(upgrade.getName(), style));
+        this.padBottom(10);
+        this.right().top().add(level).padBottom(10);
+        this.add(button).pad(10);
+        this.add(cost);
+        this.setTouchable(Touchable.enabled);
+        this.setVisible(true);
 
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
-        table.draw(batch, parentAlpha);
-    }
 
     @Override
     public void act(float delta) {
         super.act(delta);
         button.setChecked(!upgrade.isAffordable());
         button.setDisabled(!upgrade.isAffordable());
-        cost.setText("Cost: "+upgrade.getCost());
-        level.setText("LvL: "+upgrade.getLevel());
+        cost.setText("Cost: "+(int)upgrade.getCost());
+        level.setText("LvL: "+(int)upgrade.getLevel());
     }
 
 

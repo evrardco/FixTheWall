@@ -77,7 +77,7 @@ public class UpgradeScreen implements Screen {
                 )
         );
         table.padTop(25).left().add(but);
-        table.debug();
+        table.setDebug(true);
 
         //testing upgrade button
 
