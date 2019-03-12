@@ -11,13 +11,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.fixthewall.game.screens.GameScreen;
 import com.fixthewall.game.screens.LoadingScreen;
-import com.fixthewall.game.upgrades.AbstractManager;
+import com.fixthewall.game.upgrades.UpgradeManager;
 import com.fixthewall.game.logic.BadGuysLogic;
 import com.fixthewall.game.logic.MusicLogic;
 import com.fixthewall.game.logic.GameLogic;
-import com.fixthewall.game.screens.StartScreen;
 
 public class Game extends com.badlogic.gdx.Game {
 
@@ -27,14 +25,10 @@ public class Game extends com.badlogic.gdx.Game {
     public static final float GAME_WIDTH = 1080;
     public static final int GAME_HEIGHT = 1920;
 
-	private MusicLogic playlist;
+	public MusicLogic playlist;
 
 	@Override
 	public void create () {
-		//music
-		playlist = new MusicLogic();
-		playlist.runPlaylist();
-		//
         ass = new AssetManager();
         FileHandleResolver resolver = new InternalFileHandleResolver();
         ass.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
@@ -44,15 +38,14 @@ public class Game extends com.badlogic.gdx.Game {
         loadVIPAssets();
         loadAssets();
 
-        AbstractManager.getSingleInstance();
+        UpgradeManager.getSingleInstance();
         GameLogic.getSingleInstance().init();
-        BadGuysLogic.getSingleInstance().init(9.0, 1.0f);
+        BadGuysLogic.getSingleInstance().init(3.0, 1.0f);
 		viewport = new FitViewport(GAME_WIDTH, GAME_HEIGHT);
 		setScreen(new LoadingScreen(this));
 	}
 	@Override
-	public void dispose (){
-		playlist.dispose();
+	public void dispose () {
 		ass.dispose();
 	}
 
@@ -70,6 +63,22 @@ public class Game extends com.badlogic.gdx.Game {
 
         ass.load("GermaniaLoading.ttf", BitmapFont.class, smallFont);
 
+        // dossier logoGG
+        // (voir pour les perfs si c'est pas mieux de faire une seule Texture et choper les images en TextureRegion)
+        ass.load("logoGG/logoGG_0.png", Texture.class);
+        ass.load("logoGG/logoGG_1.png", Texture.class);
+        ass.load("logoGG/logoGG_2.png", Texture.class);
+        ass.load("logoGG/logoGG_3.png", Texture.class);
+        ass.load("logoGG/logoGG_4.png", Texture.class);
+        ass.load("logoGG/logoGG_5.png", Texture.class);
+        ass.load("logoGG/logoGG_6.png", Texture.class);
+        ass.load("logoGG/logoGG_7.png", Texture.class);
+        ass.load("logoGG/logoGG_8.png", Texture.class);
+        ass.load("logoGG/logoGG_9.png", Texture.class);
+        ass.load("logoGG/logoGG_10.png", Texture.class);
+        ass.load("logoGG/logoGG_11.png", Texture.class);
+        ass.load("logoGG/logoGG_12.png", Texture.class);
+
         ass.finishLoading();
     }
 
@@ -78,11 +87,19 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("badGuysRSheet.png", Texture.class);
         ass.load("fondWall.png", Texture.class);
         ass.load("fondWall-nuit.png", Texture.class);
+        ass.load("nuages.png", Texture.class);
         ass.load("marteau.png", Texture.class);
         ass.load("pioche.png", Texture.class);
-        ass.load("texture_button.png", Texture.class);
-        ass.load("texture_button_return.png", Texture.class);
-        ass.load("texture_button_return_down.png", Texture.class);
+
+        // dossier ui
+        ass.load("ui/texture_button.png", Texture.class);
+        ass.load("ui/texture_button_return.png", Texture.class);
+        ass.load("ui/texture_button_return_down.png", Texture.class);
+        ass.load("ui/texture_button_settings.png", Texture.class);
+        ass.load("ui/texture_button_settings_down.png", Texture.class);
+        ass.load("ui/texture_button_volume.png", Texture.class);
+        ass.load("ui/texture_button_volume_down.png", Texture.class);
+        ass.load("ui/white_background.png", Texture.class);
 
         // dossier wallStates
         ass.load("wallStates/theWall.png", Texture.class);
