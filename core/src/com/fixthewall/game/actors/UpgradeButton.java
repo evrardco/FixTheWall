@@ -62,12 +62,12 @@ public class UpgradeButton extends Table {
 
         //setting up elements in the table
 
-        this.left().top().add(new Label(upgrade.getName(), style));
+        this.left().top().add(new Label(upgrade.getName()+":\n", style));
         this.padBottom(10);
-        this.add(new Label(upgrade.getName(), style));
+        this.add(new Label(upgrade.getDesc(), style));
         this.padBottom(10);
-        this.right().top().add(level).padBottom(10);
-        this.add(button).pad(10);
+        this.right().top().add(level).padBottom(5);
+        this.add(button).pad(5);
         this.add(cost);
         this.setTouchable(Touchable.enabled);
         this.setVisible(true);

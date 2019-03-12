@@ -13,7 +13,7 @@ public class Upgrade1 extends AbstractUpgrade {
         instance.setMaxHealth((int) instance.getMaxHealth() * 2);
         Gdx.app.log("Upgrade 1","max: " + instance.getMaxHealth());
         instance.setHealth(instance.getHealth() * 2);
-        this.setName("Life++:");
+        this.setName("Life++");
         this.setDesc("Increase your wall's life !");
     }
 }
