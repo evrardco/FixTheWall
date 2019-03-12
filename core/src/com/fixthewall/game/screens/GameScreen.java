@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
@@ -46,6 +47,7 @@ public class GameScreen implements Screen {
 
         Image imgFond = new Image(textureFond);
         Wall wall = new Wall(game.ass);
+        Dynamite dyn = new Dynamite(game.ass);
         hammer = new Hammer(game.ass);
         Ennemi ennemi = new Ennemi(1, game.ass);
 
@@ -86,7 +88,7 @@ public class GameScreen implements Screen {
                 hammer.show(event.getStageX(), event.getStageY());
             }
         });
-
+        dyn.addListener(dyn.getListener());
         bricksLabel = new Label("Bricks: " + (int) GameLogic.getSingleInstance().getBricks(), new Label.LabelStyle(font, Color.BLACK));
         healthLabel = new Label("Health: " + (int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth(), new Label.LabelStyle(font, Color.BLACK));
         bricksLabel.setPosition(game.viewport.getWorldWidth() / 2f, game.viewport.getWorldHeight() * 0.9f);
@@ -95,6 +97,7 @@ public class GameScreen implements Screen {
         //Add all the things to runescape
         stage.addActor(imgFond);
         stage.addActor(wall);
+        stage.addActor(dyn);
         stage.addActor(ennemi);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);

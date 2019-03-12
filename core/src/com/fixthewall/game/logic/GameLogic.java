@@ -56,5 +56,9 @@ public class GameLogic {
         this.bricks = bricks;
     }
 
+    public void reduceHealth() {
+        health = health - 50;
+    }
+
 
 }

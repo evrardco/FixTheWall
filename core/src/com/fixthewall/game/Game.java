@@ -91,6 +91,7 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("wallStates/theWall60.png", Texture.class);
         ass.load("wallStates/theWall80.png", Texture.class);
         ass.load("wallStates/theWallBroken.png", Texture.class);
+        ass.load("nuke.png", Texture.class);
 
         // dossier music
         ass.load("music/song1.mp3", Music.class);
