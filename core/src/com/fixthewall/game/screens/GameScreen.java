@@ -17,13 +17,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.actors.MenuTable;
 import com.fixthewall.game.actors.Nuages;
 import com.fixthewall.game.actors.PopupLabel;
+import com.fixthewall.game.actors.UpgradeButton;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.logic.BadGuysLogic;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.actors.Hammer;
+import com.fixthewall.game.upgrades.AbstractUpgrade;
+import com.fixthewall.game.upgrades.UpgradeManager;
 
 import java.util.LinkedList;
 
@@ -57,6 +61,22 @@ public class GameScreen implements Screen {
 
         Group hammerGroup = new Group();
         hammer = new Hammer(game.ass);
+
+        //Initializing upgrade menu
+        final MenuTable menuUpgrade = new MenuTable(game.ass, "Upgrades");
+        menuUpgrade.setVisible(false);
+
+        AbstractUpgrade[] upArray = UpgradeManager.getSingleInstance().getAllUpgrade();
+        for(int i=0; i < upArray.length; i++)
+            menuUpgrade.addEntry("",
+                    new UpgradeButton(game.ass,
+                            UpgradeManager.getSingleInstance().getAllUpgrade()[i]));
+
+
+
+
+
+        //Hammer grouping
         popupLabels = new LinkedList<PopupLabel>();
         for (int i = 0; i < MAX_POPUP_LABELS; i++) {
             PopupLabel temp = new PopupLabel(game.ass);
@@ -80,7 +100,7 @@ public class GameScreen implements Screen {
         upsButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                game.setScreen(new UpgradeScreen(game));
+                menuUpgrade.setVisible(!menuUpgrade.isVisible());
             }
         });
 
@@ -121,6 +141,7 @@ public class GameScreen implements Screen {
         stage.addActor(bricksLabel);
         stage.addActor(healthLabel);
         stage.addActor(hammerGroup);
+        stage.addActor(menuUpgrade);
 
         Gdx.input.setInputProcessor(stage);
     }

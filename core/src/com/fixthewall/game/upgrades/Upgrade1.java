@@ -11,6 +11,8 @@ public class Upgrade1 extends AbstractUpgrade {
     }
     @Override
     public void apply() {
+        super.apply();
+        this.setCost(this.getLevel()*10+this.getCost()*Math.log(this.getCost()));
         GameLogic instance = GameLogic.getSingleInstance();
         instance.setMaxHealth((int) instance.getMaxHealth() * 2);
         Gdx.app.log("Upgrade 1","max: " + instance.getMaxHealth());

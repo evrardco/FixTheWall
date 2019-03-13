@@ -50,7 +50,6 @@ public abstract class AbstractUpgrade {
                 if(Instance.getBricks() >= cost) {
                     GameLogic.getSingleInstance().setBricks(GameLogic.getSingleInstance().getBricks() - cost);
                     level++;
-                    setCost(level*10+cost*Math.log(cost));
                     applied = true;
                     UpgradeManager.getSingleInstance().update();
                 }else{
