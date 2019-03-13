@@ -8,28 +8,16 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class LogoGG extends Actor {
 
-    private Texture[] textures;
+    private Texture background;
+    private Texture brick;
     private float progress;
 
     public LogoGG(AssetManager ass) {
         progress = 0;
-        textures = new Texture[] {
-                ass.get("logoGG/logoGG_0.png", Texture.class),
-                ass.get("logoGG/logoGG_1.png", Texture.class),
-                ass.get("logoGG/logoGG_2.png", Texture.class),
-                ass.get("logoGG/logoGG_3.png", Texture.class),
-                ass.get("logoGG/logoGG_4.png", Texture.class),
-                ass.get("logoGG/logoGG_5.png", Texture.class),
-                ass.get("logoGG/logoGG_6.png", Texture.class),
-                ass.get("logoGG/logoGG_7.png", Texture.class),
-                ass.get("logoGG/logoGG_8.png", Texture.class),
-                ass.get("logoGG/logoGG_9.png", Texture.class),
-                ass.get("logoGG/logoGG_10.png", Texture.class),
-                ass.get("logoGG/logoGG_11.png", Texture.class),
-                ass.get("logoGG/logoGG_12.png", Texture.class)
-        };
-        setHeight(textures[0].getHeight());
-        setWidth(textures[0].getWidth());
+        background = ass.get("logoGG/logoGG_background.png", Texture.class);
+        brick = ass.get("logoGG/logoGG_brick.png", Texture.class);
+        setHeight(background.getHeight());
+        setWidth(background.getWidth());
     }
 
     @Override
@@ -39,9 +27,23 @@ public class LogoGG extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        int index = MathUtils.ceil(progress * (textures.length - 1));
+        batch.draw(background, getX(), getY());
 
-        batch.draw(textures[index], getX(), getY());
+        // 12 is the number of bricks total
+        int numBricks = MathUtils.ceil(progress * 12);
+        for (int i = 0, j = 0, count = 0; count < numBricks; count++, i++) {
+            // each 4 bricks we move up
+            if (i != 0 && i % 4 == 0) {
+                j++;
+                i = 0;
+            }
+
+            // 84 is the arbitrary offset that makes a 4 pixels spacing between bricks
+            int offsetx = 84 * i;
+            int offsety = 84 * j;
+
+            batch.draw(brick, getX() + offsetx, getY() + offsety);
+        }
     }
 
     public void setProgress(float progress) {
