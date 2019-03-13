@@ -49,7 +49,7 @@ public class HealthBar extends Group {
 
         healthBar.setValue((float) (GameLogic.getSingleInstance().getHealth() / GameLogic.getSingleInstance().getMaxHealth()));
 
-        health.setText((int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth());
+        health.setText(GameLogic.getSingleInstance().getHealthString());
         health.setSize(health.getPrefWidth(), health.getPrefHeight());
         health.setPosition(healthBar.getWidth() / 2f - health.getWidth() / 2f,
                 healthBar.getHeight() / 2f - health.getHeight() / 2f);
