@@ -65,19 +65,8 @@ public class Game extends com.badlogic.gdx.Game {
 
         // dossier logoGG
         // (voir pour les perfs si c'est pas mieux de faire une seule Texture et choper les images en TextureRegion)
-        ass.load("logoGG/logoGG_0.png", Texture.class);
-        ass.load("logoGG/logoGG_1.png", Texture.class);
-        ass.load("logoGG/logoGG_2.png", Texture.class);
-        ass.load("logoGG/logoGG_3.png", Texture.class);
-        ass.load("logoGG/logoGG_4.png", Texture.class);
-        ass.load("logoGG/logoGG_5.png", Texture.class);
-        ass.load("logoGG/logoGG_6.png", Texture.class);
-        ass.load("logoGG/logoGG_7.png", Texture.class);
-        ass.load("logoGG/logoGG_8.png", Texture.class);
-        ass.load("logoGG/logoGG_9.png", Texture.class);
-        ass.load("logoGG/logoGG_10.png", Texture.class);
-        ass.load("logoGG/logoGG_11.png", Texture.class);
-        ass.load("logoGG/logoGG_12.png", Texture.class);
+        ass.load("logoGG/logoGG_background.png", Texture.class);
+        ass.load("logoGG/logoGG_brick.png", Texture.class);
 
         ass.finishLoading();
     }
