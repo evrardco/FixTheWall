@@ -1,5 +1,7 @@
 package com.fixthewall.game.logic;
 
+import com.fixthewall.game.Helpers;
+
 public class GameLogic {
     private double health;
     private double maxHealth;
@@ -17,7 +19,7 @@ public class GameLogic {
     private GameLogic(){}
 
     public void init(){
-        this.maxHealth = 100.5f;
+        this.maxHealth = 100.5;
         health = maxHealth;
         bricks = 0;
         healingPower = 1.0;
@@ -79,4 +81,23 @@ public class GameLogic {
         return score;
     }
 
+    public String getHealthString() {
+        return Helpers.formatBigNumbers(getHealth()) + "/" + Helpers.formatBigNumbers(getMaxHealth());
+    }
+
+    public String getBricksString() {
+        return Helpers.formatBigNumbers(getBricks());
+    }
+
+    public String getScoreString() {
+        return Helpers.formatBigNumbers(getScore());
+    }
+
+    public String getBricksPowerString() {
+        return Helpers.formatBigNumbers(getBricksPower());
+    }
+
+    public String getHealingPowerString() {
+        return Helpers.formatBigNumbers(getHealingPower());
+    }
 }

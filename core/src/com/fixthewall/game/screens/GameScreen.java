@@ -13,12 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.HealthBar;
@@ -116,10 +113,10 @@ public class GameScreen implements Screen {
         });
         dyn.addListener(dyn.getListener());
 
-        bricksLabel = new Label("Bricks: " + (int) GameLogic.getSingleInstance().getBricks(), new Label.LabelStyle(font, Color.BLACK));
+        bricksLabel = new Label("Bricks: " + GameLogic.getSingleInstance().getBricksString(), new Label.LabelStyle(font, Color.BLACK));
         bricksLabel.setPosition(game.viewport.getWorldWidth() * 0.05f, game.viewport.getWorldHeight() * 0.85f);
 
-        scoreLabel = new Label("Score: " + (int) GameLogic.getSingleInstance().getScore(), new Label.LabelStyle(font, Color.BLACK));
+        scoreLabel = new Label("Score: " + GameLogic.getSingleInstance().getScoreString(), new Label.LabelStyle(font, Color.BLACK));
         scoreLabel.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.8f);
 
         // health bar
@@ -151,8 +148,8 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        bricksLabel.setText("Bricks: " + (int) GameLogic.getSingleInstance().getBricks());
-        scoreLabel.setText("Score: " + (int) GameLogic.getSingleInstance().getScore());
+        bricksLabel.setText("Bricks: " + GameLogic.getSingleInstance().getBricksString());
+        scoreLabel.setText("Score: " + GameLogic.getSingleInstance().getScoreString());
 
         //ennemiGroup.addActor(new Ennemi(0, game.ass));
 

@@ -11,7 +11,7 @@ import com.fixthewall.game.logic.GameLogic;
 
 public class PopupLabel extends Label {
 
-    ParallelAction parallel;
+    private ParallelAction parallel;
 
     public PopupLabel(AssetManager ass) {
         super("This is a popup label !", new LabelStyle(ass.get("Germania30.ttf", BitmapFont.class), Color.BLACK));
@@ -30,7 +30,7 @@ public class PopupLabel extends Label {
         addAction(parallel);
 
         GameLogic instance = GameLogic.getSingleInstance();
-        setText("+" + (long) instance.getBricksPower() + " Bricks, +" + (long) instance.getHealingPower() + " HP");
+        setText("+" + instance.getBricksPowerString() + " Bricks, +" + instance.getHealingPowerString() + " HP");
     }
 
 }
