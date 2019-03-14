@@ -2,7 +2,9 @@ package com.fixthewall.game.logic;
 
 import com.fixthewall.game.Helpers;
 
-public class GameLogic {
+import java.io.Serializable;
+
+public class GameLogic implements Serializable {
     private double health;
     private double maxHealth;
     private double bricks;

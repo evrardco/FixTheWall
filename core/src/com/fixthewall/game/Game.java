@@ -17,6 +17,10 @@ import com.fixthewall.game.logic.BadGuysLogic;
 import com.fixthewall.game.logic.MusicLogic;
 import com.fixthewall.game.logic.GameLogic;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 public class Game extends com.badlogic.gdx.Game {
 
     public FitViewport viewport;
@@ -26,6 +30,8 @@ public class Game extends com.badlogic.gdx.Game {
     public static final int GAME_HEIGHT = 1920;
 
 	public MusicLogic playlist;
+
+
 
 	@Override
 	public void create () {
@@ -41,8 +47,12 @@ public class Game extends com.badlogic.gdx.Game {
         UpgradeManager.getSingleInstance().init();
         GameLogic.getSingleInstance().init();
         BadGuysLogic.getSingleInstance().init(3.0, 1.0f);
+
+
+
 		viewport = new FitViewport(GAME_WIDTH, GAME_HEIGHT);
 		setScreen(new LoadingScreen(this));
+
 	}
 	@Override
 	public void dispose () {

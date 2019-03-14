@@ -60,6 +60,11 @@ public abstract class AbstractUpgrade {
 
     }
 
+    public void save(){
+        String className = this.getClass().getSimpleName();
+
+    }
+
     public void levelUp(){
         level++;
         cost = cost*2;

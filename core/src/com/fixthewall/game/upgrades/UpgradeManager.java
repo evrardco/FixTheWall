@@ -17,7 +17,8 @@ public class UpgradeManager {
             allUpgrade[i] = currentUpgrade;
 
         }
-        allUpgrade[1] = new Upgrade2();            currentUpgrade.setLevel(0);
+        allUpgrade[1] = new Upgrade2();
+        currentUpgrade.setLevel(0);
 
         update();
     }
