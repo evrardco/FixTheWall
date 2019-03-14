@@ -4,6 +4,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -50,7 +51,7 @@ public class MenuTable extends Table {
         row();
     }
 
-    public void addEntry(String description, Button button) {
+    public void addEntry(String description, Actor button) {
         BitmapFont font = ass.get("Germania60.ttf");
         add(new Label(description, new Label.LabelStyle(font, Color.BLACK))).padBottom(25).left();
         add(button).padBottom(25);

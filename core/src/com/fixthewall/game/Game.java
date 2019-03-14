@@ -38,7 +38,7 @@ public class Game extends com.badlogic.gdx.Game {
         loadVIPAssets();
         loadAssets();
 
-        UpgradeManager.getSingleInstance();
+        UpgradeManager.getSingleInstance().init();
         GameLogic.getSingleInstance().init();
         BadGuysLogic.getSingleInstance().init(3.0, 1.0f);
 		viewport = new FitViewport(GAME_WIDTH, GAME_HEIGHT);
@@ -82,6 +82,8 @@ public class Game extends com.badlogic.gdx.Game {
 
         // dossier ui
         ass.load("ui/texture_button.png", Texture.class);
+        ass.load("ui/texture_button_down.png", Texture.class);
+        ass.load("ui/texture_button_disabled.png", Texture.class);
         ass.load("ui/texture_button_return.png", Texture.class);
         ass.load("ui/texture_button_return_down.png", Texture.class);
         ass.load("ui/texture_button_settings.png", Texture.class);
@@ -89,6 +91,7 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("ui/texture_button_volume.png", Texture.class);
         ass.load("ui/texture_button_volume_down.png", Texture.class);
         ass.load("ui/white_background.png", Texture.class);
+        ass.load("ui/texture_upgrade_pannel.png", Texture.class);
         ass.load("ui/texture_progressbar_background.png", Texture.class);
         ass.load("ui/texture_progressbar.png", Texture.class);
 

@@ -10,9 +10,30 @@ public abstract class AbstractUpgrade {
     private int level;
     private float base;
     private double cost;
+    private String desc;
+    private String name;
 
 
     private boolean applied;
+
+    public boolean isAffordable(){
+        return !(GameLogic.getSingleInstance().getBricks() < this.cost);
+    }
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public AbstractUpgrade(int level, double cost){
         this.level = level;
@@ -29,7 +50,6 @@ public abstract class AbstractUpgrade {
                 if(Instance.getBricks() >= cost) {
                     GameLogic.getSingleInstance().setBricks(GameLogic.getSingleInstance().getBricks() - cost);
                     level++;
-                    setCost(level*10+cost*Math.log(cost));
                     applied = true;
                     UpgradeManager.getSingleInstance().update();
                 }else{
