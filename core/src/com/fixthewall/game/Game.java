@@ -17,6 +17,10 @@ import com.fixthewall.game.logic.BadGuysLogic;
 import com.fixthewall.game.logic.MusicLogic;
 import com.fixthewall.game.logic.GameLogic;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 public class Game extends com.badlogic.gdx.Game {
 
     public FitViewport viewport;
@@ -26,6 +30,8 @@ public class Game extends com.badlogic.gdx.Game {
     public static final int GAME_HEIGHT = 1920;
 
 	public MusicLogic playlist;
+
+
 
 	@Override
 	public void create () {
@@ -38,11 +44,15 @@ public class Game extends com.badlogic.gdx.Game {
         loadVIPAssets();
         loadAssets();
 
-        UpgradeManager.getSingleInstance();
+        UpgradeManager.getSingleInstance().init();
         GameLogic.getSingleInstance().init();
         BadGuysLogic.getSingleInstance().init(3.0, 1.0f);
+
+
+
 		viewport = new FitViewport(GAME_WIDTH, GAME_HEIGHT);
 		setScreen(new LoadingScreen(this));
+
 	}
 	@Override
 	public void dispose () {
@@ -65,19 +75,8 @@ public class Game extends com.badlogic.gdx.Game {
 
         // dossier logoGG
         // (voir pour les perfs si c'est pas mieux de faire une seule Texture et choper les images en TextureRegion)
-        ass.load("logoGG/logoGG_0.png", Texture.class);
-        ass.load("logoGG/logoGG_1.png", Texture.class);
-        ass.load("logoGG/logoGG_2.png", Texture.class);
-        ass.load("logoGG/logoGG_3.png", Texture.class);
-        ass.load("logoGG/logoGG_4.png", Texture.class);
-        ass.load("logoGG/logoGG_5.png", Texture.class);
-        ass.load("logoGG/logoGG_6.png", Texture.class);
-        ass.load("logoGG/logoGG_7.png", Texture.class);
-        ass.load("logoGG/logoGG_8.png", Texture.class);
-        ass.load("logoGG/logoGG_9.png", Texture.class);
-        ass.load("logoGG/logoGG_10.png", Texture.class);
-        ass.load("logoGG/logoGG_11.png", Texture.class);
-        ass.load("logoGG/logoGG_12.png", Texture.class);
+        ass.load("logoGG/logoGG_background.png", Texture.class);
+        ass.load("logoGG/logoGG_brick.png", Texture.class);
 
         ass.finishLoading();
     }
@@ -94,6 +93,8 @@ public class Game extends com.badlogic.gdx.Game {
 
         // dossier ui
         ass.load("ui/texture_button.png", Texture.class);
+        ass.load("ui/texture_button_down.png", Texture.class);
+        ass.load("ui/texture_button_disabled.png", Texture.class);
         ass.load("ui/texture_button_return.png", Texture.class);
         ass.load("ui/texture_button_return_down.png", Texture.class);
         ass.load("ui/texture_button_settings.png", Texture.class);
@@ -101,6 +102,9 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("ui/texture_button_volume.png", Texture.class);
         ass.load("ui/texture_button_volume_down.png", Texture.class);
         ass.load("ui/white_background.png", Texture.class);
+        ass.load("ui/texture_upgrade_pannel.png", Texture.class);
+        ass.load("ui/texture_progressbar_background.png", Texture.class);
+        ass.load("ui/texture_progressbar.png", Texture.class);
 
         // dossier wallStates
         ass.load("wallStates/theWall.png", Texture.class);

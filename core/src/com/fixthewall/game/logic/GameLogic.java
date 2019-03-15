@@ -1,12 +1,17 @@
 package com.fixthewall.game.logic;
 
-public class GameLogic {
+import com.fixthewall.game.Helpers;
+
+import java.io.Serializable;
+
+public class GameLogic implements Serializable {
     private double health;
     private double maxHealth;
     private double bricks;
     private static GameLogic singleInstance = null;
     private double healingPower;
     private double bricksPower;
+    private double score;
 
     public static GameLogic getSingleInstance(){
         if(singleInstance == null) singleInstance = new GameLogic();
@@ -16,11 +21,12 @@ public class GameLogic {
     private GameLogic(){}
 
     public void init(){
-        this.maxHealth = 100.5f;
+        this.maxHealth = 100.5;
         health = maxHealth;
         bricks = 0;
         healingPower = 1.0;
         bricksPower = 1.0;
+        score = 0.0;
     }
 
     public double getHealth() {
@@ -69,5 +75,31 @@ public class GameLogic {
         health = health - n;
     }
 
+    public void setScore(double score) {
+        this.score = score;
+    }
 
+    public double getScore() {
+        return score;
+    }
+
+    public String getHealthString() {
+        return Helpers.formatBigNumbers(getHealth()) + "/" + Helpers.formatBigNumbers(getMaxHealth());
+    }
+
+    public String getBricksString() {
+        return Helpers.formatBigNumbers(getBricks());
+    }
+
+    public String getScoreString() {
+        return Helpers.formatBigNumbers(getScore());
+    }
+
+    public String getBricksPowerString() {
+        return Helpers.formatBigNumbers(getBricksPower());
+    }
+
+    public String getHealingPowerString() {
+        return Helpers.formatBigNumbers(getHealingPower());
+    }
 }

@@ -16,16 +16,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.actors.MenuTable;
+import com.fixthewall.game.actors.HealthBar;
 import com.fixthewall.game.actors.Nuages;
 import com.fixthewall.game.actors.PopupLabel;
+import com.fixthewall.game.actors.UpgradeButton;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.logic.BadGuysLogic;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.actors.Hammer;
+import com.fixthewall.game.upgrades.AbstractUpgrade;
+import com.fixthewall.game.upgrades.UpgradeManager;
 
 import java.util.LinkedList;
 
@@ -37,7 +41,7 @@ public class GameScreen implements Screen {
     private Stage stage;
     private Hammer hammer;
     private Label bricksLabel;
-    private Label healthLabel;
+    private Label scoreLabel;
     private Group ennemiGroup;
     private LinkedList<PopupLabel> popupLabels;
 
@@ -61,6 +65,22 @@ public class GameScreen implements Screen {
 
         Group hammerGroup = new Group();
         hammer = new Hammer(game.ass);
+
+        //Initializing upgrade menu
+        final MenuTable menuUpgrade = new MenuTable(game.ass, "Upgrades");
+        menuUpgrade.setVisible(false);
+
+        AbstractUpgrade[] upArray = UpgradeManager.getSingleInstance().getAllUpgrade();
+        for(int i=0; i < upArray.length; i++)
+            menuUpgrade.addEntry("",
+                    new UpgradeButton(game.ass,
+                            UpgradeManager.getSingleInstance().getAllUpgrade()[i]));
+
+
+
+
+
+        //Hammer grouping
         popupLabels = new LinkedList<PopupLabel>();
         for (int i = 0; i < MAX_POPUP_LABELS; i++) {
             PopupLabel temp = new PopupLabel(game.ass);
@@ -84,7 +104,7 @@ public class GameScreen implements Screen {
         upsButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                game.setScreen(new UpgradeScreen(game));
+                menuUpgrade.setVisible(!menuUpgrade.isVisible());
             }
         });
 
@@ -102,6 +122,7 @@ public class GameScreen implements Screen {
                     instance.setHealth(maxHealth);
                 }
                 instance.setBricks(instance.getBricks() + instance.getBricksPower());
+                instance.setScore(instance.getScore() + instance.getBricksPower());
                 hammer.show(event.getStageX(), event.getStageY());
 
                 //spawn digit popup here
@@ -111,10 +132,17 @@ public class GameScreen implements Screen {
             }
         });
         dyn.addListener(dyn.getListener());
-        bricksLabel = new Label("Bricks: " + (int) GameLogic.getSingleInstance().getBricks(), new Label.LabelStyle(font, Color.BLACK));
-        healthLabel = new Label("Health: " + (int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth(), new Label.LabelStyle(font, Color.BLACK));
-        bricksLabel.setPosition(game.viewport.getWorldWidth() / 2f, game.viewport.getWorldHeight() * 0.9f);
-        healthLabel.setPosition(game.viewport.getWorldWidth() / 2f, game.viewport.getWorldHeight() * 0.8f);
+
+        bricksLabel = new Label("Bricks: " + GameLogic.getSingleInstance().getBricksString(), new Label.LabelStyle(font, Color.BLACK));
+        bricksLabel.setPosition(game.viewport.getWorldWidth() * 0.05f, game.viewport.getWorldHeight() * 0.85f);
+
+        scoreLabel = new Label("Score: " + GameLogic.getSingleInstance().getScoreString(), new Label.LabelStyle(font, Color.BLACK));
+        scoreLabel.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.8f);
+
+        // health bar
+        HealthBar healthBar = new HealthBar(game.ass);
+        healthBar.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.9f);
+        //
 
         //Add all the things to runescape
         stage.addActor(imgFond);
@@ -125,8 +153,10 @@ public class GameScreen implements Screen {
         stage.addActor(ennemiGroup);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);
-        stage.addActor(healthLabel);
+        stage.addActor(scoreLabel);
+        stage.addActor(healthBar);
         stage.addActor(hammerGroup);
+        stage.addActor(menuUpgrade);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -139,8 +169,9 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        bricksLabel.setText("Bricks: " + (int) GameLogic.getSingleInstance().getBricks());
-        healthLabel.setText("Health: " + (int) GameLogic.getSingleInstance().getHealth() + "/" + (int) GameLogic.getSingleInstance().getMaxHealth());
+        bricksLabel.setText("Bricks: " + GameLogic.getSingleInstance().getBricksString());
+        scoreLabel.setText("Score: " + GameLogic.getSingleInstance().getScoreString());
+
         //ennemiGroup.addActor(new Ennemi(0, game.ass));
 
         stage.act(delta);
