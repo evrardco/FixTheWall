@@ -89,6 +89,7 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("fondWall-nuit.png", Texture.class);
         ass.load("nuages.png", Texture.class);
         ass.load("marteau.png", Texture.class);
+        ass.load("marteauDiam.png", Texture.class);
         ass.load("pioche.png", Texture.class);
 
         // dossier ui
@@ -121,6 +122,7 @@ public class Game extends com.badlogic.gdx.Game {
         // dossier Frames
         ass.load("Frames/SheetFrameEnnemi.png", Texture.class);
         ass.load("Frames/SheetFrameEnnemiHit.png", Texture.class);
+        ass.load("Frames/SheetFrameDynamite.png", Texture.class);
 
         // dossier data
 
