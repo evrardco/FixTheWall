@@ -11,14 +11,15 @@ public class UpgradeManager {
         return allUpgrade;
     }
     public void init(){
-        AbstractUpgrade currentUpgrade = null;
-        for (int i = 0; i < allUpgrade.length; i++) {
-            currentUpgrade = new Upgrade1(0, 10);
-            allUpgrade[i] = currentUpgrade;
+        //AbstractUpgrade currentUpgrade = null;
+        //for (int i = 0; i < allUpgrade.length; i++) {
+            //currentUpgrade = new Upgrade1(0, 10);
+        allUpgrade[0] = new Upgrade1(0, 10);
+            //allUpgrade[i] = currentUpgrade;
 
-        }
-        allUpgrade[1] = new Upgrade2();
-        currentUpgrade.setLevel(0);
+        //}
+        allUpgrade[1] = new Upgrade2(0, 100);
+        //currentUpgrade.setLevel(0);
 
         update();
     }
@@ -33,6 +34,7 @@ public class UpgradeManager {
             if (currentUpgrade.isApplied())
             {
                 currentUpgrade.apply();
+                currentUpgrade.setApplied(false);//Permet de ne pas upgrade plusieurs à la foi.
             }
         }
 

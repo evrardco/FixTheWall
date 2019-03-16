@@ -71,13 +71,9 @@ public class GameScreen implements Screen {
         menuUpgrade.setVisible(false);
 
         AbstractUpgrade[] upArray = UpgradeManager.getSingleInstance().getAllUpgrade();
-        for(int i=0; i < upArray.length; i++)
-            menuUpgrade.addEntry("",
-                    new UpgradeButton(game.ass,
-                            UpgradeManager.getSingleInstance().getAllUpgrade()[i]));
-
-
-
+        for(int i=0; i < upArray.length; i++) {
+            menuUpgrade.addEntry("", new UpgradeButton(game.ass, upArray[i]));
+        }
 
 
         //Hammer grouping

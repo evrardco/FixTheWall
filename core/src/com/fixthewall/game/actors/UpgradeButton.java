@@ -44,10 +44,10 @@ public class UpgradeButton extends Table {
         this.upgrade = upgrade;
 
         pannelTex = ass.get("ui/texture_upgrade_pannel.png");
-        this.setBackground(new TextureRegionDrawable(pannelTex));
+        this.setBackground(new TextureRegionDrawable(pannelTex));//BackGround Vert des bouttons
         Label.LabelStyle style = new Label.LabelStyle((BitmapFont)ass.get("Germania30.ttf"), Color.BLACK);
-        cost = new Label(""+(int)upgrade.getCost(), style);
-        level = new Label(""+(int)upgrade.getLevel(), style);
+        cost = new Label(""+(long)upgrade.getCost(), style);
+        level = new Label(""+upgrade.getLevel(), style);
 
         //setting up Button.
         ImageTextButton.ImageTextButtonStyle imTxtStyle = new ImageTextButton.ImageTextButtonStyle(
@@ -84,8 +84,8 @@ public class UpgradeButton extends Table {
         super.act(delta);
         button.setChecked(!upgrade.isAffordable());
         button.setDisabled(!upgrade.isAffordable());
-        cost.setText("Cost: "+(int)upgrade.getCost());
-        level.setText("LvL: "+(int)upgrade.getLevel());
+        cost.setText("Cost: "+(long)upgrade.getCost());
+        level.setText("LvL: "+upgrade.getLevel());
     }
 
 

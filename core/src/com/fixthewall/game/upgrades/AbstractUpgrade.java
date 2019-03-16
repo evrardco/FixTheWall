@@ -17,7 +17,7 @@ public abstract class AbstractUpgrade {
     private boolean applied;
 
     public boolean isAffordable(){
-        return !(GameLogic.getSingleInstance().getBricks() < this.cost);
+        return (GameLogic.getSingleInstance().getBricks() >= this.cost);
     }
     public String getDesc() {
         return desc;
