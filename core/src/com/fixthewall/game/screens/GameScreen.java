@@ -21,6 +21,7 @@ import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.MenuTable;
 import com.fixthewall.game.actors.HealthBar;
 import com.fixthewall.game.actors.Nuages;
+import com.fixthewall.game.actors.PauseButton;
 import com.fixthewall.game.actors.PopupLabel;
 import com.fixthewall.game.actors.UpgradeButton;
 import com.fixthewall.game.actors.Wall;
@@ -40,8 +41,10 @@ public class GameScreen implements Screen {
     private final Game game;
     private Stage stage;
     private Hammer hammer;
+    private PauseButton pause;
     private Label bricksLabel;
     private Label scoreLabel;
+    private Boolean onPause;
     private Group ennemiGroup;
     private LinkedList<PopupLabel> popupLabels;
 
@@ -58,10 +61,12 @@ public class GameScreen implements Screen {
         Wall wall = new Wall(game.ass);
         Dynamite dyn = new Dynamite(game.ass);
         hammer = new Hammer(game.ass);
+        pause = new PauseButton(game.ass);
 
         ennemiGroup = new Group();
         Ennemi ennemi = new Ennemi(1, game.ass);
         ennemiGroup.addActor(ennemi);
+        onPause = false;
 
         Group hammerGroup = new Group();
         hammer = new Hammer(game.ass);
@@ -100,7 +105,9 @@ public class GameScreen implements Screen {
         upsButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                menuUpgrade.setVisible(!menuUpgrade.isVisible());
+                if (!onPause) {
+                    menuUpgrade.setVisible(!menuUpgrade.isVisible());
+                }
             }
         });
 
@@ -108,24 +115,31 @@ public class GameScreen implements Screen {
         wall.addListener( new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
-                GameLogic instance = GameLogic.getSingleInstance();
-                double maxHealth = instance.getMaxHealth();
-                double incrementedHealth = instance.getHealth() + instance.getHealingPower();
-                if(incrementedHealth <= maxHealth){
-                    instance.setHealth(incrementedHealth);
-                }
-                else {
-                    instance.setHealth(maxHealth);
-                }
-                instance.setBricks(instance.getBricks() + instance.getBricksPower());
-                instance.setScore(instance.getScore() + instance.getBricksPower());
-                hammer.show(event.getStageX(), event.getStageY());
+                if (!onPause) {
+                    GameLogic instance = GameLogic.getSingleInstance();
+                    double maxHealth = instance.getMaxHealth();
+                    double incrementedHealth = instance.getHealth() + instance.getHealingPower();
+                    if (incrementedHealth <= maxHealth) {
+                        instance.setHealth(incrementedHealth);
+                    } else {
+                        instance.setHealth(maxHealth);
+                    }
+                    instance.setBricks(instance.getBricks() + instance.getBricksPower());
+                    instance.setScore(instance.getScore() + instance.getBricksPower());
+                    hammer.show(event.getStageX(), event.getStageY());
 
-                //spawn digit popup here
-                PopupLabel temp = popupLabels.remove();
-                temp.show(event.getStageX() - hammer.getWidth(), event.getStageY() + hammer.getHeight() / 2f);
-                popupLabels.add(temp);
+                    //spawn digit popup here
+                    PopupLabel temp = popupLabels.remove();
+                    temp.show(event.getStageX() - hammer.getWidth(), event.getStageY() + hammer.getHeight() / 2f);
+                    popupLabels.add(temp);
+                }
             }
+        });
+        pause.addListener( new ClickListener(){
+            @Override
+            public  void clicked(InputEvent event, float x, float y){
+                onPause = !onPause;
+                          }
         });
         dyn.addListener(dyn.getListener());
 
@@ -140,12 +154,13 @@ public class GameScreen implements Screen {
         healthBar.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.9f);
         //
 
-        //Add all the things to runescape
+        //Add all the things to runescape (add a deadman mode)
         stage.addActor(imgFond);
         stage.addActor(nuages);
         stage.addActor(wall);
         stage.addActor(dyn);
         stage.addActor(ennemi);
+        stage.addActor(pause);
         stage.addActor(ennemiGroup);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);
@@ -159,24 +174,31 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta) {
-        //logic update
-        BadGuysLogic.getSingleInstance().doDamage(delta);
+        if (!onPause) {
+            //logic update
+            BadGuysLogic.getSingleInstance().doDamage(delta);
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        bricksLabel.setText("Bricks: " + GameLogic.getSingleInstance().getBricksString());
-        scoreLabel.setText("Score: " + GameLogic.getSingleInstance().getScoreString());
+            bricksLabel.setText("Bricks: " + GameLogic.getSingleInstance().getBricksString());
+            scoreLabel.setText("Score: " + GameLogic.getSingleInstance().getScoreString());
 
-        //ennemiGroup.addActor(new Ennemi(0, game.ass));
+            //ennemiGroup.addActor(new Ennemi(0, game.ass));
 
-        stage.act(delta);
-        stage.draw();
+            stage.act(delta);
+            stage.draw();
 
-        if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
-            dispose();
-            gameScreen = null;
-            game.setScreen(new EndScreen(game));
+            if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
+                dispose();
+                gameScreen = null;
+                game.setScreen(new EndScreen(game));
+            }
+        }
+        else {
+
+            //add pause design at center ?
+
         }
     }
 
