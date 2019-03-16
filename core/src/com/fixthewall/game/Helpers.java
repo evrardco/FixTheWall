@@ -6,6 +6,7 @@ public class Helpers {
 
     public static String[] suffixes = {
             "",
+            "",
             "K",
             "M",
             "G",
