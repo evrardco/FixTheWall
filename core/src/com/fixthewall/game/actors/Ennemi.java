@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.fixthewall.game.Game;
+import com.fixthewall.game.logic.GameLogic;
 
 /*
 * TARGET ENNEMI:    X = [0; 984] et Y = [242; 298]
@@ -25,7 +25,9 @@ import com.fixthewall.game.Game;
 
 public class Ennemi extends Actor {
 
+    private GameLogic gameInstance;
     private double power;
+    private TextureRegion hitFrame;
     private float targetX;
     private float targetY;
     private float distance;
@@ -43,6 +45,7 @@ public class Ennemi extends Actor {
     private float elapsedTimeHit;
 
     public Ennemi (int level, AssetManager ass){
+        gameInstance = GameLogic.getSingleInstance();
         if (level < 1)
             this.level = 1;
         else
@@ -97,10 +100,12 @@ public class Ennemi extends Actor {
                 }
             }
         }
-        float randSpeed = getRandom(8)+5f;
+        hitFrame = ennemiFrames2[3];//Frame de frappe
+        float randSpeed = getRandom(6)+5f;
         float frame2Speed = randSpeed/100f;
         if(isMegaEnnemi){
-            frame2Speed /= 10f;
+            frame2Speed /= 4f;
+            setPowerMega();
         }
         ennemiAnimationHit = new Animation<TextureRegion>(frame2Speed, ennemiFrames2);
         //
@@ -110,7 +115,11 @@ public class Ennemi extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         if(this.getX()==targetX && this.getY()==targetY){
             elapsedTimeHit += Gdx.graphics.getDeltaTime();
-            batch.draw( ennemiAnimationHit.getKeyFrame(elapsedTimeHit, true), this.getX(), this.getY());
+            TextureRegion frame = ennemiAnimationHit.getKeyFrame(elapsedTimeHit, true);
+            if(frame==hitFrame){
+                this.hitTheWall();
+            }
+            batch.draw( frame, this.getX(), this.getY());
         }
         else{
             elapsedTime += Gdx.graphics.getDeltaTime();
@@ -119,7 +128,11 @@ public class Ennemi extends Actor {
     }
 
     private void setPower() {
-        this.power = 1.0 * this.level;
+        this.power = this.level/5.0;//div par 5 car problème de synchronisation avec les frames.
+    }
+
+    private void setPowerMega(){
+        this.power = this.level;
     }
 
     public void setLevel(int level) {
@@ -132,7 +145,7 @@ public class Ennemi extends Actor {
         fromLeft = (rand==0);
         rand = getRandom(2);
         fromSide = (rand==0);
-        rand = getRandom(100);// 1% de chance d'être MEGA
+        rand = getRandom(100);// 1% de chance d'être MEGA !!!
         isMegaEnnemi = (rand==42);
     }
 
@@ -169,8 +182,14 @@ public class Ennemi extends Actor {
         float x = this.getX();
         int interval;
         if(fromLeft){
-            interval = 984 - (int)x;
-            targetX = x + 1f + (float)getRandom(interval);
+            if(x < 0f) {
+                interval = 985;
+                targetX =(float)getRandom(interval);
+            }
+            else {
+                interval = 985 - (int) x;
+                targetX = x + (float)getRandom(interval);
+            }
         }
         else{
             if(x > 985f)
@@ -185,6 +204,10 @@ public class Ennemi extends Actor {
 
     private void setDistance(){
         distance = Math.abs(this.getX() - targetX) + Math.abs(this.getY() - targetY);
+    }
+
+    private void hitTheWall(){
+        gameInstance.reduceHealth(power);
     }
 
     /*
