@@ -12,16 +12,27 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.fixthewall.game.Game;
 
 /*
-* Ennemis avance entre Y = [242; 298] (intervale de 56 pixels)
-*  et s'arrêt dans l'intervale X = [0; 984] (intervale de 984 pixels)
+* TARGET ENNEMI:    X = [0; 984] et Y = [242; 298]
+*
+* SPAWN ENNEMI:
+*                                 fromLeft                     |               !fromLeft
+*                |---------------------------------------------|-----------------------------------------
+*    fromSide    |     X = -(96+50) et Y = [0; 298]            |      X = 1080+50 et Y = [0; 298]
+*   -------------|---------------------------------------------|-----------------------------------------
+*    !fromSide   |     X = [-(96+50); 492] et Y = -(128+50)    |      X = [493; 1080+50] et Y = -(128+50)
+*
 * */
 
 public class Ennemi extends Actor {
 
-    private float power;
+    private double power;
     private float targetX;
+    private float targetY;
+    private float distance;
     private int level;
+    private boolean isMegaEnnemi;
     private boolean fromLeft;
+    private boolean fromSide;
     //variables d'animation:
     private static final int FRAME_COLS = 4, FRAME_ROWS = 5;
     private static final int FRAME_COLS2 = 4, FRAME_ROWS2 = 2;
@@ -39,6 +50,8 @@ public class Ennemi extends Actor {
         this.setPower();
         this.setSide();
         this.setCoor();
+        this.setTarget();
+        this.setDistance();
         setTouchable(Touchable.disabled); // clik through
 
         //Set animation move
@@ -61,11 +74,9 @@ public class Ennemi extends Actor {
             }
         }
         float duration = getRandom(4)+3f;
-        targetX = (float)getRandom(985);
-        float distance = Math.abs(targetX-this.getX());
         float frame1Speed = (duration/distance)*4f;//Vitesse = (distance/temps)^-1 ici car c'est le temps des frames et non la vitesse.
         ennemiAnimation = new Animation<TextureRegion>(frame1Speed, ennemiFrames);
-        this.addAction(Actions.moveTo(targetX, this.getY(), duration));
+        this.addAction(Actions.moveTo(targetX, targetY, duration));
         //
         //Set animation hit
         Texture texture2 = ass.get("Frames/SheetFrameEnnemiHit.png");
@@ -88,13 +99,16 @@ public class Ennemi extends Actor {
         }
         float randSpeed = getRandom(8)+5f;
         float frame2Speed = randSpeed/100f;
+        if(isMegaEnnemi){
+            frame2Speed /= 10f;
+        }
         ennemiAnimationHit = new Animation<TextureRegion>(frame2Speed, ennemiFrames2);
         //
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if(this.getX()==targetX){
+        if(this.getX()==targetX && this.getY()==targetY){
             elapsedTimeHit += Gdx.graphics.getDeltaTime();
             batch.draw( ennemiAnimationHit.getKeyFrame(elapsedTimeHit, true), this.getX(), this.getY());
         }
@@ -105,8 +119,7 @@ public class Ennemi extends Actor {
     }
 
     private void setPower() {
-        // TODO equilibrage de ça
-        this.power = 1.5f * this.level;
+        this.power = 1.0 * this.level;
     }
 
     public void setLevel(int level) {
@@ -117,17 +130,61 @@ public class Ennemi extends Actor {
     private void setSide(){
         int rand = getRandom(2);
         fromLeft = (rand==0);
+        rand = getRandom(2);
+        fromSide = (rand==0);
+        rand = getRandom(100);// 1% de chance d'être MEGA
+        isMegaEnnemi = (rand==42);
     }
 
+    /*
+    * Set le point de spawn de cette ennemi.
+    * */
     private void setCoor(){
-        float randY = (float)getRandom(57);
         if(fromLeft){
-            this.setX(-(96f+50f));
+            if(fromSide){// fromLeft && fromSide -> X = -(96+50) et Y = [0; 298]
+                this.setX(-(96f+50f));
+                this.setY((float)getRandom(299));
+            }
+            else{// fromLeft && !fromSide -> X = [-(96+50); 492] et Y = -(128+50)
+                this.setX(-(96f+50f)+getRandom(639));
+                this.setY(-(128f+50f));
+            }
         }
         else{
-            this.setX(1080f+50f);
+            if(fromSide){// !fromLeft && fromSide -> X = 1080+50 et Y = [0; 298]
+                this.setX(1080f+50f);
+                this.setY((float)getRandom(299));
+            }
+            else{// !fromLeft && !fromSide -> X = [493; 1080+50] et Y = -(128+50)
+                this.setX(493f+getRandom(638));
+                this.setY(-(128f+50f));
+            }
         }
-        this.setY(242f+randY);
+    }
+
+    /*
+     * Set le point d'arrivé de cette ennemi.
+     * */
+    private void setTarget(){
+        float x = this.getX();
+        int interval;
+        if(fromLeft){
+            interval = 984 - (int)x;
+            targetX = x + 1f + (float)getRandom(interval);
+        }
+        else{
+            if(x > 985f)
+                interval = 985;
+            else
+                interval = (int)x;
+
+            targetX = (float)getRandom(interval);
+        }
+        targetY = 242f+getRandom(getRandom(57));
+    }
+
+    private void setDistance(){
+        distance = Math.abs(this.getX() - targetX) + Math.abs(this.getY() - targetY);
     }
 
     /*
