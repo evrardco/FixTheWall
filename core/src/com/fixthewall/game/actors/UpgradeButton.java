@@ -28,6 +28,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.fixthewall.game.upgrades.AbstractUpgrade;
 import com.fixthewall.game.upgrades.UpgradeManager;
+import com.fixthewall.game.Helpers;
 
 public class UpgradeButton extends Table {
     private AbstractUpgrade upgrade;
@@ -46,7 +47,7 @@ public class UpgradeButton extends Table {
         pannelTex = ass.get("ui/texture_upgrade_pannel.png");
         this.setBackground(new TextureRegionDrawable(pannelTex));//BackGround Vert des bouttons
         Label.LabelStyle style = new Label.LabelStyle((BitmapFont)ass.get("Germania30.ttf"), Color.BLACK);
-        cost = new Label(""+(long)upgrade.getCost(), style);
+        cost = new Label(Helpers.formatBigNumbers(upgrade.getCost()), style);
         level = new Label(""+upgrade.getLevel(), style);
 
         //setting up Button.
@@ -84,7 +85,7 @@ public class UpgradeButton extends Table {
         super.act(delta);
         button.setChecked(!upgrade.isAffordable());
         button.setDisabled(!upgrade.isAffordable());
-        cost.setText("Cost: "+(long)upgrade.getCost());
+        cost.setText("Cost: "+Helpers.formatBigNumbers(upgrade.getCost()));
         level.setText("LvL: "+upgrade.getLevel());
     }
 

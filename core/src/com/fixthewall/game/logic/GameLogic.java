@@ -80,7 +80,9 @@ public class GameLogic implements Serializable {
         return maxHealth;
     }
 
-    public void setMaxHealth(double maxHealth) { this.maxHealth = maxHealth;}
+    public void setMaxHealth(double maxHealth) {
+        this.maxHealth = maxHealth;
+    }
 
     public double getBricks() {
         return bricks;

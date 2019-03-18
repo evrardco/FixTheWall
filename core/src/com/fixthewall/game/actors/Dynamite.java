@@ -14,6 +14,7 @@ import com.fixthewall.game.logic.GameLogic;
 
 public class Dynamite extends Actor{
 
+    public static boolean onPause;
     private double degats;
     private boolean visible;
     private Animation<TextureRegion> DynamiteAnimation;
@@ -21,16 +22,19 @@ public class Dynamite extends Actor{
     private float elapsedTime;
     private float Time;
     private Texture texture;
+    private int level;
 
     public Dynamite (AssetManager ass) {
         texture = ass.get("Frames/SheetFrameDynamite.png");
         degats = 25;
+        level = 1;
+        onPause = false;
         //set size actor
         setWidth(texture.getWidth()/3f);
         setHeight(texture.getHeight());
         visible = false;
         setTouchable(Touchable.disabled);
-        //
+
         //Set animation
         TextureRegion[][] tmp = TextureRegion.split(texture,
                 texture.getWidth()/3,
@@ -65,6 +69,8 @@ public class Dynamite extends Actor{
         }
     }
 
+
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (getRandom(300) == 10 && !visible)
@@ -83,14 +89,21 @@ public class Dynamite extends Actor{
         return  new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
-                visible = false;
-                setTouchable(Touchable.disabled);
-                Time = 0;
+                if (!onPause) {
+
+                    visible = false;
+                    setTouchable(Touchable.disabled);
+                    Time = 0;
+                }
             }
         };
 
     }
 
+    public void setLevel(int level){
+        this.level = level;
+        this.degats = 25*level*level;
+    }
 
     /*
      * Retourne un entier aléatoire entre 0 et n-1
