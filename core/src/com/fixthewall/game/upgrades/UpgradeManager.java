@@ -1,6 +1,8 @@
 package com.fixthewall.game.upgrades;
 
-public class UpgradeManager {
+import java.io.Serializable;
+
+public class UpgradeManager implements Serializable {
 
    private AbstractUpgrade [] allUpgrade = new AbstractUpgrade[2];
    private static UpgradeManager singleInstance = null;
@@ -68,6 +70,10 @@ public class UpgradeManager {
     public static UpgradeManager getSingleInstance(){
         if(singleInstance == null) singleInstance = new UpgradeManager();
         return singleInstance;
+    }
+
+    public void init(UpgradeManager instance){
+        singleInstance = instance;
     }
 
 }
