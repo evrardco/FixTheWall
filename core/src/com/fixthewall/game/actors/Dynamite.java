@@ -14,6 +14,7 @@ import com.fixthewall.game.logic.GameLogic;
 
 public class Dynamite extends Actor{
 
+    public static boolean onPause;
     private double degats;
     private boolean visible;
     private Animation<TextureRegion> DynamiteAnimation;
@@ -27,6 +28,7 @@ public class Dynamite extends Actor{
         texture = ass.get("Frames/SheetFrameDynamite.png");
         degats = 25;
         level = 1;
+        onPause = false;
         //set size actor
         setWidth(texture.getWidth()/3f);
         setHeight(texture.getHeight());
@@ -87,9 +89,12 @@ public class Dynamite extends Actor{
         return  new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
-                visible = false;
-                setTouchable(Touchable.disabled);
-                Time = 0;
+                if (!onPause) {
+
+                    visible = false;
+                    setTouchable(Touchable.disabled);
+                    Time = 0;
+                }
             }
         };
 

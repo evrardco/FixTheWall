@@ -143,7 +143,9 @@ public class GameScreen implements Screen {
             @Override
             public  void clicked(InputEvent event, float x, float y){
                 onPause = !onPause;
+                Dynamite.onPause =  onPause;
                           }
+
         });
         dyn.addListener(dyn.getListener());
 
@@ -188,9 +190,9 @@ public class GameScreen implements Screen {
             scoreLabel.setText("Score: " + GameLogic.getSingleInstance().getScoreString());
 
 
-            if (totalTime/90 > 1)
+            if (totalTime/90f > 1f)
             {
-                totalTime = 0;
+                totalTime = 0f;
                 wave++;
                 for (int i = 0; i < 10+2*wave; i++)
                 {
