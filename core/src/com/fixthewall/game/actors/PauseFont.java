@@ -1,21 +1,21 @@
 package com.fixthewall.game.actors;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.assets.AssetManager;
 
-public class PauseButton extends Actor {
+public class PauseFont extends Actor {
 
     private Texture texture;
 
-    public PauseButton (AssetManager ass) {
+    public PauseFont (AssetManager ass) {
 
         super();
-        texture = ass.get("imgPause.png", Texture.class);
+        texture = ass.get("imgPauseFont.png", Texture.class);
         setHeight(texture.getHeight());
         setWidth(texture.getWidth());
-        setPosition(30, 1810);
+        setPosition(0, 0);
     }
 
 
@@ -28,4 +28,5 @@ public class PauseButton extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(texture, getX(), getY());
     }
+
 }

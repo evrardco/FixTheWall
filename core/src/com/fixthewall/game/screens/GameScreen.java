@@ -22,6 +22,7 @@ import com.fixthewall.game.actors.MenuTable;
 import com.fixthewall.game.actors.HealthBar;
 import com.fixthewall.game.actors.Nuages;
 import com.fixthewall.game.actors.PauseButton;
+import com.fixthewall.game.actors.PauseFont;
 import com.fixthewall.game.actors.PopupLabel;
 import com.fixthewall.game.actors.UpgradeButton;
 import com.fixthewall.game.actors.Wall;
@@ -41,9 +42,11 @@ public class GameScreen implements Screen {
     private Stage stage;
     private Hammer hammer;
     private PauseButton pause;
+    private PauseFont pauseFont;
     private Label bricksLabel;
     private Label scoreLabel;
     private Boolean onPause;
+    private int countPause;
     private Group ennemiGroup;
     private Dynamite dyn;
     private double totalTime;
@@ -65,7 +68,10 @@ public class GameScreen implements Screen {
         dyn = new Dynamite(game.ass);
         hammer = new Hammer(game.ass);
         pause = new PauseButton(game.ass);
+        pauseFont = new PauseFont(game.ass);
+        pauseFont.setVisible(false);
         wave = 0;
+        countPause = 0;
 
         ennemiGroup = new Group();
         Ennemi ennemi = new Ennemi(1, game.ass);
@@ -139,12 +145,27 @@ public class GameScreen implements Screen {
                 }
             }
         });
+        //Add listener to the pause button
         pause.addListener( new ClickListener(){
+            @Override
+            public  void clicked(InputEvent event, float x, float y){
+                pause.setVisible(false);
+                pauseFont.setVisible(true);
+                onPause = !onPause;
+                Dynamite.onPause =  onPause;
+            }
+
+        });
+        //Add listener to the pause font
+        pauseFont.addListener( new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
                 onPause = !onPause;
                 Dynamite.onPause =  onPause;
-                          }
+                pause.setVisible(true);
+                pauseFont.setVisible(false);
+                countPause = 0;
+            }
 
         });
         dyn.addListener(dyn.getListener());
@@ -174,6 +195,7 @@ public class GameScreen implements Screen {
         stage.addActor(healthBar);
         stage.addActor(hammerGroup);
         stage.addActor(menuUpgrade);
+        stage.addActor(pauseFont);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -211,9 +233,14 @@ public class GameScreen implements Screen {
             }
         }
         else {
+            if (countPause < 5){
+                Gdx.gl.glClearColor(0, 0, 0, 1);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+                stage.act(delta);
+                stage.draw();
 
-            //add pause design at center ?
-
+            }
+            countPause++;
         }
     }
 
