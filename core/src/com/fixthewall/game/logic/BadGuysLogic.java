@@ -1,6 +1,8 @@
 package com.fixthewall.game.logic;
 
-public class BadGuysLogic {
+import java.io.Serializable;
+
+public class BadGuysLogic implements Serializable {
 
     private double damagePerSec;
     private double mul;
@@ -38,6 +40,9 @@ public class BadGuysLogic {
     public void doDamage(double delta) {
         GameLogic.getSingleInstance().setHealth(
                  GameLogic.getSingleInstance().getHealth() - (damagePerSec * mul * delta));
+    }
+    public void init(BadGuysLogic instance){
+        singleInstance = instance;
     }
 
 }

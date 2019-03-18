@@ -1,6 +1,9 @@
 package com.fixthewall.game.logic;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Timer;
 import com.fixthewall.game.Helpers;
+import com.fixthewall.game.Perziztancinator;
 
 import java.io.Serializable;
 
@@ -12,6 +15,15 @@ public class GameLogic implements Serializable {
     private double healingPower;
     private double bricksPower;
     private double score;
+    private transient Timer timer;
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public void setTimer(Timer timer) {
+        this.timer = timer;
+    }
 
     public static GameLogic getSingleInstance(){
         if(singleInstance == null) singleInstance = new GameLogic();
@@ -27,6 +39,15 @@ public class GameLogic implements Serializable {
         healingPower = 1.0;
         bricksPower = 1.0;
         score = 0.0;
+        timer = new Timer();
+
+        Timer.Task saveTask = new Timer.Task(){
+            public void run(){
+                Perziztancinator.getSingleInstance().save();
+                Gdx.app.log("GAMELOGIC", "Saving game...");
+            }
+        };
+        timer.scheduleTask(saveTask, 0.0f, 1.0f, -1 );
     }
 
     public double getHealth() {
@@ -72,7 +93,7 @@ public class GameLogic implements Serializable {
     }
 
     public void reduceHealth(double n) {
-               setHealth(this.health - n);
+        setHealth(health - n);
     }
 
     public void setScore(double score) {
@@ -102,4 +123,17 @@ public class GameLogic implements Serializable {
     public String getHealingPowerString() {
         return Helpers.formatBigNumbers(getHealingPower());
     }
+    public void init(GameLogic instance){
+        singleInstance = instance;
+
+        timer = new Timer();
+        Timer.Task saveTask = new Timer.Task(){
+            public void run(){
+                Perziztancinator.save();
+                Gdx.app.log("GAMELOGIC", "Saving game...");
+            }
+        };
+        timer.scheduleTask(saveTask, 0.0f, 1.0f, -1 );
+    }
+
 }

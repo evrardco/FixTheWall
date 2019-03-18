@@ -5,7 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.fixthewall.game.logic.GameLogic;
 
-public abstract class AbstractUpgrade {
+import java.io.Serializable;
+
+public abstract class AbstractUpgrade implements Serializable {
 
     private int level;
     private float base;
@@ -109,6 +111,8 @@ public abstract class AbstractUpgrade {
     public void setApplied(boolean applied) {
         this.applied = applied;
     }
+
+
 
 
 
