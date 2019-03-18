@@ -11,15 +11,8 @@ public class UpgradeManager {
         return allUpgrade;
     }
     public void init(){
-        //AbstractUpgrade currentUpgrade = null;
-        //for (int i = 0; i < allUpgrade.length; i++) {
-            //currentUpgrade = new Upgrade1(0, 10);
         allUpgrade[0] = new Upgrade1(0, 10);
-            //allUpgrade[i] = currentUpgrade;
-
-        //}
         allUpgrade[1] = new Upgrade2(0, 100);
-        //currentUpgrade.setLevel(0);
 
         update();
     }
@@ -27,7 +20,7 @@ public class UpgradeManager {
 
     public void update()
     {
-        AbstractUpgrade currentUpgrade = null;
+        AbstractUpgrade currentUpgrade;
         for (int i = 0; i < allUpgrade.length; i++)
         {
             currentUpgrade = allUpgrade[i];
@@ -42,7 +35,7 @@ public class UpgradeManager {
 
     public void unupdate()
     {
-        AbstractUpgrade currentUpgrade = null;
+        AbstractUpgrade currentUpgrade;
         for (int i = 0; i < allUpgrade.length; i++)
         {
             currentUpgrade = allUpgrade[i];
@@ -54,7 +47,7 @@ public class UpgradeManager {
     public double totalSum()
     {
         double totalCost = 0;
-        AbstractUpgrade currentUpgrade = null;
+        AbstractUpgrade currentUpgrade;
         for (int i = 0; i < allUpgrade.length; i++)
         {
             currentUpgrade = allUpgrade[i];
