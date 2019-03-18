@@ -21,16 +21,18 @@ public class Dynamite extends Actor{
     private float elapsedTime;
     private float Time;
     private Texture texture;
+    private int level;
 
     public Dynamite (AssetManager ass) {
         texture = ass.get("Frames/SheetFrameDynamite.png");
         degats = 25;
+        level = 1;
         //set size actor
         setWidth(texture.getWidth()/3f);
         setHeight(texture.getHeight());
         visible = false;
         setTouchable(Touchable.disabled);
-        //
+
         //Set animation
         TextureRegion[][] tmp = TextureRegion.split(texture,
                 texture.getWidth()/3,
@@ -65,6 +67,8 @@ public class Dynamite extends Actor{
         }
     }
 
+
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (getRandom(300) == 10 && !visible)
@@ -91,6 +95,10 @@ public class Dynamite extends Actor{
 
     }
 
+    public void setLevel(int level){
+        this.level = level;
+        this.degats = 25*level*level;
+    }
 
     /*
      * Retourne un entier aléatoire entre 0 et n-1

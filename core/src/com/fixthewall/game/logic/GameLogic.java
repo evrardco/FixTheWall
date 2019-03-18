@@ -72,7 +72,7 @@ public class GameLogic implements Serializable {
     }
 
     public void reduceHealth(double n) {
-        health = health - n;
+               setHealth(this.health - n);
     }
 
     public void setScore(double score) {

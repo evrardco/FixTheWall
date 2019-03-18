@@ -46,6 +46,10 @@ public class GameScreen implements Screen {
     private Label scoreLabel;
     private Boolean onPause;
     private Group ennemiGroup;
+    private Dynamite dyn;
+    private double totalTime;
+    private int wave;
+
     private LinkedList<PopupLabel> popupLabels;
 
     public static GameScreen gameScreen;
@@ -59,9 +63,10 @@ public class GameScreen implements Screen {
         Image imgFond = new Image(textureFond);
         Nuages nuages = new Nuages(game.ass);
         Wall wall = new Wall(game.ass);
-        Dynamite dyn = new Dynamite(game.ass);
+        dyn = new Dynamite(game.ass);
         hammer = new Hammer(game.ass);
         pause = new PauseButton(game.ass);
+        wave = 0;
 
         ennemiGroup = new Group();
         Ennemi ennemi = new Ennemi(1, game.ass);
@@ -80,7 +85,7 @@ public class GameScreen implements Screen {
             menuUpgrade.addEntry("", new UpgradeButton(game.ass, upArray[i]));
         }
 
-
+        totalTime = 0;
         //Hammer grouping
         popupLabels = new LinkedList<PopupLabel>();
         for (int i = 0; i < MAX_POPUP_LABELS; i++) {
@@ -176,6 +181,7 @@ public class GameScreen implements Screen {
     public void render (float delta) {
         if (!onPause) {
             //logic update
+            totalTime = totalTime + delta;
             BadGuysLogic.getSingleInstance().doDamage(delta);
 
             Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -184,7 +190,17 @@ public class GameScreen implements Screen {
             bricksLabel.setText("Bricks: " + GameLogic.getSingleInstance().getBricksString());
             scoreLabel.setText("Score: " + GameLogic.getSingleInstance().getScoreString());
 
-            //ennemiGroup.addActor(new Ennemi(0, game.ass));
+
+            if (totalTime/90 > 1)
+            {
+                totalTime = 0;
+                wave++;
+                for (int i = 0; i < 10+2*wave; i++)
+                {
+                    ennemiGroup.addActor(new Ennemi(wave, game.ass));
+                    dyn.setLevel(wave);
+                }
+            }
 
             stage.act(delta);
             stage.draw();
