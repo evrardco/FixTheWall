@@ -26,7 +26,6 @@ import com.fixthewall.game.actors.PopupLabel;
 import com.fixthewall.game.actors.UpgradeButton;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
-import com.fixthewall.game.logic.BadGuysLogic;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.actors.Hammer;
 import com.fixthewall.game.upgrades.AbstractUpgrade;
@@ -182,8 +181,6 @@ public class GameScreen implements Screen {
         if (!onPause) {
             //logic update
             totalTime = totalTime + delta;
-            BadGuysLogic.getSingleInstance().doDamage(delta);
-
             Gdx.gl.glClearColor(0, 0, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
