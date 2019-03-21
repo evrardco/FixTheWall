@@ -28,7 +28,7 @@ public class Brixplosion extends Actor{
     }
 
     public Brixplosion(int count, AssetManager ass, float x, float y){
-        bricks = ne²w Group();
+        bricks = new Group();
         alpha = 1f;
         for(int i=0; i < count; i ++){
             float angVel = (float)Math.random()*360f;
