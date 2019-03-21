@@ -45,18 +45,21 @@ public class Game extends com.badlogic.gdx.Game {
         loadAssets();
         //We see wether we must load the saved game.
 
-        if(Perziztancinator.isNewGame()){
-            UpgradeManager.getSingleInstance().init();
-            GameLogic.getSingleInstance().init();
-            BadGuysLogic.getSingleInstance().init(3.0, 1.0f);
-            Perziztancinator.getSingleInstance().init();
-
-        }else{
-            Perziztancinator.load();
-            UpgradeManager.getSingleInstance().init(Perziztancinator.getSingleInstance().getUpgManager());
-            GameLogic.getSingleInstance().init(Perziztancinator.getSingleInstance().getLogic());
-            BadGuysLogic.getSingleInstance().init(Perziztancinator.getSingleInstance().getBadLogic());
-        }
+//        if(Perziztancinator.isNewGame()){
+//            UpgradeManager.getSingleInstance().init();
+//            GameLogic.getSingleInstance().init();
+//            BadGuysLogic.getSingleInstance().init(3.0, 1.0f);
+//            Perziztancinator.getSingleInstance().init();
+//
+//        }else{
+//            Perziztancinator.load();
+//            UpgradeManager.getSingleInstance().init(Perziztancinator.getSingleInstance().getUpgManager());
+//            GameLogic.getSingleInstance().init(Perziztancinator.getSingleInstance().getLogic());
+//            BadGuysLogic.getSingleInstance().init(Perziztancinator.getSingleInstance().getBadLogic());
+//        }
+        UpgradeManager.getSingleInstance().init();
+        GameLogic.getSingleInstance().init();
+        BadGuysLogic.getSingleInstance().init(3.0, 1.0f);
 
 
 
@@ -104,6 +107,7 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("marteau.png", Texture.class);
         ass.load("marteauDiam.png", Texture.class);
         ass.load("pioche.png", Texture.class);
+        ass.load("anim/brick.png", Texture.class);
 
         // dossier ui
         ass.load("ui/texture_button.png", Texture.class);

@@ -55,10 +55,17 @@ public class Ennemi extends Actor {
         this.setCoor();
         this.setTarget();
         this.setDistance();
-        setTouchable(Touchable.disabled); // clik through
+        setTouchable(Touchable.enabled); // click through
 
         //Set animation move
         Texture texture = ass.get("Frames/SheetFrameEnnemi.png");
+
+        // set hitbox for click listener
+        this.setWidth(texture.getWidth() / (float) FRAME_COLS);
+        this.setHeight(texture.getHeight() / (float) FRAME_ROWS);
+        this.setBounds(getX(), getY(), getWidth(), getHeight());
+        //
+
         TextureRegion[][] tmp = TextureRegion.split(texture,
                         texture.getWidth() / FRAME_COLS,
                         texture.getHeight() / FRAME_ROWS);

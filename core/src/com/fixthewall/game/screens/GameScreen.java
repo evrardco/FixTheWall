@@ -10,12 +10,15 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.MenuTable;
@@ -27,6 +30,7 @@ import com.fixthewall.game.actors.PopupLabel;
 import com.fixthewall.game.actors.UpgradeButton;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
+import com.fixthewall.game.actors.anim.Brixplosion;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.actors.Hammer;
 import com.fixthewall.game.upgrades.AbstractUpgrade;
@@ -48,6 +52,7 @@ public class GameScreen implements Screen {
     private Boolean onPause;
     private int countPause;
     private Group ennemiGroup;
+    private Group animGroup;
     private Dynamite dyn;
     private double totalTime;
     private int wave;
@@ -74,12 +79,31 @@ public class GameScreen implements Screen {
         countPause = 0;
 
         ennemiGroup = new Group();
-        Ennemi ennemi = new Ennemi(1, game.ass);
-        ennemiGroup.addActor(ennemi);
+
         onPause = false;
 
         Group hammerGroup = new Group();
+        animGroup = new Group();
         hammer = new Hammer(game.ass);
+
+        Ennemi ennemy = new Ennemi(1, game.ass);
+        ennemy.addListener(new ClickListener(){
+            @Override
+            public  void clicked(InputEvent event, float x, float y){
+                float betterX = event.getStageX();
+                float betterY = event.getStageY();
+                Actor actor = event.getListenerActor();
+                Brixplosion explosion = new Brixplosion(15, game.ass, betterX, betterY);
+                explosion.setPosition(betterX, betterY);
+                animGroup.addActor(explosion);
+                actor.remove();
+
+                Gdx.app.log("GameScreen", "Ennemy touched");
+            }
+
+        });
+        ennemiGroup.addActor(ennemy);
+
 
         //Initializing upgrade menu
         final MenuTable menuUpgrade = new MenuTable(game.ass, "Upgrades");
@@ -186,9 +210,10 @@ public class GameScreen implements Screen {
         stage.addActor(nuages);
         stage.addActor(wall);
         stage.addActor(dyn);
-        stage.addActor(ennemi);
+        stage.addActor(ennemy);
         stage.addActor(pause);
         stage.addActor(ennemiGroup);
+        stage.addActor(animGroup);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);
         stage.addActor(scoreLabel);
@@ -202,6 +227,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta) {
+
+        //pause code
+
         if (!onPause) {
             //logic update
             totalTime = totalTime + delta;
@@ -218,7 +246,17 @@ public class GameScreen implements Screen {
                 wave++;
                 for (int i = 0; i < 10+2*wave; i++)
                 {
-                    ennemiGroup.addActor(new Ennemi(wave, game.ass));
+                    final Actor ennemy = new Ennemi(wave, game.ass);
+                    ennemy.addListener(new ClickListener(){
+                        @Override
+                        public  void clicked(InputEvent event, float x, float y){
+                            animGroup.addActor(new Brixplosion(15, game.ass, x, y));
+                            ennemy.remove();
+                        }
+
+                    });
+
+                    ennemiGroup.addActor(ennemy);
                     dyn.setLevel(wave);
                 }
             }
