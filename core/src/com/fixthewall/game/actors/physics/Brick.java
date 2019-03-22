@@ -3,10 +3,13 @@ package com.fixthewall.game.actors.physics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.fixthewall.game.Game;
 
 public class Brick extends Actor {
     private float y;
@@ -23,7 +26,9 @@ public class Brick extends Actor {
 
 
     public Brick(float x, float y, float velX, float velY, float angVel, float ttl, boolean gravity, AssetManager ass){
-        this.groundLevel = this.x - 100f; //arbitrary should be changed
+        this.x = x;
+        this.y = y;
+        this.groundLevel = this.y - 100f; //arbitrary should be changed
         this.velX = velX;
         this.velY = velY;
         this.angVel = angVel;
@@ -32,8 +37,7 @@ public class Brick extends Actor {
         this.sprite = new Sprite((Texture)ass.get("anim/brick.png"));
         this.sprite.setPosition(x, y);
         onGround = false;
-        this.x = x;
-        this.y = y;
+
 
     }
 
@@ -41,17 +45,18 @@ public class Brick extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         sprite.draw(batch, parentAlpha);
+
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
         this.setPosition(sprite.getX(), sprite.getY());
-        Gdx.app.log("Brick", "velX = "+velX);
+        //Gdx.app.log("Brick", "velX = "+velX);
         sprite.setPosition(getX() + velX * delta, getY() + velY * delta);
         sprite.rotate(angVel * delta);
         ttl -= delta;
-        Gdx.app.log("Brick", ""+onGround+"\n\n\n");
+        //Gdx.app.log("Brick", ""+onGround+"\n\n\n");
         if(!onGround && sprite.getY() <= groundLevel){
             velY = 0;
             sprite.setRotation(0f);
@@ -59,7 +64,7 @@ public class Brick extends Actor {
             onGround = true;
         }if(onGround){
             sprite.setY(groundLevel);
-            //velX *= Constants.SLOWING_FACTOR;
+            velX *= Constants.SLOWING_FACTOR;
         } else if(isPulledBygravity){
             velY += Constants.GRAVITY * delta;
         }
