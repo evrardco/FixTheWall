@@ -50,7 +50,7 @@ public class Helpers {
             r = String.format(Locale.getDefault(),"%.3f", highdigits);
         if (magnitude < 0)//magnitude = -1 en fin de vie.
             return "0";
-        return r += suffixes[magnitude];
+        return r + suffixes[magnitude];
     }
 
 }

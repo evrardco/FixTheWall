@@ -15,6 +15,7 @@ public class GameLogic implements Serializable {
     private double healingPower;
     private double bricksPower;
     private double score;
+    private boolean isPaused;
     private transient Timer timer;
 
     public Timer getTimer() {
@@ -33,13 +34,14 @@ public class GameLogic implements Serializable {
     private GameLogic(){}
 
     public void init(){
-        this.maxHealth = 100.5;
+        this.maxHealth = 100;
         health = maxHealth;
         bricks = 0;
         healingPower = 1.0;
         bricksPower = 1.0;
         score = 0.0;
         timer = new Timer();
+        isPaused = false;
 
         Timer.Task saveTask = new Timer.Task(){
             public void run(){
@@ -102,6 +104,14 @@ public class GameLogic implements Serializable {
 
     public double getScore() {
         return score;
+    }
+
+    public void togglePaused() {
+        isPaused = !isPaused;
+    }
+
+    public boolean isPaused() {
+        return isPaused;
     }
 
     public String getHealthString() {

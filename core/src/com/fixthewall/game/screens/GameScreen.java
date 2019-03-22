@@ -10,22 +10,17 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.SnapshotArray;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.MenuTable;
 import com.fixthewall.game.actors.HealthBar;
 import com.fixthewall.game.actors.Nuages;
-import com.fixthewall.game.actors.PauseButton;
-import com.fixthewall.game.actors.PauseFont;
 import com.fixthewall.game.actors.PopupLabel;
 import com.fixthewall.game.actors.UpgradeButton;
 import com.fixthewall.game.actors.Wall;
@@ -45,12 +40,10 @@ public class GameScreen implements Screen {
     private final Game game;
     private Stage stage;
     private Hammer hammer;
-    private PauseButton pause;
-    private PauseFont pauseFont;
+    private Image pause;
+    private Image pauseFont;
     private Label bricksLabel;
     private Label scoreLabel;
-    private Boolean onPause;
-    private int countPause;
     private Group ennemiGroup;
     private Group animGroup;
     private Dynamite dyn;
@@ -72,15 +65,13 @@ public class GameScreen implements Screen {
         Wall wall = new Wall(game.ass);
         dyn = new Dynamite(game.ass);
         hammer = new Hammer(game.ass);
-        pause = new PauseButton(game.ass);
-        pauseFont = new PauseFont(game.ass);
+        pause = new Image(game.ass.get("imgPause.png", Texture.class));
+        pause.setPosition(30, 1810);
+        pauseFont = new Image(game.ass.get("imgPauseFond.png", Texture.class));
         pauseFont.setVisible(false);
         wave = 0;
-        countPause = 0;
 
         ennemiGroup = new Group();
-
-        onPause = false;
 
         Group hammerGroup = new Group();
         animGroup = new Group();
@@ -139,9 +130,7 @@ public class GameScreen implements Screen {
         upsButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                if (!onPause) {
-                    menuUpgrade.setVisible(!menuUpgrade.isVisible());
-                }
+                menuUpgrade.setVisible(!menuUpgrade.isVisible());
             }
         });
 
@@ -149,7 +138,7 @@ public class GameScreen implements Screen {
         wall.addListener( new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
-                if (!onPause) {
+                if (!GameLogic.getSingleInstance().isPaused()) {
                     GameLogic instance = GameLogic.getSingleInstance();
                     double maxHealth = instance.getMaxHealth();
                     double incrementedHealth = instance.getHealth() + instance.getHealingPower();
@@ -169,29 +158,19 @@ public class GameScreen implements Screen {
                 }
             }
         });
+
         //Add listener to the pause button
         pause.addListener( new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
                 pause.setVisible(false);
                 pauseFont.setVisible(true);
-                onPause = !onPause;
-                Dynamite.onPause =  onPause;
+                GameLogic.getSingleInstance().togglePaused();
+                Dynamite.onPause =  GameLogic.getSingleInstance().isPaused();
             }
 
         });
-        //Add listener to the pause font
-        pauseFont.addListener( new ClickListener(){
-            @Override
-            public  void clicked(InputEvent event, float x, float y){
-                onPause = !onPause;
-                Dynamite.onPause =  onPause;
-                pause.setVisible(true);
-                pauseFont.setVisible(false);
-                countPause = 0;
-            }
 
-        });
         dyn.addListener(dyn.getListener());
 
         bricksLabel = new Label("Bricks: " + GameLogic.getSingleInstance().getBricksString(), new Label.LabelStyle(font, Color.BLACK));
@@ -230,7 +209,7 @@ public class GameScreen implements Screen {
 
         //pause code
 
-        if (!onPause) {
+        if (!GameLogic.getSingleInstance().isPaused()) {
             //logic update
             totalTime = totalTime + delta;
             Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -262,7 +241,6 @@ public class GameScreen implements Screen {
             }
 
             stage.act(delta);
-            stage.draw();
 
             if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
                 dispose();
@@ -270,16 +248,13 @@ public class GameScreen implements Screen {
                 game.setScreen(new EndScreen(game));
             }
         }
-        else {
-            if (countPause < 5){
-                Gdx.gl.glClearColor(0, 0, 0, 1);
-                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-                stage.act(delta);
-                stage.draw();
-
-            }
-            countPause++;
+        else if (Gdx.input.justTouched()) {
+            GameLogic.getSingleInstance().togglePaused();
+            Dynamite.onPause = GameLogic.getSingleInstance().isPaused();
+            pause.setVisible(true);
+            pauseFont.setVisible(false);
         }
+        stage.draw();
     }
 
     @Override

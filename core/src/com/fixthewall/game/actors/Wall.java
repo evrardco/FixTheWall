@@ -28,11 +28,6 @@ public class Wall extends Actor {
     }
 
     @Override
-    public void act(float delta) {
-        super.act(delta);
-    }
-
-    @Override
     public void draw(Batch batch, float parentAlpha) {
         GameLogic gameLogic = GameLogic.getSingleInstance();
 
