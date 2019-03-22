@@ -1,6 +1,7 @@
 package com.fixthewall.game.actors.physics;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -14,6 +15,7 @@ public class Brick extends Actor {
     private float velY;
     private float angVel;
     private float ttl;
+    private float groundLevel;
     private Sprite sprite;
     private boolean isPulledBygravity;
     private boolean onGround;
@@ -21,6 +23,7 @@ public class Brick extends Actor {
 
 
     public Brick(float x, float y, float velX, float velY, float angVel, float ttl, boolean gravity, AssetManager ass){
+        this.groundLevel = this.x - 100f; //arbitrary should be changed
         this.velX = velX;
         this.velY = velY;
         this.angVel = angVel;
@@ -44,25 +47,27 @@ public class Brick extends Actor {
     public void act(float delta) {
         super.act(delta);
         this.setPosition(sprite.getX(), sprite.getY());
-        sprite.translate(velX * delta, velY * delta);
+        Gdx.app.log("Brick", "velX = "+velX);
+        sprite.setPosition(getX() + velX * delta, getY() + velY * delta);
         sprite.rotate(angVel * delta);
         ttl -= delta;
-
-        if(!onGround && sprite.getY() <= Constants.GROUND_LEVEL){
-            velX = 0;
+        Gdx.app.log("Brick", ""+onGround+"\n\n\n");
+        if(!onGround && sprite.getY() <= groundLevel){
+            velY = 0;
             sprite.setRotation(0f);
             angVel = 0.0f;
             onGround = true;
         }if(onGround){
-            velX *= Constants.SLOWING_FACTOR;
+            sprite.setY(groundLevel);
+            //velX *= Constants.SLOWING_FACTOR;
         } else if(isPulledBygravity){
             velY += Constants.GRAVITY * delta;
         }
     }
 
     public void setVelInDir(float degrees, float speedAbs){
-        velX = (float)Math.cos(degrees * speedAbs);
-        velY = (float)Math.sin(degrees * speedAbs);
+        velX = (float)Math.cos(degrees) * speedAbs;
+        velY = (float)Math.sin(degrees) * speedAbs;
     }
 
 }

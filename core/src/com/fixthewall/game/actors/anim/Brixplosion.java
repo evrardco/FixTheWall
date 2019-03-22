@@ -34,10 +34,10 @@ public class Brixplosion extends Actor{
             float angVel = (float)Math.random()*360f;
             float dir = (float)Math.random()*360f;
             float ttl = (float)(1.0f +Math.random()*3f % 3f);
-            float speed = (float)Math.random()*200.f - 100f;
+            float speed = (float)Math.random()*4000.f - 2000f;
             Brick brick = new Brick(x, y,0.0f, 0.0f, angVel, ttl, true, ass);
             brick.setVelInDir(dir, speed);
-            bricks.addActor(new Brick(x, y,0.0f, 0.0f, angVel, ttl, true, ass));
+            bricks.addActor(brick);
         }
     }
 
