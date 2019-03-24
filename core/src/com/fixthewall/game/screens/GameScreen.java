@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.MenuTable;
@@ -56,6 +57,9 @@ public class GameScreen implements Screen {
     private Texture textureFond;
     private Texture textureFondNight;
     private int wave;
+    private int ennemiToRemove;
+    private SnapshotArray<Actor> actorsArray;
+    private Actor[] groupToArray;
 
     private LinkedList<PopupLabel> popupLabels;
 
@@ -80,6 +84,9 @@ public class GameScreen implements Screen {
         wave = 0;
         isNight = false;
         dailyTime = 0;
+        ennemiToRemove = 0;
+        actorsArray = null;
+        groupToArray = null;
 
         ennemiGroup = new Group();
 
@@ -199,9 +206,9 @@ public class GameScreen implements Screen {
         stage.addActor(nuages);
         stage.addActor(wall);
         stage.addActor(dyn);
-        stage.addActor(ennemy);
-        stage.addActor(pause);
         stage.addActor(ennemiGroup);
+        ennemiGroup.addActor(ennemy); //ou sinon le premier ennemy n'est pas ajouté au stage
+        stage.addActor(pause);
         stage.addActor(animGroup);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);
@@ -210,7 +217,6 @@ public class GameScreen implements Screen {
         stage.addActor(hammerGroup);
         stage.addActor(menuUpgrade);
         stage.addActor(pauseFont);
-
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -229,7 +235,19 @@ public class GameScreen implements Screen {
             bricksLabel.setText("Bricks: " + GameLogic.getSingleInstance().getBricksString());
             scoreLabel.setText("Score: " + GameLogic.getSingleInstance().getScoreString());
 
-
+            actorsArray = ennemiGroup.getChildren();
+            groupToArray = actorsArray.begin();
+            ennemiToRemove = GameLogic.getSingleInstance().getEnnemiRemoval();
+            for (int i = 0; i< ennemiToRemove; i++)
+            {
+                Gdx.app.log("Upgrade 3", "Passage bloucle");
+                 if (actorsArray.size > 0)
+                 {
+                     Gdx.app.log("Upgrade 3", "Passage bloucle2");
+                      groupToArray[i].remove();
+                 }
+            }
+            GameLogic.getSingleInstance().setEnnemiRemoval(0);
             if ((totalTime > 45 && !isNight) || (totalTime > 25 && isNight))
             {
                 totalTime = 0f;

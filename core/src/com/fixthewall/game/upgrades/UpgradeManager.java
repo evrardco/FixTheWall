@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class UpgradeManager implements Serializable {
 
-   private AbstractUpgrade [] allUpgrade = new AbstractUpgrade[2];
+   private AbstractUpgrade [] allUpgrade = new AbstractUpgrade[3];
    private static UpgradeManager singleInstance = null;
 
    private UpgradeManager() {}
@@ -15,7 +15,7 @@ public class UpgradeManager implements Serializable {
     public void init(){
         allUpgrade[0] = new Upgrade1(0, 10);
         allUpgrade[1] = new Upgrade2(0, 100);
-
+        allUpgrade[2] = new Upgrade3(0, 200);
         update();
     }
 
