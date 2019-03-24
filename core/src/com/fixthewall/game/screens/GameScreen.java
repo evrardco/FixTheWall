@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.MenuTable;
@@ -46,8 +48,13 @@ public class GameScreen implements Screen {
     private Label scoreLabel;
     private Group ennemiGroup;
     private Group animGroup;
+    private Image imgFond;
     private Dynamite dyn;
     private double totalTime;
+    private boolean isNight;
+    private double dailyTime;
+    private Texture textureFond;
+    private Texture textureFondNight;
     private int wave;
 
     private LinkedList<PopupLabel> popupLabels;
@@ -58,9 +65,10 @@ public class GameScreen implements Screen {
         this.game = game;
 
         stage = new Stage(game.viewport);
-        Texture textureFond = game.ass.get("fondWall.png");
+        textureFond = game.ass.get("fondWall.png");
+        textureFondNight = game.ass.get("fondWall-nuit.png");
 
-        Image imgFond = new Image(textureFond);
+        imgFond = new Image(textureFond);
         Nuages nuages = new Nuages(game.ass);
         Wall wall = new Wall(game.ass);
         dyn = new Dynamite(game.ass);
@@ -70,6 +78,8 @@ public class GameScreen implements Screen {
         pauseFont = new Image(game.ass.get("imgPauseFond.png", Texture.class));
         pauseFont.setVisible(false);
         wave = 0;
+        isNight = false;
+        dailyTime = 0;
 
         ennemiGroup = new Group();
 
@@ -212,6 +222,7 @@ public class GameScreen implements Screen {
         if (!GameLogic.getSingleInstance().isPaused()) {
             //logic update
             totalTime = totalTime + delta;
+            dailyTime = dailyTime + delta;
             Gdx.gl.glClearColor(0, 0, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -219,11 +230,11 @@ public class GameScreen implements Screen {
             scoreLabel.setText("Score: " + GameLogic.getSingleInstance().getScoreString());
 
 
-            if (totalTime/90f > 1f)
+            if ((totalTime > 45 && !isNight) || (totalTime > 25 && isNight))
             {
                 totalTime = 0f;
                 wave++;
-                for (int i = 0; i < 10+2*wave; i++)
+                for (int i = 0; i < 1+2*wave; i++)
                 {
                     final Actor ennemy = new Ennemi(wave, game.ass);
                     ennemy.addListener(new ClickListener(){
@@ -236,7 +247,20 @@ public class GameScreen implements Screen {
                     });
 
                     ennemiGroup.addActor(ennemy);
-                    dyn.setLevel(wave);
+                }
+                dyn.setLevel(wave);
+            }
+
+            if (dailyTime > 300f)
+            {
+                dailyTime = 0f;
+                isNight = !isNight;
+                if (isNight)
+                {
+                    imgFond.setDrawable(new TextureRegionDrawable(new TextureRegion(textureFondNight)));
+                }
+                else {
+                    imgFond.setDrawable(new TextureRegionDrawable(new TextureRegion(textureFond)));
                 }
             }
 
