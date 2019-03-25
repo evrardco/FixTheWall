@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.fixthewall.game.actors.BigMenuTable;
 import com.fixthewall.game.actors.MenuTable;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
@@ -64,8 +65,12 @@ public class StartScreen implements Screen {
         });
 
         // Settings menu
-        // TODO: ajouter d'autres entrées aux settings
-        final MenuTable settingsTable = new MenuTable(game.ass, "Settings");
+        Texture imgButton = game.ass.get("ui/texture_button_settings.png");
+        Texture imgButtonDown = game.ass.get("ui/texture_button_settings_down.png");
+        Button settingsButton = new ImageButton(new TextureRegionDrawable(imgButton), new TextureRegionDrawable(imgButtonDown));
+        settingsButton.setPosition(game.viewport.getWorldWidth() * 0.1f, game.viewport.getWorldHeight() * 0.9f);
+
+        final MenuTable settingsTable = new MenuTable(game.ass, settingsButton.getX(), settingsButton.getY(), settingsButton.getPrefWidth());
         settingsTable.setVisible(false);
 
         Button volumeButton = new ImageButton(
@@ -81,27 +86,23 @@ public class StartScreen implements Screen {
                     game.playlist.play();
             }
         });
-        settingsTable.addEntry("Volume ON/OFF", volumeButton);
-        // End settings menu
+        settingsTable.addEntry(volumeButton);
 
-        Texture imgButton = game.ass.get("ui/texture_button_settings.png");
-        Texture imgButtonDown = game.ass.get("ui/texture_button_settings_down.png");
-        Button settingsButton = new ImageButton(new TextureRegionDrawable(imgButton), new TextureRegionDrawable(imgButtonDown));
-        settingsButton.setPosition(game.viewport.getWorldWidth() * 0.1f, game.viewport.getWorldHeight() * 0.9f);
         settingsButton.addListener(new ClickListener() {
             @Override
             public  void clicked(InputEvent event, float x, float y) {
                 settingsTable.setVisible(!settingsTable.isVisible());
             }
         });
+        // End settings menu
 
         stage.addActor(imgFond);
         Wall wall = new Wall(game.ass);
         stage.addActor(wall);
         //add button to the scene
         stage.addActor(playButton);
-        stage.addActor(settingsButton);
         stage.addActor(settingsTable);
+        stage.addActor(settingsButton);
         //necessaire pour rendre le bouton clickable
         Gdx.input.setInputProcessor(stage);
     }

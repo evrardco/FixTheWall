@@ -119,7 +119,7 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("ui/texture_button_settings_down.png", Texture.class);
         ass.load("ui/texture_button_volume.png", Texture.class);
         ass.load("ui/texture_button_volume_down.png", Texture.class);
-        ass.load("ui/white_background.png", Texture.class);
+        ass.load("ui/background.png", Texture.class);
         ass.load("ui/texture_upgrade_pannel.png", Texture.class);
         ass.load("ui/texture_progressbar_background.png", Texture.class);
         ass.load("ui/texture_progressbar.png", Texture.class);
@@ -167,6 +167,5 @@ public class Game extends com.badlogic.gdx.Game {
         bigFont.fontFileName = "data/Germania.ttf";
         bigFont.fontParameters.size = 120;
         ass.load("Germania120.ttf", BitmapFont.class, bigFont);
-
     }
 }

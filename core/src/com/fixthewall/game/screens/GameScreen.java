@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
-import com.fixthewall.game.actors.MenuTable;
+import com.fixthewall.game.actors.BigMenuTable;
 import com.fixthewall.game.actors.HealthBar;
 import com.fixthewall.game.actors.Nuages;
 import com.fixthewall.game.actors.PopupLabel;
@@ -44,7 +44,7 @@ public class GameScreen implements Screen {
     private Stage stage;
     private Hammer hammer;
     private Image pause;
-    private Image pauseFont;
+    private Image pauseFond;
     private Label bricksLabel;
     private Label scoreLabel;
     private Group ennemiGroup;
@@ -79,8 +79,8 @@ public class GameScreen implements Screen {
         hammer = new Hammer(game.ass);
         pause = new Image(game.ass.get("imgPause.png", Texture.class));
         pause.setPosition(30, 1810);
-        pauseFont = new Image(game.ass.get("imgPauseFond.png", Texture.class));
-        pauseFont.setVisible(false);
+        pauseFond = new Image(game.ass.get("imgPauseFond.png", Texture.class));
+        pauseFond.setVisible(false);
         wave = 0;
         isNight = false;
         dailyTime = 0;
@@ -114,12 +114,12 @@ public class GameScreen implements Screen {
 
 
         //Initializing upgrade menu
-        final MenuTable menuUpgrade = new MenuTable(game.ass, "Upgrades");
+        final BigMenuTable menuUpgrade = new BigMenuTable(game.ass, "Upgrades");
         menuUpgrade.setVisible(false);
 
         AbstractUpgrade[] upArray = UpgradeManager.getSingleInstance().getAllUpgrade();
         for(int i=0; i < upArray.length; i++) {
-            menuUpgrade.addEntry("", new UpgradeButton(game.ass, upArray[i]));
+            menuUpgrade.addEntry(new UpgradeButton(game.ass, upArray[i]));
         }
 
         totalTime = 0;
@@ -181,7 +181,8 @@ public class GameScreen implements Screen {
             @Override
             public  void clicked(InputEvent event, float x, float y){
                 pause.setVisible(false);
-                pauseFont.setVisible(true);
+                pauseFond.setVisible(true);
+                menuUpgrade.setVisible(false);
                 GameLogic.getSingleInstance().togglePaused();
                 Dynamite.onPause =  GameLogic.getSingleInstance().isPaused();
             }
@@ -216,7 +217,7 @@ public class GameScreen implements Screen {
         stage.addActor(healthBar);
         stage.addActor(hammerGroup);
         stage.addActor(menuUpgrade);
-        stage.addActor(pauseFont);
+        stage.addActor(pauseFond);
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -294,7 +295,7 @@ public class GameScreen implements Screen {
             GameLogic.getSingleInstance().togglePaused();
             Dynamite.onPause = GameLogic.getSingleInstance().isPaused();
             pause.setVisible(true);
-            pauseFont.setVisible(false);
+            pauseFond.setVisible(false);
         }
         stage.draw();
     }
