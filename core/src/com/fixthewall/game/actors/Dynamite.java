@@ -116,7 +116,7 @@ public class Dynamite extends Actor{
 
     public void setLevel(int level){
         this.level = level;
-        this.degats = 25*level*level;
+        this.degats = 25*Math.log(1+level*level);
     }
 
     public Rectangle getBounds()
