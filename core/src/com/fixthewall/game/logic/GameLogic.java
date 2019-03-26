@@ -16,6 +16,7 @@ public class GameLogic implements Serializable {
     private double bricksPower;
     private int ennemiToRemove;
     private double score;
+    private boolean isUpgrade3;
     private boolean isPaused;
     private transient Timer timer;
 
@@ -42,6 +43,7 @@ public class GameLogic implements Serializable {
         bricksPower = 1.0;
         score = 0.0;
         ennemiToRemove = 0;
+        isUpgrade3 = false;
         timer = new Timer();
         isPaused = false;
 
@@ -110,6 +112,14 @@ public class GameLogic implements Serializable {
 
     public void setScore(double score) {
         this.score = score;
+    }
+
+    public void setUpgrade3(boolean val) {
+        this.isUpgrade3 = val;
+    }
+
+    public boolean isUpgrade3() {
+        return isUpgrade3;
     }
 
     public double getScore() {

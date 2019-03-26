@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.SnapshotArray;
+import com.fixthewall.game.actors.Dollard;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.ui.BigMenuTable;
@@ -48,6 +49,7 @@ public class GameScreen implements Screen {
     private Label bricksLabel;
     private Label scoreLabel;
     private Group ennemiGroup;
+    private Group dollardGroup;
     private Group animGroup;
     private Image imgFond;
     private Dynamite dyn;
@@ -89,6 +91,7 @@ public class GameScreen implements Screen {
         groupToArray = null;
 
         ennemiGroup = new Group();
+        dollardGroup = new Group();
 
         Group hammerGroup = new Group();
         animGroup = new Group();
@@ -208,6 +211,7 @@ public class GameScreen implements Screen {
         stage.addActor(wall);
         stage.addActor(dyn);
         stage.addActor(ennemiGroup);
+        stage.addActor(dollardGroup);
         ennemiGroup.addActor(ennemy); //ou sinon le premier ennemy n'est pas ajouté au stage
         stage.addActor(pause);
         stage.addActor(animGroup);
@@ -239,16 +243,24 @@ public class GameScreen implements Screen {
             actorsArray = ennemiGroup.getChildren();
             groupToArray = actorsArray.begin();
             ennemiToRemove = GameLogic.getSingleInstance().getEnnemiRemoval();
-            for (int i = 0; i< ennemiToRemove; i++)
+            if (GameLogic.getSingleInstance().isUpgrade3())
             {
-                Gdx.app.log("Upgrade 3", "Passage bloucle");
-                 if (actorsArray.size > 0)
-                 {
-                     Gdx.app.log("Upgrade 3", "Passage bloucle2");
-                      groupToArray[i].remove();
-                 }
+                for(int i = 0; i < UpgradeManager.getSingleInstance().getAllUpgrade()[2].getLevel()*2+3;i++) {
+                    dollardGroup.addActor(new Dollard(game.ass, UpgradeManager.getSingleInstance().getAllUpgrade()[2].getLevel()));
+                }
             }
-            GameLogic.getSingleInstance().setEnnemiRemoval(0);
+            GameLogic.getSingleInstance().setUpgrade3(false);
+            //GameLogic.getSingleInstance().setUpgrade3(false);
+            if (!dollardGroup.hasChildren()) {
+                for (int i = 0; i < ennemiToRemove; i++) {
+                    Gdx.app.log("Upgrade 3", "Passage bloucle");
+                    if (actorsArray.size > 0) {
+                        Gdx.app.log("Upgrade 3", "Passage bloucle2");
+                        groupToArray[i].remove();
+                    }
+                }
+                GameLogic.getSingleInstance().setEnnemiRemoval(0);
+            }
             if ((totalTime > 45 && !isNight) || (totalTime > 25 && isNight))
             {
                 totalTime = 0f;

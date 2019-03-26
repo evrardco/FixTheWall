@@ -15,7 +15,7 @@ public class UpgradeManager implements Serializable {
     public void init(){
         allUpgrade[0] = new Upgrade1(0, 10);
         allUpgrade[1] = new Upgrade2(0, 100);
-        allUpgrade[2] = new Upgrade3(0, 200);
+        allUpgrade[2] = new Upgrade3(0, 50);
         update();
     }
 

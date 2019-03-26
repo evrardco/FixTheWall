@@ -30,7 +30,6 @@ public class Wall extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         GameLogic gameLogic = GameLogic.getSingleInstance();
-
         float healthRatio = (float) (gameLogic.getHealth() / gameLogic.getMaxHealth());
         int index = MathUtils.ceil(healthRatio * (textures.length - 1));
 
