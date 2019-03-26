@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -42,6 +43,7 @@ public class Ennemi extends Actor {
     // Variable for tracking elapsed time for the animation
     private float elapsedTime;
     private float elapsedTimeHit;
+    private Rectangle bounds;
 
     public Ennemi (AssetManager ass){
         this.setSide();
@@ -193,6 +195,12 @@ public class Ennemi extends Actor {
         targetY = 242f+getRandom(getRandom(57));
     }
 
+    public Rectangle getBounds()
+    {
+        bounds=new Rectangle((this.getX()+100), this.getY()+100, (this.getWidth()+100), this.getHeight());
+        return bounds;
+
+    }
     private void setDistance(){
         distance = Math.abs(this.getX() - targetX) + Math.abs(this.getY() - targetY);
     }

@@ -15,7 +15,7 @@ public class Upgrade3 extends AbstractUpgrade {
     @Override
     public void apply() {
         super.apply();
-        GameLogic.getSingleInstance().setEnnemiRemoval(this.getLevel()*this.getLevel());
+        GameLogic.getSingleInstance().setEnnemiRemoval(this.getLevel()*3);
         GameLogic.getSingleInstance().setUpgrade3(true);
         this.setCost(this.getCost()*2);
         this.setLevel(this.getLevel()+1);
