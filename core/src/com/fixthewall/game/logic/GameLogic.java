@@ -78,6 +78,8 @@ public class GameLogic implements Serializable {
     public void setHealth(double health) {
         if (health < 0)
             this.health = 0;
+        else if (health > getMaxHealth())
+            this.health = getMaxHealth();
         else
             this.health = health;
     }

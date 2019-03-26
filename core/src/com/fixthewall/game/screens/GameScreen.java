@@ -32,6 +32,7 @@ import com.fixthewall.game.Game;
 import com.fixthewall.game.actors.anim.Brixplosion;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.actors.Hammer;
+import com.fixthewall.game.logic.MexicanLogic;
 import com.fixthewall.game.upgrades.AbstractUpgrade;
 import com.fixthewall.game.upgrades.UpgradeManager;
 
@@ -49,6 +50,7 @@ public class GameScreen implements Screen {
     private Label bricksLabel;
     private Label scoreLabel;
     private Group ennemiGroup;
+    private Group workerGroup;
     private Group dollardGroup;
     private Group animGroup;
     private Image imgFond;
@@ -82,6 +84,15 @@ public class GameScreen implements Screen {
         pause = new Image(game.ass.get("imgPause.png", Texture.class));
         pause.setPosition(30, 1810);
         pauseFond = new Image(game.ass.get("imgPauseFond.png", Texture.class));
+        pauseFond.addListener(new ClickListener() {
+            @Override
+            public  void clicked(InputEvent event, float x, float y){
+                GameLogic.getSingleInstance().togglePaused();
+                Dynamite.onPause = GameLogic.getSingleInstance().isPaused();
+                pause.setVisible(true);
+                pauseFond.setVisible(false);
+            }
+        });
         pauseFond.setVisible(false);
         wave = 0;
         isNight = false;
@@ -90,14 +101,15 @@ public class GameScreen implements Screen {
         actorsArray = null;
         groupToArray = null;
 
-        ennemiGroup = new Group();
+        ennemiGroup = MexicanLogic.getSingleInstance().getEnnemiGroup();
+        workerGroup = MexicanLogic.getSingleInstance().getWorkerGroup();
         dollardGroup = new Group();
 
         Group hammerGroup = new Group();
         animGroup = new Group();
         hammer = new Hammer(game.ass);
 
-        Ennemi ennemy = new Ennemi(1, game.ass);
+        Ennemi ennemy = new Ennemi(game.ass);
         ennemy.addListener(new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
@@ -160,13 +172,8 @@ public class GameScreen implements Screen {
             public  void clicked(InputEvent event, float x, float y){
                 if (!GameLogic.getSingleInstance().isPaused()) {
                     GameLogic instance = GameLogic.getSingleInstance();
-                    double maxHealth = instance.getMaxHealth();
                     double incrementedHealth = instance.getHealth() + instance.getHealingPower();
-                    if (incrementedHealth <= maxHealth) {
-                        instance.setHealth(incrementedHealth);
-                    } else {
-                        instance.setHealth(maxHealth);
-                    }
+                    instance.setHealth(incrementedHealth);
                     instance.setBricks(instance.getBricks() + instance.getBricksPower());
                     instance.setScore(instance.getScore() + instance.getBricksPower());
                     hammer.show(event.getStageX(), event.getStageY());
@@ -211,6 +218,7 @@ public class GameScreen implements Screen {
         stage.addActor(wall);
         stage.addActor(dyn);
         stage.addActor(ennemiGroup);
+        stage.addActor(workerGroup);
         stage.addActor(dollardGroup);
         ennemiGroup.addActor(ennemy); //ou sinon le premier ennemy n'est pas ajouté au stage
         stage.addActor(pause);
@@ -267,7 +275,7 @@ public class GameScreen implements Screen {
                 wave++;
                 for (int i = 0; i < 1+2*wave; i++)
                 {
-                    final Actor ennemy = new Ennemi(wave, game.ass);
+                    final Actor ennemy = new Ennemi(game.ass);
                     ennemy.addListener(new ClickListener(){
                         @Override
                         public  void clicked(InputEvent event, float x, float y){
@@ -302,12 +310,6 @@ public class GameScreen implements Screen {
                 gameScreen = null;
                 game.setScreen(new EndScreen(game));
             }
-        }
-        else if (Gdx.input.justTouched()) {
-            GameLogic.getSingleInstance().togglePaused();
-            Dynamite.onPause = GameLogic.getSingleInstance().isPaused();
-            pause.setVisible(true);
-            pauseFond.setVisible(false);
         }
         stage.draw();
     }

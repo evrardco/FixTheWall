@@ -11,15 +11,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.fixthewall.game.logic.MexicanLogic;
 import com.fixthewall.game.screens.LoadingScreen;
 import com.fixthewall.game.upgrades.UpgradeManager;
-import com.fixthewall.game.logic.BadGuysLogic;
 import com.fixthewall.game.logic.MusicLogic;
 import com.fixthewall.game.logic.GameLogic;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 public class Game extends com.badlogic.gdx.Game {
 
@@ -48,18 +44,18 @@ public class Game extends com.badlogic.gdx.Game {
 //        if(Perziztancinator.isNewGame()){
 //            UpgradeManager.getSingleInstance().init();
 //            GameLogic.getSingleInstance().init();
-//            BadGuysLogic.getSingleInstance().init(3.0, 1.0f);
+//            MexicanLogic.getSingleInstance().init(3.0, 1.0f);
 //            Perziztancinator.getSingleInstance().init();
 //
 //        }else{
 //            Perziztancinator.load();
 //            UpgradeManager.getSingleInstance().init(Perziztancinator.getSingleInstance().getUpgManager());
 //            GameLogic.getSingleInstance().init(Perziztancinator.getSingleInstance().getLogic());
-//            BadGuysLogic.getSingleInstance().init(Perziztancinator.getSingleInstance().getBadLogic());
+//            MexicanLogic.getSingleInstance().init(Perziztancinator.getSingleInstance().getBadLogic());
 //        }
-        UpgradeManager.getSingleInstance().init();
+        UpgradeManager.getSingleInstance().init(ass);
         GameLogic.getSingleInstance().init();
-        BadGuysLogic.getSingleInstance().init(1.0, 1.0f);
+        MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0);
 
 
 

@@ -1,12 +1,10 @@
 package com.fixthewall.game;
 
 import com.badlogic.gdx.Gdx;
-import com.fixthewall.game.logic.BadGuysLogic;
+import com.fixthewall.game.logic.MexicanLogic;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.upgrades.UpgradeManager;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -56,14 +54,14 @@ public class Perziztancinator implements Serializable {
 
 
     private GameLogic logic;
-    private BadGuysLogic badLogic;
+    private MexicanLogic badLogic;
     private UpgradeManager upgManager;
 
     public GameLogic getLogic() {
         return logic;
     }
 
-    public BadGuysLogic getBadLogic() {
+    public MexicanLogic getBadLogic() {
         return badLogic;
     }
 
@@ -82,7 +80,7 @@ public class Perziztancinator implements Serializable {
 
     public void init(){
         this.logic = GameLogic.getSingleInstance();
-        this.badLogic = BadGuysLogic.getSingleInstance();
+        this.badLogic = MexicanLogic.getSingleInstance();
         this.upgManager = UpgradeManager.getSingleInstance();
     }
 

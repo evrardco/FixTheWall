@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.fixthewall.game.logic.BadGuysLogic;
+import com.fixthewall.game.logic.MexicanLogic;
 
 /*
 * TARGET ENNEMI:    X = [0; 984] et Y = [242; 298]
@@ -43,7 +43,7 @@ public class Ennemi extends Actor {
     private float elapsedTime;
     private float elapsedTimeHit;
 
-    public Ennemi (int level, AssetManager ass){
+    public Ennemi (AssetManager ass){
         this.setSide();
         this.setCoor();
         this.setTarget();
@@ -100,7 +100,7 @@ public class Ennemi extends Actor {
                 }
             }
         }
-        hitFrame = ennemiFrames2[3];//Frame de frappe
+        hitFrame = ennemiFrames2[3]; //Frame de frappe
         float randSpeed = getRandom(6)+5f;
         float frame2Speed = randSpeed/100f;
         if(isMegaEnnemi){
@@ -114,14 +114,14 @@ public class Ennemi extends Actor {
     public void act(float delta) {
         super.act(delta);
         if (this.getX() == targetX && this.getY() == targetY) {
-            elapsedTimeHit += Gdx.graphics.getDeltaTime();
+            elapsedTimeHit += delta;
             currentFrame = ennemiAnimationHit.getKeyFrame(elapsedTimeHit, true);
             if (currentFrame == hitFrame && (previousFrame == null || previousFrame != currentFrame)) {
                 this.hitTheWall();
             }
             previousFrame = currentFrame;
         } else {
-            elapsedTime += Gdx.graphics.getDeltaTime();
+            elapsedTime += delta;
             currentFrame = ennemiAnimation.getKeyFrame(elapsedTime, true);
         }
     }
@@ -198,7 +198,7 @@ public class Ennemi extends Actor {
     }
 
     private void hitTheWall(){
-        BadGuysLogic.getSingleInstance().doDamage();
+        MexicanLogic.getSingleInstance().doDamage();
     }
 
     /*

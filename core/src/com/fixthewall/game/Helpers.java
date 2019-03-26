@@ -4,6 +4,8 @@ import java.util.Locale;
 
 public class Helpers {
 
+    public static int steps = 0;
+
     public static String[] suffixes = {
             "",
             "",
@@ -51,6 +53,20 @@ public class Helpers {
         if (magnitude < 0)//magnitude = -1 en fin de vie.
             return "0";
         return r + suffixes[magnitude];
+    }
+
+    /**
+     * Retourne un entier aléatoire entre 0 et max-1
+     */
+    public static double getRandom(int max){
+        return Math.random() * max;
+    }
+
+    /**
+     * Retourne un entier aléatoire entre min et max-1
+     */
+    public static double getRandom(int min, int max){
+        return Math.random() * (max - min) + min;
     }
 
 }

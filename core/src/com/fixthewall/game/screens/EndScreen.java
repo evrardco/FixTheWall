@@ -53,7 +53,7 @@ public class EndScreen implements Screen {
             @Override
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
                 GameLogic.getSingleInstance().init();
-                UpgradeManager.getSingleInstance().init();
+                UpgradeManager.getSingleInstance().init(game.ass);
                 dispose();
                 GameScreen.gameScreen = new GameScreen(game);
                 game.setScreen(GameScreen.gameScreen);

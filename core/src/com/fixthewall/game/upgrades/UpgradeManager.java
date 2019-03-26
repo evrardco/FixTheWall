@@ -1,10 +1,13 @@
 package com.fixthewall.game.upgrades;
 
+import com.badlogic.gdx.assets.AssetManager;
+
 import java.io.Serializable;
 
 public class UpgradeManager implements Serializable {
 
-   private AbstractUpgrade [] allUpgrade = new AbstractUpgrade[3];
+   private AbstractUpgrade [] allUpgrade = new AbstractUpgrade[5];
+   private AssetManager ass;
    private static UpgradeManager singleInstance = null;
 
    private UpgradeManager() {}
@@ -12,10 +15,15 @@ public class UpgradeManager implements Serializable {
     public AbstractUpgrade[] getAllUpgrade() {
         return allUpgrade;
     }
-    public void init(){
+
+    public void init(AssetManager ass) {
+        this.ass = ass;
+
         allUpgrade[0] = new Upgrade1(0, 10);
         allUpgrade[1] = new Upgrade2(0, 100);
         allUpgrade[2] = new Upgrade3(0, 50);
+        allUpgrade[3] = new WorkerUpgrade(0, 10, ass);
+        allUpgrade[4] = new WorkerLevelUpgrade(0, 10);
         update();
     }
 
