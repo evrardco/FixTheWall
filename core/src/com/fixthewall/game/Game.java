@@ -43,7 +43,7 @@ public class Game extends com.badlogic.gdx.Game {
 
         loadVIPAssets();
         loadAssets();
-        //We see wether we must load the saved game.
+        //We see whether we must load the saved game.
 
         if(Perziztancinator.isNewGame()){
             UpgradeManager.getSingleInstance().init();

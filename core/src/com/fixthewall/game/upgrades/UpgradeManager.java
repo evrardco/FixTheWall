@@ -13,8 +13,8 @@ public class UpgradeManager implements Serializable {
         return allUpgrade;
     }
     public void init(){
-        allUpgrade[0] = new Upgrade1(0, 10);
-        allUpgrade[1] = new Upgrade2(0, 100);
+        allUpgrade[0] = new Upgrade1(1, 10);
+        allUpgrade[1] = new Upgrade2(1, 100);
 
         update();
     }
