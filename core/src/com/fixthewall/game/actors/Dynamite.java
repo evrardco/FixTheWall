@@ -11,11 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.fixthewall.game.actors.anim.Brixplosion;
 import com.fixthewall.game.logic.GameLogic;
 
 public class Dynamite extends Actor{
 
     public static boolean onPause;
+    private final AssetManager ass;
     private double degats;
     private boolean visible;
     private Animation<TextureRegion> DynamiteAnimation;
@@ -35,6 +37,7 @@ public class Dynamite extends Actor{
         onPause = false;
         isFalling = false;
         isExploding = false;
+        this.ass = ass;
         //set size actor
         setWidth(texture.getWidth()/3f);
         setHeight(texture.getHeight());
@@ -130,6 +133,8 @@ public class Dynamite extends Actor{
     {
         isFalling = false;
         isExploding = true;
+        Brixplosion brixplosion = new Brixplosion(15, ass, this.getX(), this.getY(), 500.0f);
+        this.getParent().addActor(brixplosion);
         visible = false;
         setTouchable(Touchable.disabled);
         Time = 0;

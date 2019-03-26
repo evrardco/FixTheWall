@@ -110,21 +110,7 @@ public class GameScreen implements Screen {
         hammer = new Hammer(game.ass);
 
         Ennemi ennemy = new Ennemi(game.ass);
-        ennemy.addListener(new ClickListener(){
-            @Override
-            public  void clicked(InputEvent event, float x, float y){
-                float betterX = event.getStageX();
-                float betterY = event.getStageY();
-                Actor actor = event.getListenerActor();
-                Brixplosion explosion = new Brixplosion(15, game.ass, betterX, betterY);
-                explosion.setPosition(betterX, betterY);
-                animGroup.addActor(explosion);
-                actor.remove();
 
-                Gdx.app.log("GameScreen", "Ennemy touched");
-            }
-
-        });
         ennemiGroup.addActor(ennemy);
 
 
@@ -249,14 +235,16 @@ public class GameScreen implements Screen {
             scoreLabel.setText("Score: " + GameLogic.getSingleInstance().getScoreString());
 
             actorsArray = ennemiGroup.getChildren();
-            groupToArray = actorsArray.begin();
+            groupToArray = actorsArray.begin(); //TODO C'est déjà une array les children
+                                                //suffit d'utiliser .get et .set
             if (dyn.getExploding())
             {
                 dyn.setExploding(false);
                 for (int i = 0; i < actorsArray.size; i++) {
                         //groupToArray[i].remove();
-                    if(dyn.getBounds().overlaps(((Ennemi)groupToArray[i]).getBounds())) {
-                        groupToArray[i].remove();
+                    if(groupToArray[i] instanceof Ennemi){
+                        if(dyn.getBounds().overlaps(((Ennemi)groupToArray[i]).getBounds()))
+                            ((Ennemi)(groupToArray[i])).kill();
                     }
                 }
             }
@@ -283,15 +271,8 @@ public class GameScreen implements Screen {
                 wave++;
                 for (int i = 0; i < 1+2*wave; i++)
                 {
-                    final Actor ennemy = new Ennemi(game.ass);
-                    ennemy.addListener(new ClickListener(){
-                        @Override
-                        public  void clicked(InputEvent event, float x, float y){
-                            animGroup.addActor(new Brixplosion(15, game.ass, x, y));
-                            ennemy.remove();
-                        }
+                    Actor ennemy = new Ennemi(game.ass);
 
-                    });
 
                     ennemiGroup.addActor(ennemy);
                 }

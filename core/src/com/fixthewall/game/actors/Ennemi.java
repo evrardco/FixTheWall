@@ -8,8 +8,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.fixthewall.game.Game;
+import com.fixthewall.game.actors.anim.Brixplosion;
 import com.fixthewall.game.logic.MexicanLogic;
 
 /*
@@ -26,6 +31,7 @@ import com.fixthewall.game.logic.MexicanLogic;
 
 public class Ennemi extends Actor {
 
+    private final AssetManager ass;
     private TextureRegion hitFrame;
     private TextureRegion previousFrame;
     private TextureRegion currentFrame;
@@ -45,12 +51,13 @@ public class Ennemi extends Actor {
     private float elapsedTimeHit;
     private Rectangle bounds;
 
-    public Ennemi (AssetManager ass){
+    public Ennemi (final AssetManager ass){
         this.setSide();
         this.setCoor();
         this.setTarget();
         this.setDistance();
         setTouchable(Touchable.enabled); // click through
+        this.ass = ass;
 
         //Set animation move
         Texture texture = ass.get("Frames/SheetFrameEnnemi.png");
@@ -109,6 +116,21 @@ public class Ennemi extends Actor {
             frame2Speed /= 4f;
         }
         ennemiAnimationHit = new Animation<TextureRegion>(frame2Speed, ennemiFrames2);
+
+        this.addListener(new ClickListener(){
+            @Override
+            public  void clicked(InputEvent event, float x, float y){
+                float betterX = event.getStageX();
+                float betterY = event.getStageY();
+                Actor actor = event.getListenerActor();
+                Brixplosion explosion = new Brixplosion(15, ass, betterX, betterY, 0f);
+                explosion.setPosition(betterX, betterY);
+                actor.getParent().addActor(explosion);
+                actor.remove();
+                Gdx.app.log("GameScreen", "Ennemy touched");
+            }
+
+        });
         //
     }
 
@@ -201,9 +223,17 @@ public class Ennemi extends Actor {
         return bounds;
 
     }
+
+    public void kill(){
+        Brixplosion explosion = new Brixplosion(15, ass, getX(), getY(), 0f);
+        explosion.setPosition(getX(), getY());
+        getParent().addActor(explosion);
+        remove();
+    }
     private void setDistance(){
         distance = Math.abs(this.getX() - targetX) + Math.abs(this.getY() - targetY);
     }
+
 
     private void hitTheWall(){
         MexicanLogic.getSingleInstance().doDamage();

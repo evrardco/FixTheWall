@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.fixthewall.game.Game;
 
 public class Brick extends Actor {
+    private float alpha;
     private float y;
     private float x;
     private float velX;
@@ -37,6 +38,7 @@ public class Brick extends Actor {
         this.sprite = new Sprite((Texture)ass.get("anim/brick.png"));
         this.sprite.setPosition(x, y);
         onGround = false;
+        this.alpha = 1.0f;
 
 
     }
@@ -44,7 +46,7 @@ public class Brick extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        sprite.draw(batch, parentAlpha);
+        sprite.draw(batch, alpha);
 
     }
 
@@ -52,10 +54,10 @@ public class Brick extends Actor {
     public void act(float delta) {
         super.act(delta);
         this.setPosition(sprite.getX(), sprite.getY());
-        //Gdx.app.log("Brick", "velX = "+velX);
+        //  Gdx.app.log("Brick", "velX = "+velX);
         sprite.setPosition(getX() + velX * delta, getY() + velY * delta);
         sprite.rotate(angVel * delta);
-        ttl -= delta;
+
         //Gdx.app.log("Brick", ""+onGround+"\n\n\n");
         if(!onGround && sprite.getY() <= groundLevel){
             velY = 0;
@@ -64,13 +66,25 @@ public class Brick extends Actor {
             onGround = true;
         }if(onGround){
             sprite.setY(groundLevel);
-            velX *= Constants.SLOWING_FACTOR;
+            velX += Constants.SLOWING_FACTOR * -1.0f * Math.signum(velX) * delta;
         } else if(isPulledBygravity){
             velY += Constants.GRAVITY * delta;
+        }
+        //here we do the fading stuff
+        ttl = Math.max(ttl-delta, 0.0f);
+        Gdx.app.log("Brick", "ttl: "+ttl);
+        if(ttl <= 0.0f){
+            this.alpha -= delta;
+            Gdx.app.log("Brick", "alpha: "+alpha);
+
+            if(alpha < 0.0f){
+                this.remove();
+            }
         }
     }
 
     public void setVelInDir(float degrees, float speedAbs){
+        degrees = (float)Math.toRadians(degrees);
         velX = (float)Math.cos(degrees) * speedAbs;
         velY = (float)Math.sin(degrees) * speedAbs;
     }
