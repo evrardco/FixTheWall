@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class BadGuysLogic implements Serializable {
 
-    private double damagePerSec;
+    private double damage;
     private double mul;
 
     private static BadGuysLogic singleInstance = null;
@@ -16,17 +16,17 @@ public class BadGuysLogic implements Serializable {
 
     private BadGuysLogic(){}
 
-    public void init(double dps, float mul){
-        damagePerSec = dps;
+    public void init(double damage, float mul){
+        this.damage = damage;
         this.mul = mul;
     }
 
-    public double getDamagePerSec() {
-        return damagePerSec;
+    public double getDamage() {
+        return damage;
     }
 
-    public void setDamagePerSec(double damagePerSec) {
-        this.damagePerSec = damagePerSec;
+    public void setDamage(double damage) {
+        this.damage = damage;
     }
 
     public double getMul() {
@@ -37,9 +37,9 @@ public class BadGuysLogic implements Serializable {
         this.mul = mul;
     }
 
-    public void doDamage(double delta) {
+    public void doDamage() {
         GameLogic.getSingleInstance().setHealth(
-                 GameLogic.getSingleInstance().getHealth() - (damagePerSec * mul * delta));
+                 GameLogic.getSingleInstance().getHealth() - damage * mul);
     }
     public void init(BadGuysLogic instance){
         singleInstance = instance;

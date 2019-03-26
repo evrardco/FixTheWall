@@ -45,18 +45,21 @@ public class Game extends com.badlogic.gdx.Game {
         loadAssets();
         //We see whether we must load the saved game.
 
-        if(Perziztancinator.isNewGame()){
-            UpgradeManager.getSingleInstance().init();
-            GameLogic.getSingleInstance().init();
-            BadGuysLogic.getSingleInstance().init(3.0, 1.0f);
-            Perziztancinator.getSingleInstance().init();
-
-        }else{
-            Perziztancinator.load();
-            UpgradeManager.getSingleInstance().init(Perziztancinator.getSingleInstance().getUpgManager());
-            GameLogic.getSingleInstance().init(Perziztancinator.getSingleInstance().getLogic());
-            BadGuysLogic.getSingleInstance().init(Perziztancinator.getSingleInstance().getBadLogic());
-        }
+//        if(Perziztancinator.isNewGame()){
+//            UpgradeManager.getSingleInstance().init();
+//            GameLogic.getSingleInstance().init();
+//            BadGuysLogic.getSingleInstance().init(3.0, 1.0f);
+//            Perziztancinator.getSingleInstance().init();
+//
+//        }else{
+//            Perziztancinator.load();
+//            UpgradeManager.getSingleInstance().init(Perziztancinator.getSingleInstance().getUpgManager());
+//            GameLogic.getSingleInstance().init(Perziztancinator.getSingleInstance().getLogic());
+//            BadGuysLogic.getSingleInstance().init(Perziztancinator.getSingleInstance().getBadLogic());
+//        }
+        UpgradeManager.getSingleInstance().init();
+        GameLogic.getSingleInstance().init();
+        BadGuysLogic.getSingleInstance().init(1.0, 1.0f);
 
 
 
@@ -99,11 +102,12 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("fondWall.png", Texture.class);
         ass.load("fondWall-nuit.png", Texture.class);
         ass.load("imgPause.png", Texture.class);
-        ass.load("imgPauseFont.png", Texture.class);
+        ass.load("imgPauseFond.png", Texture.class);
         ass.load("nuages.png", Texture.class);
         ass.load("marteau.png", Texture.class);
         ass.load("marteauDiam.png", Texture.class);
         ass.load("pioche.png", Texture.class);
+        ass.load("anim/brick.png", Texture.class);
 
         // dossier ui
         ass.load("ui/texture_button.png", Texture.class);
@@ -115,7 +119,7 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("ui/texture_button_settings_down.png", Texture.class);
         ass.load("ui/texture_button_volume.png", Texture.class);
         ass.load("ui/texture_button_volume_down.png", Texture.class);
-        ass.load("ui/white_background.png", Texture.class);
+        ass.load("ui/background.png", Texture.class);
         ass.load("ui/texture_upgrade_pannel.png", Texture.class);
         ass.load("ui/texture_progressbar_background.png", Texture.class);
         ass.load("ui/texture_progressbar.png", Texture.class);
@@ -163,6 +167,5 @@ public class Game extends com.badlogic.gdx.Game {
         bigFont.fontFileName = "data/Germania.ttf";
         bigFont.fontParameters.size = 120;
         ass.load("Germania120.ttf", BitmapFont.class, bigFont);
-
     }
 }

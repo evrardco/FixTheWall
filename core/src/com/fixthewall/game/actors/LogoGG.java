@@ -21,11 +21,6 @@ public class LogoGG extends Actor {
     }
 
     @Override
-    public void act(float delta) {
-        super.act(delta);
-    }
-
-    @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(background, getX(), getY());
 

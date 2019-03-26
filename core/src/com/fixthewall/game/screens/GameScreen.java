@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -16,17 +17,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
-import com.fixthewall.game.actors.MenuTable;
-import com.fixthewall.game.actors.HealthBar;
+import com.fixthewall.game.actors.ui.BigMenuTable;
+import com.fixthewall.game.actors.ui.HealthBar;
 import com.fixthewall.game.actors.Nuages;
-import com.fixthewall.game.actors.PauseButton;
-import com.fixthewall.game.actors.PauseFont;
-import com.fixthewall.game.actors.PopupLabel;
-import com.fixthewall.game.actors.UpgradeButton;
+import com.fixthewall.game.actors.ui.PopupLabel;
+import com.fixthewall.game.actors.ui.UpgradeButton;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
+import com.fixthewall.game.actors.anim.Brixplosion;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.actors.Hammer;
 import com.fixthewall.game.upgrades.AbstractUpgrade;
@@ -41,16 +43,23 @@ public class GameScreen implements Screen {
     private final Game game;
     private Stage stage;
     private Hammer hammer;
-    private PauseButton pause;
-    private PauseFont pauseFont;
+    private Image pause;
+    private Image pauseFond;
     private Label bricksLabel;
     private Label scoreLabel;
-    private Boolean onPause;
-    private int countPause;
     private Group ennemiGroup;
+    private Group animGroup;
+    private Image imgFond;
     private Dynamite dyn;
     private double totalTime;
+    private boolean isNight;
+    private double dailyTime;
+    private Texture textureFond;
+    private Texture textureFondNight;
     private int wave;
+    private int ennemiToRemove;
+    private SnapshotArray<Actor> actorsArray;
+    private Actor[] groupToArray;
 
     private LinkedList<PopupLabel> popupLabels;
 
@@ -60,34 +69,57 @@ public class GameScreen implements Screen {
         this.game = game;
 
         stage = new Stage(game.viewport);
-        Texture textureFond = game.ass.get("fondWall.png");
+        textureFond = game.ass.get("fondWall.png");
+        textureFondNight = game.ass.get("fondWall-nuit.png");
 
-        Image imgFond = new Image(textureFond);
+        imgFond = new Image(textureFond);
         Nuages nuages = new Nuages(game.ass);
         Wall wall = new Wall(game.ass);
         dyn = new Dynamite(game.ass);
         hammer = new Hammer(game.ass);
-        pause = new PauseButton(game.ass);
-        pauseFont = new PauseFont(game.ass);
-        pauseFont.setVisible(false);
+        pause = new Image(game.ass.get("imgPause.png", Texture.class));
+        pause.setPosition(30, 1810);
+        pauseFond = new Image(game.ass.get("imgPauseFond.png", Texture.class));
+        pauseFond.setVisible(false);
         wave = 0;
-        countPause = 0;
+        isNight = false;
+        dailyTime = 0;
+        ennemiToRemove = 0;
+        actorsArray = null;
+        groupToArray = null;
 
         ennemiGroup = new Group();
-        Ennemi ennemi = new Ennemi(1, game.ass);
-        ennemiGroup.addActor(ennemi);
-        onPause = false;
 
         Group hammerGroup = new Group();
+        animGroup = new Group();
         hammer = new Hammer(game.ass);
 
+        Ennemi ennemy = new Ennemi(1, game.ass);
+        ennemy.addListener(new ClickListener(){
+            @Override
+            public  void clicked(InputEvent event, float x, float y){
+                float betterX = event.getStageX();
+                float betterY = event.getStageY();
+                Actor actor = event.getListenerActor();
+                Brixplosion explosion = new Brixplosion(15, game.ass, betterX, betterY);
+                explosion.setPosition(betterX, betterY);
+                animGroup.addActor(explosion);
+                actor.remove();
+
+                Gdx.app.log("GameScreen", "Ennemy touched");
+            }
+
+        });
+        ennemiGroup.addActor(ennemy);
+
+
         //Initializing upgrade menu
-        final MenuTable menuUpgrade = new MenuTable(game.ass, "Upgrades");
+        final BigMenuTable menuUpgrade = new BigMenuTable(game.ass, "Upgrades");
         menuUpgrade.setVisible(false);
 
         AbstractUpgrade[] upArray = UpgradeManager.getSingleInstance().getAllUpgrade();
         for(int i=0; i < upArray.length; i++) {
-            menuUpgrade.addEntry("", new UpgradeButton(game.ass, upArray[i]));
+            menuUpgrade.addEntry(new UpgradeButton(game.ass, upArray[i]));
         }
 
         totalTime = 0;
@@ -115,9 +147,7 @@ public class GameScreen implements Screen {
         upsButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                if (!onPause) {
-                    menuUpgrade.setVisible(!menuUpgrade.isVisible());
-                }
+                menuUpgrade.setVisible(!menuUpgrade.isVisible());
             }
         });
 
@@ -125,7 +155,7 @@ public class GameScreen implements Screen {
         wall.addListener( new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
-                if (!onPause) {
+                if (!GameLogic.getSingleInstance().isPaused()) {
                     GameLogic instance = GameLogic.getSingleInstance();
                     double maxHealth = instance.getMaxHealth();
                     double incrementedHealth = instance.getHealth() + instance.getHealingPower();
@@ -145,29 +175,20 @@ public class GameScreen implements Screen {
                 }
             }
         });
+
         //Add listener to the pause button
         pause.addListener( new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
                 pause.setVisible(false);
-                pauseFont.setVisible(true);
-                onPause = !onPause;
-                Dynamite.onPause =  onPause;
+                pauseFond.setVisible(true);
+                menuUpgrade.setVisible(false);
+                GameLogic.getSingleInstance().togglePaused();
+                Dynamite.onPause =  GameLogic.getSingleInstance().isPaused();
             }
 
         });
-        //Add listener to the pause font
-        pauseFont.addListener( new ClickListener(){
-            @Override
-            public  void clicked(InputEvent event, float x, float y){
-                onPause = !onPause;
-                Dynamite.onPause =  onPause;
-                pause.setVisible(true);
-                pauseFont.setVisible(false);
-                countPause = 0;
-            }
 
-        });
         dyn.addListener(dyn.getListener());
 
         bricksLabel = new Label("Bricks: " + GameLogic.getSingleInstance().getBricksString(), new Label.LabelStyle(font, Color.BLACK));
@@ -186,45 +207,83 @@ public class GameScreen implements Screen {
         stage.addActor(nuages);
         stage.addActor(wall);
         stage.addActor(dyn);
-        stage.addActor(ennemi);
-        stage.addActor(pause);
         stage.addActor(ennemiGroup);
+        ennemiGroup.addActor(ennemy); //ou sinon le premier ennemy n'est pas ajouté au stage
+        stage.addActor(pause);
+        stage.addActor(animGroup);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);
         stage.addActor(scoreLabel);
         stage.addActor(healthBar);
         stage.addActor(hammerGroup);
         stage.addActor(menuUpgrade);
-        stage.addActor(pauseFont);
-
+        stage.addActor(pauseFond);
         Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void render (float delta) {
-        if (!onPause) {
+
+        //pause code
+
+        if (!GameLogic.getSingleInstance().isPaused()) {
             //logic update
             totalTime = totalTime + delta;
+            dailyTime = dailyTime + delta;
             Gdx.gl.glClearColor(0, 0, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
             bricksLabel.setText("Bricks: " + GameLogic.getSingleInstance().getBricksString());
             scoreLabel.setText("Score: " + GameLogic.getSingleInstance().getScoreString());
 
-
-            if (totalTime/90f > 1f)
+            actorsArray = ennemiGroup.getChildren();
+            groupToArray = actorsArray.begin();
+            ennemiToRemove = GameLogic.getSingleInstance().getEnnemiRemoval();
+            for (int i = 0; i< ennemiToRemove; i++)
+            {
+                Gdx.app.log("Upgrade 3", "Passage bloucle");
+                 if (actorsArray.size > 0)
+                 {
+                     Gdx.app.log("Upgrade 3", "Passage bloucle2");
+                      groupToArray[i].remove();
+                 }
+            }
+            GameLogic.getSingleInstance().setEnnemiRemoval(0);
+            if ((totalTime > 45 && !isNight) || (totalTime > 25 && isNight))
             {
                 totalTime = 0f;
                 wave++;
-                for (int i = 0; i < 10+2*wave; i++)
+                for (int i = 0; i < 1+2*wave; i++)
                 {
-                    ennemiGroup.addActor(new Ennemi(wave, game.ass));
-                    dyn.setLevel(wave);
+                    final Actor ennemy = new Ennemi(wave, game.ass);
+                    ennemy.addListener(new ClickListener(){
+                        @Override
+                        public  void clicked(InputEvent event, float x, float y){
+                            animGroup.addActor(new Brixplosion(15, game.ass, x, y));
+                            ennemy.remove();
+                        }
+
+                    });
+
+                    ennemiGroup.addActor(ennemy);
+                }
+                dyn.setLevel(wave);
+            }
+
+            if (dailyTime > 300f)
+            {
+                dailyTime = 0f;
+                isNight = !isNight;
+                if (isNight)
+                {
+                    imgFond.setDrawable(new TextureRegionDrawable(new TextureRegion(textureFondNight)));
+                }
+                else {
+                    imgFond.setDrawable(new TextureRegionDrawable(new TextureRegion(textureFond)));
                 }
             }
 
             stage.act(delta);
-            stage.draw();
 
             if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
                 dispose();
@@ -232,16 +291,13 @@ public class GameScreen implements Screen {
                 game.setScreen(new EndScreen(game));
             }
         }
-        else {
-            if (countPause < 5){
-                Gdx.gl.glClearColor(0, 0, 0, 1);
-                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-                stage.act(delta);
-                stage.draw();
-
-            }
-            countPause++;
+        else if (Gdx.input.justTouched()) {
+            GameLogic.getSingleInstance().togglePaused();
+            Dynamite.onPause = GameLogic.getSingleInstance().isPaused();
+            pause.setVisible(true);
+            pauseFond.setVisible(false);
         }
+        stage.draw();
     }
 
     @Override

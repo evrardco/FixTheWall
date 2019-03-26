@@ -25,11 +25,16 @@ public class Nuages extends Actor {
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha) {
-        if(this.getX()== TARGET){
+    public void act(float delta) {
+        super.act(delta);
+        if(this.getX() == TARGET){
             this.setX(1080f);
             this.addAction(Actions.moveTo(TARGET, this.getY(), TIME));
         }
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
         batch.draw(texture, this.getX(), this.getY());
     }
 

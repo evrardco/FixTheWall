@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.fixthewall.game.logic.GameLogic;
+import com.fixthewall.game.logic.BadGuysLogic;
 
 /*
 * TARGET ENNEMI:    X = [0; 984] et Y = [242; 298]
@@ -25,13 +25,12 @@ import com.fixthewall.game.logic.GameLogic;
 
 public class Ennemi extends Actor {
 
-    private GameLogic gameInstance;
-    private double power;
     private TextureRegion hitFrame;
+    private TextureRegion previousFrame;
+    private TextureRegion currentFrame;
     private float targetX;
     private float targetY;
     private float distance;
-    private int level;
     private boolean isMegaEnnemi;
     private boolean fromLeft;
     private boolean fromSide;
@@ -45,20 +44,21 @@ public class Ennemi extends Actor {
     private float elapsedTimeHit;
 
     public Ennemi (int level, AssetManager ass){
-        gameInstance = GameLogic.getSingleInstance();
-        if (level < 1)
-            this.level = 1;
-        else
-            this.level = level;
-        this.setPower();
         this.setSide();
         this.setCoor();
         this.setTarget();
         this.setDistance();
-        setTouchable(Touchable.disabled); // clik through
+        setTouchable(Touchable.enabled); // click through
 
         //Set animation move
         Texture texture = ass.get("Frames/SheetFrameEnnemi.png");
+
+        // set hitbox for click listener
+        this.setWidth(texture.getWidth() / (float) FRAME_COLS);
+        this.setHeight(texture.getHeight() / (float) FRAME_ROWS);
+        this.setBounds(getX(), getY(), getWidth(), getHeight());
+        //
+
         TextureRegion[][] tmp = TextureRegion.split(texture,
                         texture.getWidth() / FRAME_COLS,
                         texture.getHeight() / FRAME_ROWS);
@@ -105,39 +105,30 @@ public class Ennemi extends Actor {
         float frame2Speed = randSpeed/100f;
         if(isMegaEnnemi){
             frame2Speed /= 4f;
-            setPowerMega();
         }
         ennemiAnimationHit = new Animation<TextureRegion>(frame2Speed, ennemiFrames2);
         //
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha) {
-        if(this.getX()==targetX && this.getY()==targetY){
+    public void act(float delta) {
+        super.act(delta);
+        if (this.getX() == targetX && this.getY() == targetY) {
             elapsedTimeHit += Gdx.graphics.getDeltaTime();
-            TextureRegion frame = ennemiAnimationHit.getKeyFrame(elapsedTimeHit, true);
-            if(frame==hitFrame){
+            currentFrame = ennemiAnimationHit.getKeyFrame(elapsedTimeHit, true);
+            if (currentFrame == hitFrame && (previousFrame == null || previousFrame != currentFrame)) {
                 this.hitTheWall();
             }
-            batch.draw( frame, this.getX(), this.getY());
-        }
-        else{
+            previousFrame = currentFrame;
+        } else {
             elapsedTime += Gdx.graphics.getDeltaTime();
-            batch.draw( ennemiAnimation.getKeyFrame(elapsedTime, true), this.getX(), this.getY());
+            currentFrame = ennemiAnimation.getKeyFrame(elapsedTime, true);
         }
     }
 
-    private void setPower() {
-        this.power = this.level/5.0;//div par 5 car problème de synchronisation avec les frames.
-    }
-
-    private void setPowerMega(){
-        this.power = this.level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-        this.setPower();
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        batch.draw(currentFrame, this.getX(), this.getY());
     }
 
     private void setSide(){
@@ -207,7 +198,7 @@ public class Ennemi extends Actor {
     }
 
     private void hitTheWall(){
-        gameInstance.reduceHealth(power);
+        BadGuysLogic.getSingleInstance().doDamage();
     }
 
     /*
