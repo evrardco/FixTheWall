@@ -242,6 +242,16 @@ public class GameScreen implements Screen {
 
             actorsArray = ennemiGroup.getChildren();
             groupToArray = actorsArray.begin();
+            if (dyn.getExploding())
+            {
+                dyn.setExploding(false);
+                for (int i = 0; i < actorsArray.size; i++) {
+                        //groupToArray[i].remove();
+                    if(dyn.getBounds().overlaps(((Ennemi)groupToArray[i]).getBounds())) {
+                        groupToArray[i].remove();
+                    }
+                }
+            }
             ennemiToRemove = GameLogic.getSingleInstance().getEnnemiRemoval();
             if (GameLogic.getSingleInstance().isUpgrade3())
             {
@@ -253,9 +263,7 @@ public class GameScreen implements Screen {
             //GameLogic.getSingleInstance().setUpgrade3(false);
             if (!dollardGroup.hasChildren()) {
                 for (int i = 0; i < ennemiToRemove; i++) {
-                    Gdx.app.log("Upgrade 3", "Passage bloucle");
                     if (actorsArray.size > 0) {
-                        Gdx.app.log("Upgrade 3", "Passage bloucle2");
                         groupToArray[i].remove();
                     }
                 }
