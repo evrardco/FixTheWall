@@ -20,11 +20,12 @@ public class Dynamite extends Actor{
     private final AssetManager ass;
     private double degats;
     private boolean visible;
-    private Animation<TextureRegion> DynamiteAnimation;
+    private Animation<TextureRegion> dynamiteAnimation;
     // Variable for tracking elapsed time for the animation
     private float elapsedTime;
     private float Time;
     private Texture texture;
+    private TextureRegion currentFrame;
     private boolean isFalling;
     private boolean isExploding;
     private int level;
@@ -55,7 +56,7 @@ public class Dynamite extends Actor{
                 DynamiteFrames[index++] = tmp[i][j];
             }
         }
-        DynamiteAnimation = new Animation<TextureRegion>(0.1f, DynamiteFrames);
+        dynamiteAnimation = new Animation<TextureRegion>(0.1f, DynamiteFrames);
         //
         elapsedTime =0f;
         Time=0f;
@@ -87,22 +88,25 @@ public class Dynamite extends Actor{
             }
         }
 
-    }
-
-
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
         if (getRandom(300) == 10 && !visible)
         {
             visible = true;
             setTouchable(Touchable.enabled);
             this.setPosition(getRandom(1021), 300+getRandom(461));
         }
+
         if(visible) {
-            elapsedTime += Gdx.graphics.getDeltaTime();
-            batch.draw(DynamiteAnimation.getKeyFrame(elapsedTime, true), this.getX(), this.getY());
+            elapsedTime += delta;
+            currentFrame = dynamiteAnimation.getKeyFrame(elapsedTime, true);
         }
+    }
+
+
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        if(visible)
+            batch.draw(currentFrame, this.getX(), this.getY());
     }
 
     public ClickListener getListener(){
