@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.fixthewall.game.actors.Dollard;
 import com.fixthewall.game.actors.Dynamite;
@@ -53,30 +55,35 @@ public class GameScreen implements Screen {
     private Group workerGroup;
     private Group dollardGroup;
     private Group animGroup;
-    private Image imgFond;
+    private Image backgroundDay;
+    private Image backgroundNight;
     private Dynamite dyn;
     private double totalTime;
     private boolean isNight;
-    private double dailyTime;
-    private Texture textureFond;
-    private Texture textureFondNight;
     private int wave;
     private int ennemiToRemove;
-    private SnapshotArray<Actor> actorsArray;
-    private Actor[] groupToArray;
+    private float elapsedTime;
 
     private LinkedList<PopupLabel> popupLabels;
 
-    public static GameScreen gameScreen;
+    public static final transient int DAY_NIGHT_CYCLE_LEN = 600; //10 minutes
 
     public GameScreen(final Game game) {
         this.game = game;
-
+        this.elapsedTime = 0.0f;
         stage = new Stage(game.viewport);
-        textureFond = game.ass.get("fondWall.png");
-        textureFondNight = game.ass.get("fondWall-nuit.png");
 
-        imgFond = new Image(textureFond);
+
+        backgroundDay = new Image(game.ass.get("fondWall.png", Texture.class));
+        backgroundNight = new Image(game.ass.get("fondWall-nuit.png", Texture.class));
+        backgroundNight.addAction(Actions.alpha(0.0f)); //we begin during the day
+        backgroundNight.addAction(Actions.forever(
+                Actions.sequence(
+                        Actions.alpha(1.0f, DAY_NIGHT_CYCLE_LEN / 2f),
+                        Actions.alpha(0.0f, DAY_NIGHT_CYCLE_LEN / 2f)
+                )
+        ));
+
         Nuages nuages = new Nuages(game.ass);
         Wall wall = new Wall(game.ass);
         dyn = new Dynamite(game.ass);
@@ -96,10 +103,8 @@ public class GameScreen implements Screen {
         pauseFond.setVisible(false);
         wave = 0;
         isNight = false;
-        dailyTime = 0;
         ennemiToRemove = 0;
-        actorsArray = null;
-        groupToArray = null;
+
 
         ennemiGroup = MexicanLogic.getSingleInstance().getEnnemiGroup();
         workerGroup = MexicanLogic.getSingleInstance().getWorkerGroup();
@@ -199,7 +204,8 @@ public class GameScreen implements Screen {
         //
 
         //Add all the things to runescape (add a deadman mode)
-        stage.addActor(imgFond);
+        stage.addActor(backgroundDay);
+        stage.addActor(backgroundNight);
         stage.addActor(nuages);
         stage.addActor(wall);
         stage.addActor(dyn);
@@ -222,84 +228,71 @@ public class GameScreen implements Screen {
     @Override
     public void render (float delta) {
 
-        //pause code
+        if (GameLogic.getSingleInstance().isPaused()){
+            stage.draw();
+            return;
+        }
+        //logic update
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (!GameLogic.getSingleInstance().isPaused()) {
-            //logic update
-            totalTime = totalTime + delta;
-            dailyTime = dailyTime + delta;
-            Gdx.gl.glClearColor(0, 0, 0, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        bricksLabel.setText("Bricks: " + GameLogic.getSingleInstance().getBricksString());
+        scoreLabel.setText("Score: " + GameLogic.getSingleInstance().getScoreString());
 
-            bricksLabel.setText("Bricks: " + GameLogic.getSingleInstance().getBricksString());
-            scoreLabel.setText("Score: " + GameLogic.getSingleInstance().getScoreString());
 
-            actorsArray = ennemiGroup.getChildren();
-            groupToArray = actorsArray.begin(); //TODO C'est déjà une array les children
-                                                //suffit d'utiliser .get et .set
-            if (dyn.getExploding())
-            {
-                dyn.setExploding(false);
-                for (int i = 0; i < actorsArray.size; i++) {
-                        //groupToArray[i].remove();
-                    if(groupToArray[i] instanceof Ennemi){
-                        if(dyn.getBounds().overlaps(((Ennemi)groupToArray[i]).getBounds()))
-                            ((Ennemi)(groupToArray[i])).kill();
-                    }
+
+        // DYNAMITE EXPLOSION
+        Array<Actor> actorArray = ennemiGroup.getChildren();
+        if (dyn.getExploding()) {
+            dyn.setExploding(false);
+            for (Actor actor : actorArray) {
+                if(actor instanceof Ennemi && dyn.getBounds().overlaps(((Ennemi) actor).getBounds())) {
+                    ((Ennemi) actor).kill();
                 }
-            }
-            ennemiToRemove = GameLogic.getSingleInstance().getEnnemiRemoval();
-            if (GameLogic.getSingleInstance().isUpgrade3())
-            {
-                for(int i = 0; i < UpgradeManager.getSingleInstance().getAllUpgrade()[2].getLevel()*2+3;i++) {
-                    dollardGroup.addActor(new Dollard(game.ass, UpgradeManager.getSingleInstance().getAllUpgrade()[2].getLevel()));
-                }
-            }
-            GameLogic.getSingleInstance().setUpgrade3(false);
-            //GameLogic.getSingleInstance().setUpgrade3(false);
-            if (!dollardGroup.hasChildren()) {
-                for (int i = 0; i < ennemiToRemove; i++) {
-                    if (actorsArray.size > 0) {
-                        groupToArray[i].remove();
-                    }
-                }
-                GameLogic.getSingleInstance().setEnnemiRemoval(0);
-            }
-            if ((totalTime > 45 && !isNight) || (totalTime > 25 && isNight))
-            {
-                totalTime = 0f;
-                wave++;
-                for (int i = 0; i < 1+2*wave; i++)
-                {
-                    Actor ennemy = new Ennemi(game.ass);
-
-
-                    ennemiGroup.addActor(ennemy);
-                }
-                dyn.setLevel(wave);
-            }
-
-            if (dailyTime > 300f)
-            {
-                dailyTime = 0f;
-                isNight = !isNight;
-                if (isNight)
-                {
-                    imgFond.setDrawable(new TextureRegionDrawable(new TextureRegion(textureFondNight)));
-                }
-                else {
-                    imgFond.setDrawable(new TextureRegionDrawable(new TextureRegion(textureFond)));
-                }
-            }
-
-            stage.act(delta);
-
-            if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
-                dispose();
-                gameScreen = null;
-                game.setScreen(new EndScreen(game));
             }
         }
+        //
+
+
+        // CASH RAIN
+        ennemiToRemove = GameLogic.getSingleInstance().getEnnemiRemoval();
+        if (GameLogic.getSingleInstance().isUpgrade3()) {
+            for(int i = 0; i < UpgradeManager.getSingleInstance().getAllUpgrade()[2].getLevel()*2+3;i++) {
+                dollardGroup.addActor(new Dollard(game.ass, UpgradeManager.getSingleInstance().getAllUpgrade()[2].getLevel()));
+            }
+        }
+        GameLogic.getSingleInstance().setUpgrade3(false);
+        if (!dollardGroup.hasChildren()) {
+            for (int i = 0; i < ennemiToRemove; i++) {
+                if (actorsArray.size > 0) {
+                    groupToArray[i].remove();
+                }
+            }
+            GameLogic.getSingleInstance().setEnnemiRemoval(0);
+        }
+        //
+
+
+        // ENNEMI WAVES
+        if ((totalTime > 45 && !isNight) || (totalTime > 25 && isNight)) {
+            totalTime = 0f;
+            wave++;
+            for (int i = 0; i < 1+2*wave; i++){
+                Actor ennemy = new Ennemi(game.ass);
+                ennemiGroup.addActor(ennemy);
+            }
+            dyn.setLevel(wave);
+        }
+        //
+
+
+        stage.act(delta);
+
+        if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
+            dispose();
+            game.setScreen(new EndScreen(game));
+        }
+
         stage.draw();
     }
 
