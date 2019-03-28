@@ -94,14 +94,16 @@ public class Game extends com.badlogic.gdx.Game {
 
 	public void loadAssets() {
 
-        ass.load("badGuysRSheet.png", Texture.class);
         ass.load("fondWall.png", Texture.class);
         ass.load("fondWall-nuit.png", Texture.class);
         ass.load("imgPause.png", Texture.class);
         ass.load("imgPauseFond.png", Texture.class);
         ass.load("nuages.png", Texture.class);
-        ass.load("marteau.png", Texture.class);
-        ass.load("marteauDiam.png", Texture.class);
+        ass.load("Marteaux/marteau.png", Texture.class);
+        ass.load("Marteaux/marteau_normal.png", Texture.class);
+        ass.load("Marteaux/Marteau_thor.png", Texture.class);
+        ass.load("Marteaux/marteauDiam.png", Texture.class);
+        ass.load("Marteaux/War_hammer.png", Texture.class);
         ass.load("pioche.png", Texture.class);
         ass.load("anim/brick.png", Texture.class);
         ass.load("dollard.png", Texture.class);
@@ -128,7 +130,6 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("wallStates/theWall60.png", Texture.class);
         ass.load("wallStates/theWall80.png", Texture.class);
         ass.load("wallStates/theWallBroken.png", Texture.class);
-        ass.load("nuke.png", Texture.class);
 
         // dossier music
         ass.load("music/song1.mp3", Music.class);

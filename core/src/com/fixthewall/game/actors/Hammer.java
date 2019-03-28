@@ -20,7 +20,7 @@ public class Hammer extends Actor {
     private SequenceAction sequence;
 
     public Hammer(AssetManager ass) {
-        texture = new TextureRegion(ass.get("marteau.png", Texture.class));
+        texture = new TextureRegion(ass.get("Marteaux/marteau.png", Texture.class));
         setBounds(getX(),getY(),texture.getRegionWidth(),texture.getRegionHeight());
         setOrigin(texture.getRegionWidth() / 2f, texture.getRegionHeight() / 4f);
         setRotation(STARTING_ANGLE);
