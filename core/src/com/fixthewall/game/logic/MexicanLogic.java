@@ -1,6 +1,12 @@
 package com.fixthewall.game.logic;
 
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.fixthewall.game.actors.Dollar;
+import com.fixthewall.game.actors.Dynamite;
+import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.upgrades.UpgradeManager;
 
 import java.io.Serializable;
 
@@ -14,22 +20,28 @@ public class MexicanLogic implements Serializable {
     private double brickPower;
     private double mul;
 
+    private float elapsedTime;
+    private float waveNumber;
+
+    private int ennemiToRemove;
+
     private static MexicanLogic singleInstance = null;
 
-    public static MexicanLogic getSingleInstance(){
+    public static MexicanLogic getSingleInstance() {
         if(singleInstance == null) singleInstance = new MexicanLogic();
         return singleInstance;
     }
 
-    private MexicanLogic(){}
+    private MexicanLogic() {}
 
-    public void init(double damage, double heal, double brickPower, double mul){
+    public void init(double damage, double heal, double brickPower, double mul) {
         this.damage = damage;
         this.heal = heal;
         this.brickPower = brickPower;
         this.mul = mul;
         ennemiGroup = new Group();
         workerGroup = new Group();
+        ennemiToRemove = 0;
     }
 
     public double getDamage() {
@@ -66,6 +78,50 @@ public class MexicanLogic implements Serializable {
         );
     }
 
+    // TODO remplacer dollarGroup par le pool
+    public void updateCashRain(Group dollarGroup, AssetManager ass) {
+        if (ennemiToRemove > 0) {
+            for(int i = 0; i < UpgradeManager.getSingleInstance().getAllUpgrade()[2].getLevel() * 2 + 3; i++) {
+                dollarGroup.addActor(new Dollar(ass));
+            }
+        }
+        if (!dollarGroup.hasChildren()) {
+            for (int i = 0; i < ennemiToRemove; i++) {
+                if (ennemiGroup.getChildren().size > 0) {
+                    ennemiGroup.getChildren().get(i).remove();
+                }
+            }
+            MexicanLogic.getSingleInstance().setEnnemiToRemove(0);
+        }
+    }
+
+    public void updateDynamite(Dynamite dynamite) {
+        if (dynamite.hasExploded()) {
+            for (Actor actor : ennemiGroup.getChildren()) {
+                if(actor instanceof Ennemi && dynamite.getBounds().overlaps(((Ennemi) actor).getBounds())) {
+                    ((Ennemi) actor).kill();
+                }
+            }
+        }
+    }
+
+    public void updateWave(float delta, boolean isDay, AssetManager ass) {
+        elapsedTime += delta;
+        // new wave every 45 seconds if day, every 25 seconds if night
+        if ((elapsedTime >= 45 && isDay) || (elapsedTime >= 25 && !isDay)) {
+            elapsedTime = 0f;
+            waveNumber++;
+            // TODO utiliser les Pools ici
+            for (int i = 0; i < 1 + 2 * waveNumber; i++) {
+                Actor ennemy = new Ennemi(ass);
+                ennemiGroup.addActor(ennemy);
+            }
+        }
+    }
+
+    /**
+     * Pour sauvegarde
+     */
     public void init(MexicanLogic instance){
         singleInstance = instance;
     }
@@ -93,5 +149,13 @@ public class MexicanLogic implements Serializable {
 
     public void setBrickPower(double brickPower) {
         this.brickPower = brickPower;
+    }
+
+    public void setEnnemiToRemove(int num) {
+        this.ennemiToRemove = num;
+    }
+
+    public int getEnnemiToRemove() {
+        return ennemiToRemove;
     }
 }

@@ -28,13 +28,11 @@ public class Dynamite extends Actor{
     private TextureRegion currentFrame;
     private boolean isFalling;
     private boolean isExploding;
-    private int level;
     private Rectangle bounds;
 
     public Dynamite (AssetManager ass) {
         texture = ass.get("Frames/SheetFrameDynamite.png");
         degats = 25;
-        level = 1;
         onPause = false;
         isFalling = false;
         isExploding = false;
@@ -74,7 +72,7 @@ public class Dynamite extends Actor{
                 Time = Time + delta;
             }
             if (Time > 10f) {
-                GameLogic.getSingleInstance().reduceHealth(degats);
+                GameLogic.getSingleInstance().reduceHealth(GameLogic.getSingleInstance().getHealth() * 0.5);
                 Time = 0f;
                 visible = false;
                 setTouchable(Touchable.disabled);
@@ -109,7 +107,7 @@ public class Dynamite extends Actor{
             batch.draw(currentFrame, this.getX(), this.getY());
     }
 
-    public ClickListener getListener(){
+    public ClickListener getListener() {
         return  new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
@@ -121,20 +119,13 @@ public class Dynamite extends Actor{
 
     }
 
-    public void setLevel(int level){
-        this.level = level;
-        this.degats = 25*Math.log(1+level*level);
-    }
-
-    public Rectangle getBounds()
-    {
+    public Rectangle getBounds() {
         bounds=new Rectangle((this.getX()+100), this.getY()+100, (this.getWidth()+100), this.getHeight());
         return bounds;
 
     }
 
-    public void explode()
-    {
+    public void explode() {
         isFalling = false;
         isExploding = true;
         Brixplosion brixplosion = new Brixplosion(15, ass, this.getX(), this.getY(), 500.0f);
@@ -148,9 +139,11 @@ public class Dynamite extends Actor{
     {
         isExploding = false;
     }
-    public boolean getExploding()
-    {
-        return isExploding;
+
+    public boolean hasExploded() {
+        boolean temp = isExploding;
+        setExploding(false);
+        return temp;
     }
 
     /*
