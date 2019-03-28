@@ -49,6 +49,7 @@ public class Ennemi extends Actor implements Pool.Poolable {
     private Rectangle bounds;
     private TextureRegion[] ennemiFramesHit;
     private TextureRegion[] ennemiFramesWalk;
+    private boolean hidden;
 
     public Ennemi(final AssetManager ass) {
 
@@ -108,6 +109,8 @@ public class Ennemi extends Actor implements Pool.Poolable {
     @Override
     public void act(float delta) {
         super.act(delta);
+        if(!isVisible() && !hidden) return;
+        
         if (this.getX() == targetX && this.getY() == targetY) {
             elapsedTimeHit += delta;
             currentFrame = ennemiAnimationHit.getKeyFrame(elapsedTimeHit, true);
@@ -188,6 +191,16 @@ public class Ennemi extends Actor implements Pool.Poolable {
         bounds = new Rectangle((this.getX() + 100), this.getY() + 100, (this.getWidth() + 100), this.getHeight());
         return bounds;
 
+    }
+
+    public void hide(){
+        this.hidden = true;
+        setVisible(false);
+    }
+
+    public void unhide(){
+        this.hidden = false;
+        setVisible(true);
     }
 
     public void kill() {
