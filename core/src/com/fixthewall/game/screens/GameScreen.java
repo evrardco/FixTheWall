@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -66,7 +67,7 @@ public class GameScreen implements Screen {
 
     private LinkedList<PopupLabel> popupLabels;
 
-    public static final transient int DAY_NIGHT_CYCLE_LEN = 600; //10 minutes
+    public static final transient int DAY_NIGHT_CYCLE_LEN = 20; //10 minutes
 
     public GameScreen(final Game game) {
         this.game = game;
@@ -75,7 +76,14 @@ public class GameScreen implements Screen {
 
 
         backgroundDay = new Image(game.ass.get("fondWall.png", Texture.class));
-        backgroundNight = new Image(game.ass.get("fondWall-nuit.png", Texture.class));
+        backgroundNight = new Image(game.ass.get("fondWall-nuit.png", Texture.class)){
+            @Override
+            public void draw(Batch batch, float parentAlpha) {
+                Color color = getColor();
+                super.draw(batch, parentAlpha);
+                batch.setColor(color.r, color.g, color.b, parentAlpha);
+            }
+        };
         backgroundNight.addAction(Actions.alpha(0.0f)); //we begin during the day
         backgroundNight.addAction(Actions.forever(
                 Actions.sequence(
@@ -113,10 +121,9 @@ public class GameScreen implements Screen {
         Group hammerGroup = new Group();
         animGroup = new Group();
         hammer = new Hammer(game.ass);
+        ennemiGroup.addActor(new Ennemi(game.ass));
 
-        Ennemi ennemy = new Ennemi(game.ass);
 
-        ennemiGroup.addActor(ennemy);
 
 
         //Initializing upgrade menu
@@ -211,8 +218,7 @@ public class GameScreen implements Screen {
         stage.addActor(dyn);
         stage.addActor(ennemiGroup);
         stage.addActor(workerGroup);
-        stage.addActor(dollardGroup);
-        ennemiGroup.addActor(ennemy); //ou sinon le premier ennemy n'est pas ajouté au stage
+        stage.addActor(dollardGroup);//ou sinon le premier ennemy n'est pas ajouté au stage
         stage.addActor(pause);
         stage.addActor(animGroup);
         stage.addActor(upsButton);
@@ -262,14 +268,7 @@ public class GameScreen implements Screen {
             }
         }
         GameLogic.getSingleInstance().setUpgrade3(false);
-        if (!dollardGroup.hasChildren()) {
-            for (int i = 0; i < ennemiToRemove; i++) {
-                if (actorsArray.size > 0) {
-                    groupToArray[i].remove();
-                }
-            }
-            GameLogic.getSingleInstance().setEnnemiRemoval(0);
-        }
+
         //
 
 

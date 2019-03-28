@@ -55,8 +55,7 @@ public class EndScreen implements Screen {
                 GameLogic.getSingleInstance().init();
                 UpgradeManager.getSingleInstance().init(game.ass);
                 dispose();
-                GameScreen.gameScreen = new GameScreen(game);
-                game.setScreen(GameScreen.gameScreen);
+                game.setScreen(new GameScreen(game));
             }
         });
         //add button to the scene
