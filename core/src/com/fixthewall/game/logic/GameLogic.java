@@ -37,7 +37,7 @@ public class GameLogic implements Serializable {
     public void init(){
         this.maxHealth = 100;
         health = maxHealth;
-        bricks = 0;
+        bricks = 999999999999999999.0f;
         healingPower = 1.0;
         bricksPower = 1.0;
         score = 0.0;
