@@ -100,7 +100,7 @@ public class GameScreen implements Screen {
         Group ennemiGroup = MexicanLogic.getSingleInstance().getEnnemiGroup();
         Group workerGroup = MexicanLogic.getSingleInstance().getWorkerGroup();
         dollarGroup = new Group();
-
+        dollarGroup.getChildren().ensureCapacity(256);
         Group hammerGroup = new Group();
         hammer = new Hammer(game.ass);
         for(int i=0; i < 2; i++)

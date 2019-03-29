@@ -12,6 +12,7 @@ public class Dollar extends Actor {
 
     private Texture texture;
     private Rectangle bounds;
+    public static int visibleAmount = 0;
 
     private float velY;
 
@@ -19,23 +20,37 @@ public class Dollar extends Actor {
         texture = ass.get("dollard.png");
         setWidth(texture.getWidth() / 3f);
         setHeight(texture.getHeight());
+        reset();
+    }
+
+    public void reset(){
         this.setX(getRandom(900) + 20);
         this.setY(Game.GAME_HEIGHT + getHeight() + getRandom(200));
 
         bounds = new Rectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight());
 
         velY = 0f;
+        setVisible(true);
+        visibleAmount++;
     }
 
 
     @Override
     public void act(float delta) {
         super.act(delta);
+        if(!isVisible()) return;
+
         if (this.getY() > 150) {
             this.velY += Constants.GRAVITY * delta;
             this.setY(this.getY() + this.velY * delta);
-        } else
-            this.remove();
+        } else{
+            this.setVisible(false);
+            this.setX(10000.0f);
+            this.setY(10000.0f);
+            visibleAmount--;
+
+        }
+
     }
 
     @Override
