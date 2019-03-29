@@ -46,13 +46,13 @@ public class Ennemi extends Actor implements Pool.Poolable {
     // Variable for tracking elapsed time for the animation
     private float elapsedTime;
     private float elapsedTimeHit;
-    private Rectangle bounds;
     private TextureRegion[] ennemiFramesHit;
     private TextureRegion[] ennemiFramesWalk;
     private boolean hidden;
 
-    public Ennemi(final AssetManager ass) {
+    private Rectangle bounds;
 
+    public Ennemi(final AssetManager ass) {
         this.ass = ass;
         this.setupTexture();
         this.fromLeft = false;
@@ -60,19 +60,13 @@ public class Ennemi extends Actor implements Pool.Poolable {
         this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                float betterX = event.getStageX();
-                float betterY = event.getStageY();
-                Actor actor = event.getListenerActor();
-                Brixplosion explosion = new Brixplosion(15, ass, betterX, betterY, 0f);
-                explosion.setPosition(betterX, betterY);
-                actor.getParent().addActor(explosion);
-                ((Ennemi) actor).kill();
+                ((Ennemi) event.getListenerActor()).kill();
                 Gdx.app.log("GameScreen", "Ennemy touched");
             }
 
         });
 
-        //
+        this.bounds = new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
 
 
@@ -188,9 +182,7 @@ public class Ennemi extends Actor implements Pool.Poolable {
     }
 
     public Rectangle getBounds() {
-        bounds = new Rectangle((this.getX() + 100), this.getY() + 100, (this.getWidth() + 100), this.getHeight());
-        return bounds;
-
+        return bounds.setPosition(getX(), getY());
     }
 
     public void hide(){

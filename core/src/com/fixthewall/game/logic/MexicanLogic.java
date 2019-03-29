@@ -84,22 +84,30 @@ public class MexicanLogic implements Serializable {
             for(int i = 0; i < UpgradeManager.getSingleInstance().getAllUpgrade()[2].getLevel() * 2 + 3; i++) {
                 dollarGroup.addActor(new Dollar(ass));
             }
+            ennemiToRemove = 0;
         }
-        if (!dollarGroup.hasChildren()) {
-            for (int i = 0; i < ennemiToRemove; i++) {
-                if (ennemiGroup.getChildren().size > 0) {
-                    ennemiGroup.getChildren().get(i).remove();
+        // Pour les performances on regarde juste les collisions si les dollar sont sur la partie
+        // basse de l'écran. Environ 600 pixels comme le mur commence à 300 et les dollars
+        // spawnent avec une variation en y de 200 pixel + 100 pixels pour être sûr
+        if (dollarGroup.hasChildren() && dollarGroup.getChildren().get(0).getY() <= 600) {
+            for (Actor dollar : dollarGroup.getChildren()) {
+                for (Actor actor : ennemiGroup.getChildren()) {
+                    if (actor instanceof Ennemi && ((Dollar) dollar).getBounds().overlaps((((Ennemi) actor).getBounds()))) {
+                        ((Ennemi) actor).kill();
+                        dollar.remove();
+                    }
                 }
             }
-            MexicanLogic.getSingleInstance().setEnnemiToRemove(0);
         }
     }
 
     public void updateDynamite(Dynamite dynamite) {
         if (dynamite.hasExploded()) {
             for (Actor actor : ennemiGroup.getChildren()) {
-                if(actor instanceof Ennemi && dynamite.getBounds().overlaps(((Ennemi) actor).getBounds())) {
-                    ((Ennemi) actor).kill();
+                if(actor instanceof Ennemi) {
+                    if (dynamite.getExplosionRadius().overlaps(((Ennemi) actor).getBounds())) {
+                        ((Ennemi) actor).kill();
+                    }
                 }
             }
         }
