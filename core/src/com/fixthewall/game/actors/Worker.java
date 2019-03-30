@@ -23,7 +23,7 @@ public class Worker extends Actor {
     private float elapsedTime;
 
     public Worker(AssetManager ass) {
-        Texture texture = ass.get("Frames/SheetFrameEnnemiHit.png");
+        Texture texture = ass.get("Frames/SheetFrameWorker.png");
         TextureRegion[][] tmp = TextureRegion.split(texture,
                 texture.getWidth() / FRAME_COLS,
                 texture.getHeight() / FRAME_ROWS);
@@ -41,7 +41,7 @@ public class Worker extends Actor {
         hitFrame = frames[3]; //Frame de frappe
         elapsedTime = 0;
 
-        setPosition((float) Helpers.getRandom((int) (Game.GAME_WIDTH - tmp[0][0].getRegionWidth())), WALL_TOP);
+        setPosition((float) Helpers.getRandom((int) (Game.GAME_WIDTH - tmp[0][0].getRegionWidth())), WALL_TOP - 18f);
     }
 
     @Override
