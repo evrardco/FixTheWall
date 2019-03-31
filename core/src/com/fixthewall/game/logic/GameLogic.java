@@ -13,6 +13,7 @@ public class GameLogic implements Serializable {
     private double bricks;
     private static GameLogic singleInstance = null;
     private double healingPower;
+    private float trumpTime;
     private double bricksPower;
     private double score;
     private boolean isPaused;
@@ -40,6 +41,7 @@ public class GameLogic implements Serializable {
         healingPower = 1.0;
         bricksPower = 1.0;
         score = 0.0;
+        trumpTime = 0.0f;
         timer = new Timer();
         isPaused = false;
 
@@ -84,6 +86,10 @@ public class GameLogic implements Serializable {
         return maxHealth;
     }
 
+    public float getTrumpTime() {
+        return trumpTime;
+    }
+
     public void setMaxHealth(double maxHealth) {
         this.maxHealth = maxHealth;
     }
@@ -98,6 +104,10 @@ public class GameLogic implements Serializable {
 
     public void reduceHealth(double n) {
         setHealth(health - n);
+    }
+
+    public void setTrumpTime(float time) {
+        this.trumpTime = time;
     }
 
     public void setScore(double score) {

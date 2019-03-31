@@ -7,12 +7,15 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Pool;
 import com.fixthewall.game.actors.anim.Brixplosion;
+import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.logic.MexicanLogic;
 
 /*
@@ -38,6 +41,8 @@ public class Ennemi extends Actor implements Pool.Poolable {
     private boolean isMegaEnnemi;
     private boolean fromLeft;
     private boolean fromSide;
+    private boolean isDragged;
+    private Vector2 position;
     //variables d'animation:
     private static final int FRAME_COLS = 4, FRAME_ROWS = 5;
     private static final int FRAME_COLS2 = 4, FRAME_ROWS2 = 2;
@@ -57,7 +62,7 @@ public class Ennemi extends Actor implements Pool.Poolable {
         this.setupTexture();
         this.fromLeft = false;
         this.reset();
-        this.addListener(new ClickListener() {
+        /*this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 ((Ennemi) event.getListenerActor()).kill();
@@ -65,6 +70,39 @@ public class Ennemi extends Actor implements Pool.Poolable {
             }
 
         });
+        */
+        this.isDragged = false;
+        position = null;
+        this.addListener((new DragListener() {
+            public void touchDragged (InputEvent event, float x, float y, int pointer) {
+                moveBy(x - getWidth()/2, y - getHeight()/2);
+                System.out.println("touchdragged" + x + ", " + y);
+
+            }
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                if (GameLogic.getSingleInstance().getTrumpTime()>0) {
+                    isDragged = true;
+                    System.out.println("touchdown" + x + ", " + y);
+                    return true;
+                }
+                return false;
+            }
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+
+                if(MexicanLogic.getSingleInstance().checkTrumpCollision(getBounds()))
+                {
+                    kill();
+                }
+                else {
+                    if (isDragged) {
+                        reset();
+                    }
+                }
+                isDragged = false;
+                System.out.println("touchup" + x + ", " + y);
+            }
+        }));
+
 
         this.bounds = new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
@@ -102,19 +140,21 @@ public class Ennemi extends Actor implements Pool.Poolable {
 
     @Override
     public void act(float delta) {
-        super.act(delta);
-        if(!isVisible() && !hidden) return;
-        
-        if (this.getX() == targetX && this.getY() == targetY) {
-            elapsedTimeHit += delta;
-            currentFrame = ennemiAnimationHit.getKeyFrame(elapsedTimeHit, true);
-            if (currentFrame == hitFrame && (previousFrame == null || previousFrame != currentFrame)) {
-                this.hitTheWall();
+        if (!isDragged) {
+            super.act(delta);
+            if (!isVisible() && !hidden) return;
+
+            if (this.getX() == targetX && this.getY() == targetY) {
+                elapsedTimeHit += delta;
+                currentFrame = ennemiAnimationHit.getKeyFrame(elapsedTimeHit, true);
+                if (currentFrame == hitFrame && (previousFrame == null || previousFrame != currentFrame)) {
+                    this.hitTheWall();
+                }
+                previousFrame = currentFrame;
+            } else {
+                elapsedTime += delta;
+                currentFrame = ennemiAnimation.getKeyFrame(elapsedTime, true);
             }
-            previousFrame = currentFrame;
-        } else {
-            elapsedTime += delta;
-            currentFrame = ennemiAnimation.getKeyFrame(elapsedTime, true);
         }
     }
 
