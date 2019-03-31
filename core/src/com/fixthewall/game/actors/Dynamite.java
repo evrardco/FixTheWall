@@ -1,6 +1,5 @@
 package com.fixthewall.game.actors;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -12,29 +11,27 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.fixthewall.game.actors.anim.Brixplosion;
+import com.fixthewall.game.actors.physics.Constants;
 import com.fixthewall.game.logic.GameLogic;
 
 public class Dynamite extends Actor{
 
     public static boolean onPause;
     private final AssetManager ass;
-    private double degats;
     private boolean visible;
     private Animation<TextureRegion> dynamiteAnimation;
     // Variable for tracking elapsed time for the animation
     private float elapsedTime;
     private float Time;
-    private Texture texture;
     private TextureRegion currentFrame;
     private boolean isFalling;
     private boolean isExploding;
-    private int level;
     private Rectangle bounds;
 
+    private float velY;
+
     public Dynamite (AssetManager ass) {
-        texture = ass.get("Frames/SheetFrameDynamite.png");
-        degats = 25;
-        level = 1;
+        Texture texture = ass.get("Frames/SheetFrameDynamite.png");
         onPause = false;
         isFalling = false;
         isExploding = false;
@@ -58,10 +55,12 @@ public class Dynamite extends Actor{
         }
         dynamiteAnimation = new Animation<TextureRegion>(0.1f, DynamiteFrames);
         //
-        elapsedTime =0f;
-        Time=0f;
-        bounds=new Rectangle((this.getX()+100), this.getY()+100, (this.getWidth()+100), this.getHeight());
+        elapsedTime = 0f;
+        Time = 0f;
 
+        bounds = new Rectangle(this.getX() - 50, this.getY(), this.getWidth() + 100, this.getHeight());
+
+        velY = 0f;
     }
 
 
@@ -74,25 +73,24 @@ public class Dynamite extends Actor{
                 Time = Time + delta;
             }
             if (Time > 10f) {
-                GameLogic.getSingleInstance().reduceHealth(degats);
+                GameLogic.getSingleInstance().reduceHealth(GameLogic.getSingleInstance().getHealth() * 0.5);
                 Time = 0f;
                 visible = false;
                 setTouchable(Touchable.disabled);
             }
-        }
-        else {
-            this.setY(this.getY()-((this.getY()*delta)/2));
-            if (this.getY() < 300)
-            {
+        } else {
+            velY += Constants.GRAVITY * delta;
+            this.setY(this.getY() + velY * delta);
+            if (this.getY() < 300) {
                 this.explode();
             }
         }
 
-        if (getRandom(300) == 10 && !visible)
-        {
+        if (!visible && getRandom(300) == 10) {
             visible = true;
             setTouchable(Touchable.enabled);
             this.setPosition(getRandom(1021), 300+getRandom(461));
+            velY = 0f;
         }
 
         if(visible) {
@@ -109,7 +107,7 @@ public class Dynamite extends Actor{
             batch.draw(currentFrame, this.getX(), this.getY());
     }
 
-    public ClickListener getListener(){
+    public ClickListener getListener() {
         return  new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
@@ -121,20 +119,11 @@ public class Dynamite extends Actor{
 
     }
 
-    public void setLevel(int level){
-        this.level = level;
-        this.degats = 25*Math.log(1+level*level);
+    public Rectangle getExplosionRadius() {
+        return bounds.setPosition(getX() - 50, getY());
     }
 
-    public Rectangle getBounds()
-    {
-        bounds=new Rectangle((this.getX()+100), this.getY()+100, (this.getWidth()+100), this.getHeight());
-        return bounds;
-
-    }
-
-    public void explode()
-    {
+    public void explode() {
         isFalling = false;
         isExploding = true;
         Brixplosion brixplosion = new Brixplosion(15, ass, this.getX(), this.getY(), 500.0f);
@@ -148,9 +137,11 @@ public class Dynamite extends Actor{
     {
         isExploding = false;
     }
-    public boolean getExploding()
-    {
-        return isExploding;
+
+    public boolean hasExploded() {
+        boolean temp = isExploding;
+        setExploding(false);
+        return temp;
     }
 
     /*

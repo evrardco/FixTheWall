@@ -14,9 +14,7 @@ public class GameLogic implements Serializable {
     private static GameLogic singleInstance = null;
     private double healingPower;
     private double bricksPower;
-    private int ennemiToRemove;
     private double score;
-    private boolean isUpgrade3;
     private boolean isPaused;
     private transient Timer timer;
 
@@ -42,8 +40,6 @@ public class GameLogic implements Serializable {
         healingPower = 1.0;
         bricksPower = 1.0;
         score = 0.0;
-        ennemiToRemove = 0;
-        isUpgrade3 = false;
         timer = new Timer();
         isPaused = false;
 
@@ -96,14 +92,6 @@ public class GameLogic implements Serializable {
         return bricks;
     }
 
-    public void setEnnemiRemoval(int ennemiRemoval) {
-        this.ennemiToRemove = ennemiRemoval;
-    }
-
-    public int getEnnemiRemoval() {
-        return ennemiToRemove;
-    }
-
     public void setBricks(double bricks) {
         this.bricks = bricks;
     }
@@ -114,14 +102,6 @@ public class GameLogic implements Serializable {
 
     public void setScore(double score) {
         this.score = score;
-    }
-
-    public void setUpgrade3(boolean val) {
-        this.isUpgrade3 = val;
-    }
-
-    public boolean isUpgrade3() {
-        return isUpgrade3;
     }
 
     public double getScore() {
@@ -155,6 +135,10 @@ public class GameLogic implements Serializable {
     public String getHealingPowerString() {
         return Helpers.formatBigNumbers(getHealingPower());
     }
+
+    /**
+     * Pour sauvegarde
+     */
     public void init(GameLogic instance){
         singleInstance = instance;
 

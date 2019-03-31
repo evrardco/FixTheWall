@@ -1,6 +1,6 @@
 package com.fixthewall.game.upgrades;
 
-import com.fixthewall.game.logic.GameLogic;
+import com.fixthewall.game.logic.MexicanLogic;
 
 public class Upgrade3 extends AbstractUpgrade {
 
@@ -15,8 +15,7 @@ public class Upgrade3 extends AbstractUpgrade {
     @Override
     public void apply() {
         super.apply();
-        GameLogic.getSingleInstance().setEnnemiRemoval(this.getLevel()*3);
-        GameLogic.getSingleInstance().setUpgrade3(true);
+        MexicanLogic.getSingleInstance().setEnnemiToRemove(this.getLevel()*3);
         this.setCost(this.getCost()*2);
         this.setLevel(this.getLevel()+1);
     }

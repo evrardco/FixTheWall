@@ -8,12 +8,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.fixthewall.game.Game;
+import com.badlogic.gdx.utils.Pool;
 import com.fixthewall.game.actors.anim.Brixplosion;
 import com.fixthewall.game.logic.MexicanLogic;
 
@@ -29,8 +27,7 @@ import com.fixthewall.game.logic.MexicanLogic;
 *
 * */
 
-public class Ennemi extends Actor {
-
+public class Ennemi extends Actor implements Pool.Poolable {
     private final AssetManager ass;
     private TextureRegion hitFrame;
     private TextureRegion previousFrame;
@@ -49,94 +46,65 @@ public class Ennemi extends Actor {
     // Variable for tracking elapsed time for the animation
     private float elapsedTime;
     private float elapsedTimeHit;
+    private TextureRegion[] ennemiFramesHit;
+    private TextureRegion[] ennemiFramesWalk;
+    private boolean hidden;
+
     private Rectangle bounds;
 
-    public Ennemi (final AssetManager ass){
-        this.setSide();
-        this.setCoor();
-        this.setTarget();
-        this.setDistance();
-        setTouchable(Touchable.enabled); // click through
+    public Ennemi(final AssetManager ass) {
         this.ass = ass;
-
-        //Set animation move
-        Texture texture = ass.get("Frames/SheetFrameEnnemi.png");
-
-        // set hitbox for click listener
-        this.setWidth(texture.getWidth() / (float) FRAME_COLS);
-        this.setHeight(texture.getHeight() / (float) FRAME_ROWS);
-        this.setBounds(getX(), getY(), getWidth(), getHeight());
-        //
-
-        TextureRegion[][] tmp = TextureRegion.split(texture,
-                        texture.getWidth() / FRAME_COLS,
-                        texture.getHeight() / FRAME_ROWS);
-        TextureRegion[] ennemiFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
-        int index = 0;
-        for (int i = 0; i < FRAME_ROWS; i++) {
-            for (int j = 0; j < FRAME_COLS; j++) {
-                if(fromLeft) {
-                    TextureRegion flipped = tmp[i][j];
-                    flipped.flip(true, false);
-                    ennemiFrames[index++] = flipped;
-                }
-                else{
-                    ennemiFrames[index++] = tmp[i][j];
-                }
-            }
-        }
-        float duration = getRandom(4)+3f;
-        float frame1Speed = (duration/distance)*4f;//Vitesse = (distance/temps)^-1 ici car c'est le temps des frames et non la vitesse.
-        ennemiAnimation = new Animation<TextureRegion>(frame1Speed, ennemiFrames);
-        this.addAction(Actions.moveTo(targetX, targetY, duration));
-        //
-        //Set animation hit
-        Texture texture2 = ass.get("Frames/SheetFrameEnnemiHit.png");
-        TextureRegion[][] tmp2 = TextureRegion.split(texture2,
-                texture2.getWidth() / FRAME_COLS2,
-                texture2.getHeight() / FRAME_ROWS2);
-        TextureRegion[] ennemiFrames2 = new TextureRegion[FRAME_COLS2 * FRAME_ROWS2];
-        int index2 = 0;
-        for (int i = 0; i < FRAME_ROWS2; i++) {
-            for (int j = 0; j < FRAME_COLS2; j++) {
-                if(fromLeft) {
-                    TextureRegion flipped = tmp2[i][j];
-                    flipped.flip(true, false);
-                    ennemiFrames2[index2++] = flipped;
-                }
-                else{
-                    ennemiFrames2[index2++] = tmp2[i][j];
-                }
-            }
-        }
-        hitFrame = ennemiFrames2[3]; //Frame de frappe
-        float randSpeed = getRandom(6)+5f;
-        float frame2Speed = randSpeed/100f;
-        if(isMegaEnnemi){
-            frame2Speed /= 4f;
-        }
-        ennemiAnimationHit = new Animation<TextureRegion>(frame2Speed, ennemiFrames2);
-
-        this.addListener(new ClickListener(){
+        this.setupTexture();
+        this.fromLeft = false;
+        this.reset();
+        this.addListener(new ClickListener() {
             @Override
-            public  void clicked(InputEvent event, float x, float y){
-                float betterX = event.getStageX();
-                float betterY = event.getStageY();
-                Actor actor = event.getListenerActor();
-                Brixplosion explosion = new Brixplosion(15, ass, betterX, betterY, 0f);
-                explosion.setPosition(betterX, betterY);
-                actor.getParent().addActor(explosion);
-                actor.remove();
+            public void clicked(InputEvent event, float x, float y) {
+                ((Ennemi) event.getListenerActor()).kill();
                 Gdx.app.log("GameScreen", "Ennemy touched");
             }
 
         });
+
+        this.bounds = new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
+
+
+    @Override
+    public void reset() {
+
+        //Set animation move
+
+        boolean tmp = fromLeft;
+        this.setSide();
+        if(fromLeft != tmp) flip();
+
+        this.setCoor();
+        this.setTarget();
+        this.setDistance();
+
+        float duration = getRandom(4) + 3f;
+        float frame1Speed = (duration / distance) * 4f;//Vitesse = (distance/temps)^-1 ici car c'est le temps des frames et non la vitesse.
+        float randSpeed = getRandom(6) + 5f;
+        float frame2Speed = randSpeed / 100f;
+
+        this.addAction(Actions.moveTo(targetX, targetY, duration));
         //
+        //Set animation hit
+        if (isMegaEnnemi) {
+            frame2Speed /= 4f;
+        }
+
+        ennemiAnimation.setFrameDuration(frame1Speed);
+        ennemiAnimationHit.setFrameDuration(frame2Speed);
+        setVisible(true);
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
+        if(!isVisible() && !hidden) return;
+        
         if (this.getX() == targetX && this.getY() == targetY) {
             elapsedTimeHit += delta;
             currentFrame = ennemiAnimationHit.getKeyFrame(elapsedTimeHit, true);
@@ -155,37 +123,35 @@ public class Ennemi extends Actor {
         batch.draw(currentFrame, this.getX(), this.getY());
     }
 
-    private void setSide(){
+    private void setSide() {
         int rand = getRandom(2);
-        fromLeft = (rand==0);
+        fromLeft = (rand == 0);
+
         rand = getRandom(2);
-        fromSide = (rand==0);
+        fromSide = (rand == 0);
         rand = getRandom(100);// 1% de chance d'être MEGA !!!
-        isMegaEnnemi = (rand==42);
+        isMegaEnnemi = (rand == 42);
     }
 
     /*
-    * Set le point de spawn de cette ennemi.
-    * */
-    private void setCoor(){
-        if(fromLeft){
-            if(fromSide){// fromLeft && fromSide -> X = -(96+50) et Y = [0; 298]
-                this.setX(-(96f+50f));
-                this.setY((float)getRandom(299));
+     * Set le point de spawn de cette ennemi.
+     * */
+    private void setCoor() {
+        if (fromLeft) {
+            if (fromSide) {// fromLeft && fromSide -> X = -(96+50) et Y = [0; 298]
+                this.setX(-(96f + 50f));
+                this.setY((float) getRandom(299));
+            } else {// fromLeft && !fromSide -> X = [-(96+50); 492] et Y = -(128+50)
+                this.setX(-(96f + 50f) + getRandom(639));
+                this.setY(-(128f + 50f));
             }
-            else{// fromLeft && !fromSide -> X = [-(96+50); 492] et Y = -(128+50)
-                this.setX(-(96f+50f)+getRandom(639));
-                this.setY(-(128f+50f));
-            }
-        }
-        else{
-            if(fromSide){// !fromLeft && fromSide -> X = 1080+50 et Y = [0; 298]
-                this.setX(1080f+50f);
-                this.setY((float)getRandom(299));
-            }
-            else{// !fromLeft && !fromSide -> X = [493; 1080+50] et Y = -(128+50)
-                this.setX(493f+getRandom(638));
-                this.setY(-(128f+50f));
+        } else {
+            if (fromSide) {// !fromLeft && fromSide -> X = 1080+50 et Y = [0; 298]
+                this.setX(1080f + 50f);
+                this.setY((float) getRandom(299));
+            } else {// !fromLeft && !fromSide -> X = [493; 1080+50] et Y = -(128+50)
+                this.setX(493f + getRandom(638));
+                this.setY(-(128f + 50f));
             }
         }
     }
@@ -193,57 +159,117 @@ public class Ennemi extends Actor {
     /*
      * Set le point d'arrivé de cette ennemi.
      * */
-    private void setTarget(){
+    private void setTarget() {
         float x = this.getX();
         int interval;
-        if(fromLeft){
-            if(x < 0f) {
+        if (fromLeft) {
+            if (x < 0f) {
                 interval = 985;
-                targetX =(float)getRandom(interval);
-            }
-            else {
+                targetX = (float) getRandom(interval);
+            } else {
                 interval = 985 - (int) x;
-                targetX = x + (float)getRandom(interval);
+                targetX = x + (float) getRandom(interval);
             }
-        }
-        else{
-            if(x > 985f)
+        } else {
+            if (x > 985f)
                 interval = 985;
             else
-                interval = (int)x;
+                interval = (int) x;
 
-            targetX = (float)getRandom(interval);
+            targetX = (float) getRandom(interval);
         }
-        targetY = 242f+getRandom(getRandom(57));
+        targetY = 242f + getRandom(getRandom(57));
     }
 
-    public Rectangle getBounds()
-    {
-        bounds=new Rectangle((this.getX()+100), this.getY()+100, (this.getWidth()+100), this.getHeight());
-        return bounds;
-
+    public Rectangle getBounds() {
+        return bounds.setPosition(getX(), getY());
     }
 
-    public void kill(){
+    public void hide(){
+        this.hidden = true;
+        setVisible(false);
+    }
+
+    public void unhide(){
+        this.hidden = false;
+        setVisible(true);
+    }
+
+    public void kill() {
         Brixplosion explosion = new Brixplosion(15, ass, getX(), getY(), 0f);
         explosion.setPosition(getX(), getY());
         getParent().addActor(explosion);
-        remove();
+        setVisible(false);
     }
-    private void setDistance(){
+
+    private void setDistance() {
         distance = Math.abs(this.getX() - targetX) + Math.abs(this.getY() - targetY);
     }
 
 
-    private void hitTheWall(){
+    private void hitTheWall() {
         MexicanLogic.getSingleInstance().doDamage();
     }
 
     /*
      * Retourne un entier aléatoire entre 0 et n-1
      */
-    private static int getRandom(int n){
-        return (int)(Math.random()*n);
+    private static int getRandom(int n) {
+        return (int) (Math.random() * n);
     }
 
+    private void setupTexture() {
+        Texture texture = ass.get("Frames/SheetFrameEnnemi.png");
+
+        // set hitbox for click listener
+        this.setWidth(texture.getWidth() / (float) FRAME_COLS);
+        this.setHeight(texture.getHeight() / (float) FRAME_ROWS);
+        this.setBounds(getX(), getY(), getWidth(), getHeight());
+        //
+
+        TextureRegion[][] tmp = TextureRegion.split(texture,
+                texture.getWidth() / FRAME_COLS,
+                texture.getHeight() / FRAME_ROWS);
+
+        ennemiFramesWalk = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+
+        int index = 0;
+        for (int i = 0; i < FRAME_ROWS; i++) {
+            for (int j = 0; j < FRAME_COLS; j++) {
+                ennemiFramesWalk[index++] = tmp[i][j];
+            }
+        }
+
+        Texture texture2 = ass.get("Frames/SheetFrameEnnemiHit.png");
+
+        TextureRegion[][] tmp2 = TextureRegion.split(texture2,
+                texture2.getWidth() / FRAME_COLS2,
+                texture2.getHeight() / FRAME_ROWS2);
+
+        ennemiFramesHit = new TextureRegion[FRAME_COLS2 * FRAME_ROWS2];
+
+        int index2 = 0;
+        for (int i = 0; i < FRAME_ROWS2; i++) {
+            for (int j = 0; j < FRAME_COLS2; j++) {
+                ennemiFramesHit[index2++] = tmp2[i][j];
+            }
+        }
+
+        hitFrame = ennemiFramesHit[3]; //Frame de frappe
+        ennemiAnimation = new Animation<TextureRegion>(1.0f, ennemiFramesWalk);
+        ennemiAnimationHit = new Animation<TextureRegion>(1.0f, ennemiFramesHit);
+    }
+
+    /*
+    @pre: setupTextures has been called once
+    @post: texture have been switched according to dir
+     */
+
+
+    public void flip(){
+        for (int i = 0; i < ennemiFramesHit.length; i++)
+            ennemiFramesHit[i].flip(true, false);
+        for (int i = 0; i < ennemiFramesWalk.length; i++)
+            ennemiFramesWalk[i].flip(true, false);
+    }
 }

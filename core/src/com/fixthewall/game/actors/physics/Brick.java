@@ -72,11 +72,8 @@ public class Brick extends Actor {
         }
         //here we do the fading stuff
         ttl = Math.max(ttl-delta, 0.0f);
-        Gdx.app.log("Brick", "ttl: "+ttl);
         if(ttl <= 0.0f){
             this.alpha -= delta;
-            Gdx.app.log("Brick", "alpha: "+alpha);
-
             if(alpha < 0.0f){
                 this.remove();
             }
