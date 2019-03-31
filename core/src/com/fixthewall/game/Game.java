@@ -110,6 +110,7 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("pioche.png", Texture.class);
         ass.load("anim/brick.png", Texture.class);
         ass.load("dollard.png", Texture.class);
+        ass.load("Sun.png", Texture.class);
 
         // dossier ui
         ass.load("ui/texture_button.png", Texture.class);

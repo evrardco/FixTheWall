@@ -1,11 +1,13 @@
 package com.fixthewall.game.logic;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.fixthewall.game.actors.Dollar;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.pools.EnnemiPool;
 import com.fixthewall.game.upgrades.UpgradeManager;
 
@@ -23,6 +25,7 @@ public class MexicanLogic implements Serializable {
 
     private float elapsedTime;
     private float waveNumber;
+    private Sun trump;
 
     private int ennemiToRemove;
 
@@ -43,6 +46,7 @@ public class MexicanLogic implements Serializable {
         this.heal = heal;
         this.brickPower = brickPower;
         this.mul = mul;
+        this.trump = null;
         ennemiGroup = new Group();
         workerGroup = new Group();
         ennemiToRemove = 0;
@@ -118,6 +122,7 @@ public class MexicanLogic implements Serializable {
         }
     }
 
+
     public void updateWave(float delta, boolean isDay, AssetManager ass) {
         elapsedTime += delta;
         // new wave every 45 seconds if day, every 25 seconds if night
@@ -129,6 +134,20 @@ public class MexicanLogic implements Serializable {
                 ennemiGroup.addActor(pool.obtain());
             }
         }
+    }
+
+    public void updateTrumpHead(Sun trump )
+    {
+        this.trump = trump;
+    }
+
+    public boolean checkTrumpCollision(Rectangle ennemiBounds)
+    {
+        if (trump.getBounds().overlaps(ennemiBounds))
+        {
+            return true;
+        }
+        return false;
     }
 
     /**
