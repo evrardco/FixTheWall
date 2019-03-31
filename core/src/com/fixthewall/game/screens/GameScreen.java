@@ -103,7 +103,8 @@ public class GameScreen implements Screen {
 
         Group hammerGroup = new Group();
         hammer = new Hammer(game.ass);
-        ennemiGroup.addActor(new Ennemi(game.ass));
+        for(int i=0; i < 5; i++)
+            ennemiGroup.addActor(MexicanLogic.getSingleInstance().pool.obtain());
 
 
 

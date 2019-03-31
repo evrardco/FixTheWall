@@ -65,8 +65,7 @@ public class Ennemi extends Actor implements Pool.Poolable {
         /*this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ((Ennemi) event.getListenerActor()).kill();
-                Gdx.app.log("GameScreen", "Ennemy touched");
+                    ((Ennemi) event.getListenerActor()).kill();
             }
 
         });
@@ -236,10 +235,13 @@ public class Ennemi extends Actor implements Pool.Poolable {
     }
 
     public void kill() {
+        if(hidden) return;
         Brixplosion explosion = new Brixplosion(15, ass, getX(), getY(), 0f);
         explosion.setPosition(getX(), getY());
         getParent().addActor(explosion);
         setVisible(false);
+        MexicanLogic.getSingleInstance().pool.free(this);
+
     }
 
     private void setDistance() {

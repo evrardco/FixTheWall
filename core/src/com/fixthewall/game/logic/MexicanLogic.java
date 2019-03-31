@@ -8,6 +8,7 @@ import com.fixthewall.game.actors.Dollar;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.Sun;
+import com.fixthewall.game.actors.pools.EnnemiPool;
 import com.fixthewall.game.upgrades.UpgradeManager;
 
 import java.io.Serializable;
@@ -28,6 +29,8 @@ public class MexicanLogic implements Serializable {
 
     private int ennemiToRemove;
 
+    public EnnemiPool pool;
+
     private static MexicanLogic singleInstance = null;
 
     public static MexicanLogic getSingleInstance() {
@@ -37,7 +40,8 @@ public class MexicanLogic implements Serializable {
 
     private MexicanLogic() {}
 
-    public void init(double damage, double heal, double brickPower, double mul) {
+    public void init(double damage, double heal, double brickPower, double mul, AssetManager ass) {
+        this.waveNumber = 10;
         this.damage = damage;
         this.heal = heal;
         this.brickPower = brickPower;
@@ -46,6 +50,7 @@ public class MexicanLogic implements Serializable {
         ennemiGroup = new Group();
         workerGroup = new Group();
         ennemiToRemove = 0;
+        pool = new EnnemiPool(ass);
     }
 
     public double getDamage() {
@@ -126,8 +131,7 @@ public class MexicanLogic implements Serializable {
             waveNumber++;
             // TODO utiliser les Pools ici
             for (int i = 0; i < 1 + 2 * waveNumber; i++) {
-                Actor ennemy = new Ennemi(ass);
-                ennemiGroup.addActor(ennemy);
+                ennemiGroup.addActor(pool.obtain());
             }
         }
     }
