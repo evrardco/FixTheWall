@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.fixthewall.game.Game;
+import com.fixthewall.game.actors.anim.Brixplosion;
 
 public class Brick extends Actor {
     private float alpha;
@@ -39,6 +40,7 @@ public class Brick extends Actor {
         this.sprite.setPosition(x, y);
         onGround = false;
         this.alpha = 1.0f;
+        Brixplosion.brickCount++;
 
 
     }
@@ -76,6 +78,7 @@ public class Brick extends Actor {
             this.alpha -= delta;
             if(alpha < 0.0f){
                 this.remove();
+                Brixplosion.brickCount--;
             }
         }
     }

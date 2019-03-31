@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.logic.GameLogic;
+import com.fixthewall.game.logic.MexicanLogic;
 import com.fixthewall.game.upgrades.UpgradeManager;
 
 public class EndScreen implements Screen {
@@ -54,6 +55,7 @@ public class EndScreen implements Screen {
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
                 GameLogic.getSingleInstance().init();
                 UpgradeManager.getSingleInstance().init(game.ass);
+                MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);
                 dispose();
                 game.setScreen(new GameScreen(game));
             }

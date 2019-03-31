@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.fixthewall.game.actors.physics.Brick;
 
 public class Brixplosion extends Actor{
+    public static final int MAX_BRICKS_COUNT = 64;
+    public static int brickCount = 0;
     private Group bricks;
     private float alpha;
 
@@ -28,7 +30,7 @@ public class Brixplosion extends Actor{
     public Brixplosion(int count, AssetManager ass, float x, float y, float baseSpeed){
         bricks = new Group();
         alpha = 1f;
-        for(int i=0; i < count; i ++){
+        for(int i=0; i < count && brickCount < MAX_BRICKS_COUNT; i ++){
             float angVel = (float)Math.random()*360f;
             float dir = (float)(30.0f    +Math.random()*150f %150f);
             float ttl = (float)(1.0f +Math.random()*3f % 3f);

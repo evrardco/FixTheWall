@@ -55,7 +55,7 @@ public class Game extends com.badlogic.gdx.Game {
 //        }
         UpgradeManager.getSingleInstance().init(ass);
         GameLogic.getSingleInstance().init();
-        MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0);
+        MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, this.ass);
 
 
 
