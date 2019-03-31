@@ -99,9 +99,12 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("imgPause.png", Texture.class);
         ass.load("imgPauseFond.png", Texture.class);
         ass.load("nuages.png", Texture.class);
+        ass.load("Marteaux/Ghal_Maraz.png", Texture.class);
         ass.load("Marteaux/marteau.png", Texture.class);
+        ass.load("Marteaux/marteau_Brique.png", Texture.class);
         ass.load("Marteaux/marteau_normal.png", Texture.class);
         ass.load("Marteaux/Marteau_thor.png", Texture.class);
+        ass.load("Marteaux/marteau_Trump.png", Texture.class);
         ass.load("Marteaux/marteauDiam.png", Texture.class);
         ass.load("Marteaux/War_hammer.png", Texture.class);
         ass.load("pioche.png", Texture.class);

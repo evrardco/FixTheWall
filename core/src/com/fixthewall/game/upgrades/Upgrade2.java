@@ -6,7 +6,7 @@ public class Upgrade2 extends AbstractUpgrade {
     public Upgrade2(int level, double cost){
         super(level, cost);
         this.setName("Bricks++");
-        this.setDesc("Increases the brics you gain");
+        this.setDesc("Increases the bricks you gain");
 
     }
     @Override
