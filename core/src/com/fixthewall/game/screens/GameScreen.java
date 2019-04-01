@@ -14,10 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.EnnemiEchelle;
@@ -54,7 +57,6 @@ public class GameScreen implements Screen {
     private Dynamite dynamite;
     private Sun trump;
     private Moon moon;
-    //private EnnemiEchelle fUUUUUCKKKKK;
 
     private LinkedList<PopupLabel> popupLabels;
 
@@ -105,7 +107,7 @@ public class GameScreen implements Screen {
         Group ennemiGroup = MexicanLogic.getSingleInstance().getEnnemiGroup();
         Group workerGroup = MexicanLogic.getSingleInstance().getWorkerGroup();
         dollarGroup = new Group();
-
+        dollarGroup.getChildren().ensureCapacity(256);
         Group hammerGroup = new Group();
         hammer = new Hammer(game.ass);
         for(int i=0; i < 2; i++)
@@ -115,7 +117,7 @@ public class GameScreen implements Screen {
 
 
         //Initializing upgrade menu
-        final BigMenuTable menuUpgrade = new BigMenuTable(game.ass, "Upgrades");
+        final BigMenuTable menuUpgrade = new BigMenuTable(game.ass, "Upgrades", true, false);
         menuUpgrade.setVisible(false);
 
         AbstractUpgrade[] upArray = UpgradeManager.getSingleInstance().getAllUpgrade();
@@ -139,12 +141,19 @@ public class GameScreen implements Screen {
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.font = fontUps;
         //Setting up listeners
-        Button upsButton = new TextButton("Upgrades", style);
-        float x = 0.95f * game.viewport.getWorldWidth() - upsButton.getWidth();
-        float y = 0.95f * game.viewport.getWorldHeight() - upsButton.getHeight();
-        upsButton.setPosition(x, y);
 
-        upsButton.addListener(new ChangeListener() {
+        ImageTextButton.ImageTextButtonStyle upgradeButtonStyle = new ImageTextButton.ImageTextButtonStyle();
+        upgradeButtonStyle.up = new TextureRegionDrawable(game.ass.get("ui/texture_button.png", Texture.class));
+        upgradeButtonStyle.down = new TextureRegionDrawable(game.ass.get("ui/texture_button_down.png", Texture.class));
+        upgradeButtonStyle.font = game.ass.get("Germania60.ttf");
+        upgradeButtonStyle.fontColor = Color.BLACK;
+        ImageTextButton upgradeButton = new ImageTextButton("Upgrades", upgradeButtonStyle);
+
+        float x = 0.95f * game.viewport.getWorldWidth() - upgradeButton.getWidth();
+        float y = 0.95f * game.viewport.getWorldHeight() - upgradeButton.getHeight();
+        upgradeButton.setPosition(x, y);
+
+        upgradeButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
                 menuUpgrade.setVisible(!menuUpgrade.isVisible());
@@ -203,13 +212,13 @@ public class GameScreen implements Screen {
         stage.addActor(nuages);
         stage.addActor(wall);
         stage.addActor(dynamite);
+        stage.addActor(trump);
         stage.addActor(ennemiGroup);
         stage.addActor(workerGroup);
         stage.addActor(dollarGroup);
         stage.addActor(pause);
-        stage.addActor(trump);
         stage.addActor(moon);
-        stage.addActor(upsButton);
+        stage.addActor(upgradeButton);
         stage.addActor(bricksLabel);
         stage.addActor(scoreLabel);
         stage.addActor(healthBar);

@@ -2,8 +2,8 @@ package com.fixthewall.game.upgrades;
 
 import com.fixthewall.game.logic.GameLogic;
 
-public class Upgrade4 extends AbstractUpgrade {
-    public Upgrade4(int level, double cost){
+public class UpgradeHP extends AbstractUpgrade {
+    public UpgradeHP(int level, double cost){
         super(level, cost);
         this.setName("HP++");
         this.setDesc("Increases the HP you gain");
@@ -16,5 +16,6 @@ public class Upgrade4 extends AbstractUpgrade {
         GameLogic.getSingleInstance().setHealingPower(GameLogic.getSingleInstance().getHealingPower()+1.0);
         double costUp = this.getCost()/20.0;
         this.setCost(this.getCost()+costUp);
+        UpgradeManager.getSingleInstance().increaseLevelUpgradeHammer();
     }
 }

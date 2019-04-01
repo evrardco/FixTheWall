@@ -1,12 +1,9 @@
 package com.fixthewall.game.logic;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.fixthewall.game.actors.Dollar;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
@@ -14,12 +11,10 @@ import com.fixthewall.game.actors.EnnemiEchelle;
 import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.pools.EnnemiPool;
+import com.fixthewall.game.actors.recyclers.DollarRecycler;
 import com.fixthewall.game.upgrades.UpgradeManager;
 
 import java.io.Serializable;
-
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.rotateBy;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.rotateTo;
 
 public class MexicanLogic implements Serializable {
 
@@ -27,7 +22,6 @@ public class MexicanLogic implements Serializable {
 
     private transient Group ennemiGroup;
     private transient Group workerGroup;
-   // private transient Group ennemiEchelleGroup;
 
     private double damage;
     private double heal;
@@ -37,6 +31,7 @@ public class MexicanLogic implements Serializable {
     private float elapsedTime;
     private float waveNumber;
     private Sun trump;
+    private DollarRecycler dollarRecycler;
     private double dayTime;
 
     private int ennemiToRemove;
@@ -62,10 +57,10 @@ public class MexicanLogic implements Serializable {
         this.trump = null;
         ennemiGroup = new Group();
         workerGroup = new Group();
-        //ennemiEchelleGroup = new Group();
         ennemiToRemove = 0;
         this.ass = ass;
         pool = new EnnemiPool(ass);
+        dollarRecycler = new DollarRecycler(128);
     }
 
     public double getDamage() {
@@ -106,19 +101,28 @@ public class MexicanLogic implements Serializable {
     public void updateCashRain(Group dollarGroup, AssetManager ass) {
         if (ennemiToRemove > 0) {
             for(int i = 0; i < UpgradeManager.getSingleInstance().getAllUpgrade()[2].getLevel() * 2 + 3; i++) {
-                dollarGroup.addActor(new Dollar(ass));
+                Dollar dol = dollarRecycler.getOne(ass);
+                if(!dollarRecycler.isRecycling())
+                    dollarGroup.addActor(dol);
+                dol.reset();
             }
             ennemiToRemove = 0;
         }
         // Pour les performances on regarde juste les collisions si les dollar sont sur la partie
         // basse de l'écran. Environ 600 pixels comme le mur commence à 300 et les dollars
         // spawnent avec une variation en y de 200 pixel + 100 pixels pour être sûr
+        if(Dollar.visibleAmount == 0) return;
+
         if (dollarGroup.hasChildren() && dollarGroup.getChildren().get(0).getY() <= 600) {
             for (Actor dollar : dollarGroup.getChildren()) {
+                if(!dollar.isVisible()) continue;
                 for (Actor actor : ennemiGroup.getChildren()) {
-                    if (actor instanceof Ennemi && ((Dollar) dollar).getBounds().overlaps((((Ennemi) actor).getBounds()))) {
-                        ((Ennemi) actor).kill();
-                        dollar.remove();
+                    if (actor instanceof Ennemi
+                            && actor.isVisible()
+                            && ((Dollar) dollar).getBounds().overlaps((((Ennemi) actor).getBounds()))) {
+
+                            ((Ennemi) actor).kill();
+                            dollar.setVisible(false);
                     }
                 }
             }
@@ -129,7 +133,7 @@ public class MexicanLogic implements Serializable {
         if (dynamite.hasExploded()) {
             for (Actor actor : ennemiGroup.getChildren()) {
                 if(actor instanceof Ennemi) {
-                    if (dynamite.getExplosionRadius().overlaps(((Ennemi) actor).getBounds())) {
+                    if (actor.isVisible() && dynamite.getExplosionRadius().overlaps(((Ennemi) actor).getBounds())) {
                         ((Ennemi) actor).kill();
                     }
                 }
@@ -148,7 +152,6 @@ public class MexicanLogic implements Serializable {
             for (int i = 0; i < 1 + 2 * waveNumber; i++) {
                 ennemiGroup.addActor(pool.obtain());
             }
-           // ennemiEchelleGroup.addActor(new EnnemiEchelle(ass));
         }
     }
 
@@ -202,8 +205,6 @@ public class MexicanLogic implements Serializable {
     public Group getEnnemiGroup() {
         return ennemiGroup;
     }
-
-   // public Group getEnnemiEchelleGroup() { return ennemiEchelleGroup;}
 
     public double getHeal() {
         return heal;

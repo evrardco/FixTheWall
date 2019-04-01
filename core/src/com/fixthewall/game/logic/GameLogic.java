@@ -15,6 +15,7 @@ public class GameLogic implements Serializable {
     private double healingPower;
     private float trumpTime;
     private double bricksPower;
+    private int hammerLevel;
     private double score;
     private boolean isPaused;
     private transient Timer timer;
@@ -37,7 +38,8 @@ public class GameLogic implements Serializable {
     public void init(){
         this.maxHealth = 100;
         health = maxHealth;
-        bricks = 999999999999999999.0f;
+        bricks = 999999999999999999.0;
+        hammerLevel = 0;
         healingPower = 1.0;
         bricksPower = 1.0;
         score = 0.0;
@@ -144,6 +146,22 @@ public class GameLogic implements Serializable {
 
     public String getHealingPowerString() {
         return Helpers.formatBigNumbers(getHealingPower());
+    }
+
+    public void setHammerLevel(int lvl){
+        if(0<=lvl && lvl<=7){
+            this.hammerLevel=lvl;
+        }
+    }
+
+    public int getHammerLevel(){
+        return hammerLevel;
+    }
+
+    public void increaseHammerLevel(){
+        if(0<=hammerLevel && hammerLevel<=6){
+            hammerLevel++;
+        }
     }
 
     /**
