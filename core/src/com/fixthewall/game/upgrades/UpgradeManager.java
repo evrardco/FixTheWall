@@ -16,10 +16,10 @@ public class UpgradeManager implements Serializable {
     }
 
     public void init(AssetManager ass) {
-        allUpgrade[0] = new Upgrade1(0, 10);
-        allUpgrade[1] = new Upgrade2(0, 100);
-        allUpgrade[2] = new Upgrade3(0, 50);
-        allUpgrade[3] = new Upgrade4(0, 2000);
+        allUpgrade[0] = new Upgrade1(0, 10);//Life++
+        allUpgrade[1] = new Upgrade2(0, 100);//Bricks++
+        allUpgrade[3] = new Upgrade4(0, 2000);//HP++
+        allUpgrade[2] = new Upgrade3(0, 50);//CashRain
         allUpgrade[4] = new WorkerUpgrade(0, 10, ass);
         allUpgrade[5] = new WorkerLevelUpgrade(0, 10);
         allUpgrade[6] = new TrumpUpgrade(0, 10);
