@@ -2,17 +2,20 @@ package com.fixthewall.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -96,10 +99,22 @@ public class StartScreen implements Screen {
         });
         // End settings menu
 
+        // Game Title
+        Label.LabelStyle titleStyle = new Label.LabelStyle(game.ass.get("Germania120.ttf", BitmapFont.class), Color.WHITE);
+        Label title = new Label("Fix the Wall!", titleStyle);
+        Container<Label> containerTitle = new Container<Label>(title);
+        containerTitle.setPosition(stage.getWidth() / 2f, stage.getHeight() * 0.75f - title.getHeight() * 0.75f);
+        containerTitle.setTransform(true);
+        containerTitle.addAction(Actions.forever(Actions.sequence(
+                Actions.scaleTo(1.1f, 1.1f, 0.4f),
+                Actions.scaleTo(1, 1, 0.4f)
+        )));
+
         stage.addActor(imgFond);
         stage.addActor(nuages);
         Wall wall = new Wall(game.ass);
         stage.addActor(wall);
+        stage.addActor(containerTitle);
         //add button to the scene
         stage.addActor(playButton);
         stage.addActor(settingsTable);
