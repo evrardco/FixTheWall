@@ -2,9 +2,9 @@ package com.fixthewall.game.upgrades;
 
 import com.fixthewall.game.logic.MexicanLogic;
 
-public class Upgrade3 extends AbstractUpgrade {
+public class UpgradeCashRain extends AbstractUpgrade {
 
-    public Upgrade3 (int level, double cost)
+    public UpgradeCashRain(int level, double cost)
     {
         super(level, cost);
         this.setName("Cashrain");

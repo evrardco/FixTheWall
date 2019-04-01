@@ -1,25 +1,28 @@
 package com.fixthewall.game.upgrades;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.fixthewall.game.logic.GameLogic;
 
 import java.io.Serializable;
 
 public class UpgradeManager implements Serializable {
 
-   private AbstractUpgrade [] allUpgrade = new AbstractUpgrade[7];
-   private static UpgradeManager singleInstance = null;
+    private int levelUpgradeHammer;
 
-   private UpgradeManager() {}
+    private AbstractUpgrade [] allUpgrade = new AbstractUpgrade[7];
+    private static UpgradeManager singleInstance = null;
+
+    private UpgradeManager() {}
 
     public AbstractUpgrade[] getAllUpgrade() {
         return allUpgrade;
     }
 
     public void init(AssetManager ass) {
-        allUpgrade[0] = new Upgrade1(0, 10);//Life++
-        allUpgrade[1] = new Upgrade2(0, 100);//Bricks++
-        allUpgrade[3] = new Upgrade4(0, 2000);//HP++
-        allUpgrade[2] = new Upgrade3(0, 50);//CashRain
+        allUpgrade[0] = new UpgradeLife(0, 10);//Life++
+        allUpgrade[1] = new UpgradeBricks(0, 100);//Bricks++
+        allUpgrade[2] = new UpgradeHP(0, 2000);//HP++
+        allUpgrade[3] = new UpgradeCashRain(0, 50);//CashRain
         allUpgrade[4] = new WorkerUpgrade(0, 10, ass);
         allUpgrade[5] = new WorkerLevelUpgrade(0, 10);
         allUpgrade[6] = new TrumpUpgrade(0, 10);
@@ -65,6 +68,13 @@ public class UpgradeManager implements Serializable {
         return totalCost;
 
 
+    }
+
+    public void increaseLevelUpgradeHammer(){
+        levelUpgradeHammer++;
+        if(levelUpgradeHammer<=70){
+            GameLogic.getSingleInstance().setHammerLevel(levelUpgradeHammer/10);
+        }
     }
 
     public static UpgradeManager getSingleInstance(){

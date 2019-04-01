@@ -3,8 +3,8 @@ package com.fixthewall.game.upgrades;
 import com.fixthewall.game.logic.GameLogic;
 import com.badlogic.gdx.Gdx;
 
-public class Upgrade1 extends AbstractUpgrade {
-    public Upgrade1(int level, double cost) {
+public class UpgradeLife extends AbstractUpgrade {
+    public UpgradeLife(int level, double cost) {
         super(level, cost);
         this.setName("Life++");
         this.setDesc("Increase your wall's life !");
@@ -16,7 +16,7 @@ public class Upgrade1 extends AbstractUpgrade {
         GameLogic instance = GameLogic.getSingleInstance();
         double increased = instance.getMaxHealth();
         instance.setMaxHealth(instance.getMaxHealth() + increased);
-        Gdx.app.log("Upgrade 1","max: " + instance.getMaxHealth());
+        Gdx.app.log("Upgrade Life++","max: " + instance.getMaxHealth());
         instance.setHealth(instance.getHealth() + increased);
 
     }

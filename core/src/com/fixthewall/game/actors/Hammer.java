@@ -10,19 +10,21 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.fixthewall.game.logic.GameLogic;
 
 public class Hammer extends Actor {
 
     private final float STARTING_ANGLE = 20; // sprite rotation at start of the animation
     private final float ANGLE_TO_ROTATE = 45; // angle to be gradually added until the end of the animation
 
-    private TextureRegion texture;
+    private TextureRegion[] marteaux = new TextureRegion[8];
     private SequenceAction sequence;
+    private int level;
 
     public Hammer(AssetManager ass) {
-        texture = new TextureRegion(ass.get("Marteaux/marteau.png", Texture.class));
-        setBounds(getX(),getY(),texture.getRegionWidth(),texture.getRegionHeight());
-        setOrigin(texture.getRegionWidth() / 2f, texture.getRegionHeight() / 4f);
+        initHammers(ass);
+        setBounds(getX(),getY(),200f,200f);
+        setOrigin(200f / 2f, 200 / 4f);
         setRotation(STARTING_ANGLE);
         setTouchable(Touchable.disabled); // click through
         // make the hammer invisible by default
@@ -40,7 +42,8 @@ public class Hammer extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, getColor().a * parentAlpha);
-        batch.draw(this.texture, getX(), getY(), getOriginX(), getOriginY(), getWidth(),
+        int level = GameLogic.getSingleInstance().getHammerLevel();
+        batch.draw(marteaux[level], getX(), getY(), getOriginX(), getOriginY(), getWidth(),
                 getHeight(), getScaleX(), getScaleY(), getRotation());
         batch.setColor(color.r, color.g, color.b, parentAlpha);
     }
@@ -52,6 +55,17 @@ public class Hammer extends Actor {
         removeAction(sequence); // enlève l'action pour la reset (si on fait juste restart ça suffit pas)
         sequence.restart();
         addAction(sequence);
+    }
+
+    private void initHammers(AssetManager ass){
+        marteaux[0] = new TextureRegion(ass.get("Marteaux/marteau_normal.png", Texture.class));
+        marteaux[1] = new TextureRegion(ass.get("Marteaux/marteau.png", Texture.class));
+        marteaux[2] = new TextureRegion(ass.get("Marteaux/marteau_Brique.png", Texture.class));
+        marteaux[3] = new TextureRegion(ass.get("Marteaux/War_hammer.png", Texture.class));
+        marteaux[4] = new TextureRegion(ass.get("Marteaux/Marteau_thor.png", Texture.class));
+        marteaux[5] = new TextureRegion(ass.get("Marteaux/marteauDiam.png", Texture.class));
+        marteaux[6] = new TextureRegion(ass.get("Marteaux/Ghal_Maraz.png", Texture.class));
+        marteaux[7] = new TextureRegion(ass.get("Marteaux/marteau_Trump.png", Texture.class));
     }
 
 }
