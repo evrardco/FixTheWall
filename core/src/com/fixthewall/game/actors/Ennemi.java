@@ -57,6 +57,7 @@ public class Ennemi extends Actor implements Pool.Poolable {
 
     private Rectangle bounds;
 
+
     public Ennemi(final AssetManager ass) {
         this.ass = ass;
         this.setupTexture();

@@ -20,6 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.actors.EnnemiEchelle;
+import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.ui.BigMenuTable;
 import com.fixthewall.game.actors.ui.HealthBar;
@@ -51,6 +53,8 @@ public class GameScreen implements Screen {
     private Image backgroundNight;
     private Dynamite dynamite;
     private Sun trump;
+    private Moon moon;
+    //private EnnemiEchelle fUUUUUCKKKKK;
 
     private LinkedList<PopupLabel> popupLabels;
 
@@ -83,6 +87,7 @@ public class GameScreen implements Screen {
         dynamite = new Dynamite(game.ass);
         hammer = new Hammer(game.ass);
         trump = new Sun(game.ass);
+        moon = new Moon(game.ass);
         pause = new Image(game.ass.get("imgPause.png", Texture.class));
         pause.setPosition(30, 1810);
         pauseFond = new Image(game.ass.get("imgPauseFond.png", Texture.class));
@@ -203,6 +208,7 @@ public class GameScreen implements Screen {
         stage.addActor(dollarGroup);
         stage.addActor(pause);
         stage.addActor(trump);
+        stage.addActor(moon);
         stage.addActor(upsButton);
         stage.addActor(bricksLabel);
         stage.addActor(scoreLabel);
@@ -234,7 +240,7 @@ public class GameScreen implements Screen {
         MexicanLogic.getSingleInstance().updateCashRain(dollarGroup, game.ass);
 
         // TRUMP HEAD
-        MexicanLogic.getSingleInstance().updateTrumpHead(trump);
+        MexicanLogic.getSingleInstance().updateTrumpHead(trump, moon, delta, DAY_NIGHT_CYCLE_LEN );
 
         // ENNEMI WAVES
         MexicanLogic.getSingleInstance().updateWave(delta, (backgroundNight.getColor().a <= 0.5f), game.ass);

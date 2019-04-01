@@ -1,22 +1,33 @@
 package com.fixthewall.game.logic;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.fixthewall.game.actors.Dollar;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.actors.EnnemiEchelle;
+import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.pools.EnnemiPool;
 import com.fixthewall.game.upgrades.UpgradeManager;
 
 import java.io.Serializable;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.rotateBy;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.rotateTo;
+
 public class MexicanLogic implements Serializable {
+
+    private AssetManager ass;
 
     private transient Group ennemiGroup;
     private transient Group workerGroup;
+   // private transient Group ennemiEchelleGroup;
 
     private double damage;
     private double heal;
@@ -26,6 +37,7 @@ public class MexicanLogic implements Serializable {
     private float elapsedTime;
     private float waveNumber;
     private Sun trump;
+    private double dayTime;
 
     private int ennemiToRemove;
 
@@ -46,10 +58,13 @@ public class MexicanLogic implements Serializable {
         this.heal = heal;
         this.brickPower = brickPower;
         this.mul = mul;
+        dayTime = 5; //TODO : changer cette valeur en la durée de la nuit/4
         this.trump = null;
         ennemiGroup = new Group();
         workerGroup = new Group();
+        //ennemiEchelleGroup = new Group();
         ennemiToRemove = 0;
+        this.ass = ass;
         pool = new EnnemiPool(ass);
     }
 
@@ -133,12 +148,35 @@ public class MexicanLogic implements Serializable {
             for (int i = 0; i < 1 + 2 * waveNumber; i++) {
                 ennemiGroup.addActor(pool.obtain());
             }
+           // ennemiEchelleGroup.addActor(new EnnemiEchelle(ass));
         }
     }
 
-    public void updateTrumpHead(Sun trump )
-    {
-        this.trump = trump;
+    public void updateTrumpHead(Sun trump, Moon moon, float delta, float duration) {
+
+        dayTime = dayTime + delta;
+        if (dayTime > duration)
+        {
+            dayTime = 0f;
+        }
+        if (dayTime < duration/2 ) {
+            trump.setVisible(true);
+            moon.setVisible(false);
+            this.trump = trump;
+            float x = (float) (700 * Math.cos(dayTime/duration * Math.PI * 2) + 540 - (moon.getWidth() / 2));
+            float y = (float) (700 * Math.sin(dayTime/duration * Math.PI * 2) + 960);  //Playing with alpha is a bad idea
+            trump.setX(x);
+            trump.setY(y);
+        }
+        else {
+            trump.setVisible(false);
+            moon.setVisible(true);
+            this.trump = trump;
+            float x = (float) (700 * Math.cos(-dayTime/duration * Math.PI * 2) + 540 - (moon.getWidth() / 2));
+            float y = (float) (700 * Math.sin(-dayTime/duration * Math.PI * 2) + 960);
+            moon.setX(x);
+            moon.setY(y);
+        }
     }
 
     public boolean checkTrumpCollision(Rectangle ennemiBounds)
@@ -164,6 +202,8 @@ public class MexicanLogic implements Serializable {
     public Group getEnnemiGroup() {
         return ennemiGroup;
     }
+
+   // public Group getEnnemiEchelleGroup() { return ennemiEchelleGroup;}
 
     public double getHeal() {
         return heal;
