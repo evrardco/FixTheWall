@@ -41,7 +41,7 @@ public class MexicanLogic implements Serializable {
     private MexicanLogic() {}
 
     public void init(double damage, double heal, double brickPower, double mul, AssetManager ass) {
-        this.waveNumber = 10;
+        this.waveNumber = 0;
         this.damage = damage;
         this.heal = heal;
         this.brickPower = brickPower;

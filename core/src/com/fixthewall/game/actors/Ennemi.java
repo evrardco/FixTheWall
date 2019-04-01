@@ -61,6 +61,7 @@ public class Ennemi extends Actor implements Pool.Poolable {
         this.ass = ass;
         this.setupTexture();
         this.fromLeft = false;
+        position = new Vector2();
         this.reset();
         /*this.addListener(new ClickListener() {
             @Override
@@ -71,7 +72,6 @@ public class Ennemi extends Actor implements Pool.Poolable {
         });
         */
         this.isDragged = false;
-        position = null;
         this.addListener((new DragListener() {
             public void touchDragged (InputEvent event, float x, float y, int pointer) {
                 moveBy(x - getWidth()/2, y - getHeight()/2);
@@ -81,6 +81,8 @@ public class Ennemi extends Actor implements Pool.Poolable {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 if (GameLogic.getSingleInstance().getTrumpTime()>0) {
                     isDragged = true;
+                    position.x = getX();
+                    position.y = getY();
                     System.out.println("touchdown" + x + ", " + y);
                     return true;
                 }
@@ -94,7 +96,7 @@ public class Ennemi extends Actor implements Pool.Poolable {
                 }
                 else {
                     if (isDragged) {
-                        reset();
+                        setPosition(position.x, position.y);
                     }
                 }
                 isDragged = false;
