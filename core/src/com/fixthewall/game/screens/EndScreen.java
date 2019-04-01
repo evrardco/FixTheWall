@@ -7,14 +7,22 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.fixthewall.game.actors.Nuages;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
+import com.fixthewall.game.actors.ui.BigMenuTable;
+import com.fixthewall.game.actors.ui.DoubleLabel;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.logic.MexicanLogic;
 import com.fixthewall.game.upgrades.UpgradeManager;
@@ -35,24 +43,26 @@ public class EndScreen implements Screen {
         Wall wall = new Wall(game.ass);
         stage.addActor(wall);
 
+        Nuages nuages = new Nuages(game.ass);
+        stage.addActor(nuages);
+
         //Import font
+        BitmapFont font = game.ass.get("Germania60.ttf");
 
-        BitmapFont font = game.ass.get("Germania60.ttf"); // font size 12 pixels
-        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = font;
+        BigMenuTable finalMenu = new BigMenuTable(game.ass, "You lost!");
+        finalMenu.addEntry(new DoubleLabel(font, "High Score: ", "TODO"));
+        finalMenu.addEntry(new DoubleLabel(font, "Score: ", GameLogic.getSingleInstance().getScoreString()));
 
-        //setup Button
-        Button playButton = new TextButton("Restart", style);
-        float x = game.viewport.getWorldWidth() / 2f;
-        float y = game.viewport.getWorldHeight() / 2f;
-        x = x - playButton.getWidth() / 2;
-        y = y - playButton.getHeight() / 2;
+        ImageTextButton.ImageTextButtonStyle upgradeButtonStyle = new ImageTextButton.ImageTextButtonStyle();
+        upgradeButtonStyle.up = new TextureRegionDrawable(game.ass.get("ui/texture_button.png", Texture.class));
+        upgradeButtonStyle.down = new TextureRegionDrawable(game.ass.get("ui/texture_button_down.png", Texture.class));
+        upgradeButtonStyle.font = font;
+        upgradeButtonStyle.fontColor = Color.BLACK;
+        ImageTextButton restartButton = new ImageTextButton("Restart", upgradeButtonStyle);
 
-        playButton.setPosition(x, y);
-
-        playButton.addListener(new ChangeListener() {
+        restartButton.addListener(new ClickListener() {
             @Override
-            public void changed (ChangeListener.ChangeEvent event, Actor actor) {
+            public void clicked(InputEvent event, float x, float y) {
                 GameLogic.getSingleInstance().init();
                 UpgradeManager.getSingleInstance().init(game.ass);
                 MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);
@@ -60,12 +70,10 @@ public class EndScreen implements Screen {
                 game.setScreen(new GameScreen(game));
             }
         });
-        //add button to the scene
-        stage.addActor(playButton);
 
-        Label trumpLabel = new Label("You Lost!", new Label.LabelStyle(font, Color.BLACK));
-        trumpLabel.setPosition(game.viewport.getWorldWidth() / 3f, game.viewport.getWorldHeight() * 0.9f);
-        stage.addActor(trumpLabel);
+        finalMenu.addEntry(restartButton);
+
+        stage.addActor(finalMenu);
 
         Gdx.input.setInputProcessor(stage);
     }

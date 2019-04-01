@@ -113,7 +113,7 @@ public class GameScreen implements Screen {
 
 
         //Initializing upgrade menu
-        final BigMenuTable menuUpgrade = new BigMenuTable(game.ass, "Upgrades");
+        final BigMenuTable menuUpgrade = new BigMenuTable(game.ass, "Upgrades", true, false);
         menuUpgrade.setVisible(false);
 
         AbstractUpgrade[] upArray = UpgradeManager.getSingleInstance().getAllUpgrade();
@@ -142,6 +142,7 @@ public class GameScreen implements Screen {
         upgradeButtonStyle.up = new TextureRegionDrawable(game.ass.get("ui/texture_button.png", Texture.class));
         upgradeButtonStyle.down = new TextureRegionDrawable(game.ass.get("ui/texture_button_down.png", Texture.class));
         upgradeButtonStyle.font = game.ass.get("Germania60.ttf");
+        upgradeButtonStyle.fontColor = Color.BLACK;
         ImageTextButton upgradeButton = new ImageTextButton("Upgrades", upgradeButtonStyle);
 
         float x = 0.95f * game.viewport.getWorldWidth() - upgradeButton.getWidth();
@@ -207,11 +208,11 @@ public class GameScreen implements Screen {
         stage.addActor(nuages);
         stage.addActor(wall);
         stage.addActor(dynamite);
+        stage.addActor(trump);
         stage.addActor(ennemiGroup);
         stage.addActor(workerGroup);
         stage.addActor(dollarGroup);
         stage.addActor(pause);
-        stage.addActor(trump);
         stage.addActor(upgradeButton);
         stage.addActor(bricksLabel);
         stage.addActor(scoreLabel);
