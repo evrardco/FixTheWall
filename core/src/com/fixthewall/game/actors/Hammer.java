@@ -19,12 +19,11 @@ public class Hammer extends Actor {
 
     private TextureRegion[] marteaux = new TextureRegion[8];
     private SequenceAction sequence;
-    private int level;
 
     public Hammer(AssetManager ass) {
         initHammers(ass);
-        setBounds(getX(),getY(),200f,200f);
-        setOrigin(200f / 2f, 200 / 4f);
+        setBounds(getX(), getY(), marteaux[0].getRegionWidth(), marteaux[0].getRegionHeight());
+        setOrigin(getWidth() / 2f, getHeight() / 4f);
         setRotation(STARTING_ANGLE);
         setTouchable(Touchable.disabled); // click through
         // make the hammer invisible by default
@@ -57,15 +56,17 @@ public class Hammer extends Actor {
         addAction(sequence);
     }
 
-    private void initHammers(AssetManager ass){
-        marteaux[0] = new TextureRegion(ass.get("Marteaux/marteau_normal.png", Texture.class));
-        marteaux[1] = new TextureRegion(ass.get("Marteaux/marteau.png", Texture.class));
-        marteaux[2] = new TextureRegion(ass.get("Marteaux/marteau_Brique.png", Texture.class));
-        marteaux[3] = new TextureRegion(ass.get("Marteaux/War_hammer.png", Texture.class));
-        marteaux[4] = new TextureRegion(ass.get("Marteaux/Marteau_thor.png", Texture.class));
-        marteaux[5] = new TextureRegion(ass.get("Marteaux/marteauDiam.png", Texture.class));
-        marteaux[6] = new TextureRegion(ass.get("Marteaux/Ghal_Maraz.png", Texture.class));
-        marteaux[7] = new TextureRegion(ass.get("Marteaux/marteau_Trump.png", Texture.class));
+    private void initHammers(AssetManager ass) {
+        marteaux = new TextureRegion[] {
+                new TextureRegion(ass.get("Marteaux/marteau_normal.png", Texture.class)),
+                new TextureRegion(ass.get("Marteaux/marteau.png", Texture.class)),
+                new TextureRegion(ass.get("Marteaux/marteau_Brique.png", Texture.class)),
+                new TextureRegion(ass.get("Marteaux/War_hammer.png", Texture.class)),
+                new TextureRegion(ass.get("Marteaux/Marteau_thor.png", Texture.class)),
+                new TextureRegion(ass.get("Marteaux/marteauDiam.png", Texture.class)),
+                new TextureRegion(ass.get("Marteaux/Ghal_Maraz.png", Texture.class)),
+                new TextureRegion(ass.get("Marteaux/marteau_Trump.png", Texture.class))
+        };
     }
 
 }

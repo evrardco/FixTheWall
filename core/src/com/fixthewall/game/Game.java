@@ -126,6 +126,8 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("ui/texture_upgrade_pannel.png", Texture.class);
         ass.load("ui/texture_progressbar_background.png", Texture.class);
         ass.load("ui/texture_progressbar.png", Texture.class);
+        ass.load("ui/texture_button_play.png", Texture.class);
+        ass.load("ui/texture_button_play_down.png", Texture.class);
 
         // dossier wallStates
         ass.load("wallStates/theWall.png", Texture.class);
