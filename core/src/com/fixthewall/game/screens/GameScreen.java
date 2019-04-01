@@ -57,7 +57,7 @@ public class GameScreen implements Screen {
 
     private LinkedList<PopupLabel> popupLabels;
 
-    public static final transient int DAY_NIGHT_CYCLE_LEN = 20; //10 minutes
+    public static final transient int DAY_NIGHT_CYCLE_LEN = 300; //10 minutes
 
     public GameScreen(final Game game) {
         this.game = game;
@@ -73,11 +73,11 @@ public class GameScreen implements Screen {
                 batch.setColor(color.r, color.g, color.b, parentAlpha);
             }
         };
-        backgroundNight.addAction(Actions.alpha(0.0f)); //we begin during the day
+        backgroundNight.addAction(Actions.alpha(0.5f)); //we begin during the day
         backgroundNight.addAction(Actions.forever(
                 Actions.sequence(
-                        Actions.alpha(1.0f, DAY_NIGHT_CYCLE_LEN / 2f),
-                        Actions.alpha(0.0f, DAY_NIGHT_CYCLE_LEN / 2f)
+                        Actions.alpha(0.0f, DAY_NIGHT_CYCLE_LEN / 2f),
+                        Actions.alpha(1.0f, DAY_NIGHT_CYCLE_LEN / 2f)
                 )
         ));
 
@@ -85,7 +85,13 @@ public class GameScreen implements Screen {
         Wall wall = new Wall(game.ass);
         dynamite = new Dynamite(game.ass);
         hammer = new Hammer(game.ass);
-        trump = new Sun(game.ass);
+        trump = new Sun(
+                game.ass,
+                0,
+                game.viewport.getWorldHeight()/2,
+                game.viewport.getWorldWidth()*0.6f,
+                backgroundNight
+        );
         pause = new Image(game.ass.get("imgPause.png", Texture.class));
         pause.setPosition(30, 1810);
         pauseFond = new Image(game.ass.get("imgPauseFond.png", Texture.class));
@@ -205,10 +211,11 @@ public class GameScreen implements Screen {
         //Add all the things to runescape (add a deadman mode)
         stage.addActor(backgroundDay);
         stage.addActor(backgroundNight);
+        stage.addActor(trump);
         stage.addActor(nuages);
         stage.addActor(wall);
         stage.addActor(dynamite);
-        stage.addActor(trump);
+
         stage.addActor(ennemiGroup);
         stage.addActor(workerGroup);
         stage.addActor(dollarGroup);

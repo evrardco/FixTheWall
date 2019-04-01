@@ -41,6 +41,7 @@ public class Brick extends Actor {
         onGround = false;
         this.alpha = 1.0f;
         Brixplosion.brickCount++;
+        this.setScale(0.5f);
 
 
     }
