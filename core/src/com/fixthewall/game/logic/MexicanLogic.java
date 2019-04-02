@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.fixthewall.game.actors.Dollar;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
-import com.fixthewall.game.actors.EnnemiEchelle;
 import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.pools.EnnemiPool;
