@@ -22,16 +22,24 @@ public class Sun extends Actor {
 
     private float alpha;
     private TextureRegion texture;
+    private TextureRegion textureTrump;
+    private TextureRegion textureSun;
     private Rectangle bounds;
+    private Boolean isTrump;
     private Vector2 center;
     private float radius;
     private Image background;
     private float prevBackgroundAlpha;
+
     public Sun (AssetManager ass, float xMidLeft, float yLMidLeft, float radius, Image background){
+
+
         //background's    0.5<alpha<1 -> night time
         //set position
-        setCoor();
-        texture = new TextureRegion(ass.get("Sun.png", Texture.class));
+        textureSun = new TextureRegion(ass.get("Sun.png", Texture.class));
+        textureTrump = new TextureRegion(ass.get("trump.png", Texture.class));
+        texture = textureSun;
+        isTrump = false;
         this.setWidth(texture.getRegionWidth());
         this.setHeight(texture.getRegionWidth());
         this.center = new Vector2(xMidLeft, yLMidLeft);
@@ -54,15 +62,35 @@ public class Sun extends Actor {
         float x = center.x + radius * (float)cos(alpha + pi2);
         float y = center.y + radius * (float)sin(alpha + pi2);
         this.setPosition(x, y);
+        if (GameLogic.getSingleInstance().getTrumpTime() > 0)
+        {
+            if (!isTrump) {
+                isTrump = true;
+                switchTexture();
+            }
+            GameLogic.getSingleInstance().setTrumpTime(GameLogic.getSingleInstance().getTrumpTime()-delta);
+        }
+        else {
+            if (isTrump)
+            {
+                switchTexture();
+            }
+            isTrump = false;
 
-//        if (GameLogic.getSingleInstance().getTrumpTime() > 0)
-//        {
-//            GameLogic.getSingleInstance().setTrumpTime(GameLogic.getSingleInstance().getTrumpTime()-delta);
-//            setVisible(true);
-//        }
-//        else {
-//            setVisible(false);
-//        }
+        }
+    }
+
+    public void switchTexture() {
+        if (texture == textureSun)
+        {
+            texture = textureTrump;
+        }
+        else {
+            texture = textureSun;
+        }
+
+
+
     }
 
     @Override

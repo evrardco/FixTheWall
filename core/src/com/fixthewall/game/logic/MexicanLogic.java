@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.fixthewall.game.actors.Dollar;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.actors.EnnemiEchelle;
+import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.pools.EnnemiPool;
 import com.fixthewall.game.actors.recyclers.DollarRecycler;
@@ -15,6 +17,8 @@ import com.fixthewall.game.upgrades.UpgradeManager;
 import java.io.Serializable;
 
 public class MexicanLogic implements Serializable {
+
+    private AssetManager ass;
 
     private transient Group ennemiGroup;
     private transient Group workerGroup;
@@ -28,6 +32,7 @@ public class MexicanLogic implements Serializable {
     private float waveNumber;
     private Sun trump;
     private DollarRecycler dollarRecycler;
+    private double dayTime;
 
     private int ennemiToRemove;
 
@@ -48,10 +53,12 @@ public class MexicanLogic implements Serializable {
         this.heal = heal;
         this.brickPower = brickPower;
         this.mul = mul;
+        dayTime = 5; //TODO : changer cette valeur en la durée de la nuit/4
         this.trump = null;
         ennemiGroup = new Group();
         workerGroup = new Group();
         ennemiToRemove = 0;
+        this.ass = ass;
         pool = new EnnemiPool(ass);
         dollarRecycler = new DollarRecycler(128);
     }
@@ -148,9 +155,31 @@ public class MexicanLogic implements Serializable {
         }
     }
 
-    public void updateTrumpHead(Sun trump )
-    {
-        this.trump = trump;
+    public void updateTrumpHead(Sun trump, Moon moon, float delta, float duration) {
+
+        dayTime = dayTime + delta;
+        if (dayTime > duration)
+        {
+            dayTime = 0f;
+        }
+        if (dayTime < duration/2 ) {
+            trump.setVisible(true);
+            moon.setVisible(false);
+            this.trump = trump;
+            float x = (float) (700 * Math.cos(dayTime/duration * Math.PI * 2) + 540 - (moon.getWidth() / 2));
+            float y = (float) (700 * Math.sin(dayTime/duration * Math.PI * 2) + 960);  //Playing with alpha is a bad idea
+            trump.setX(x);
+            trump.setY(y);
+        }
+        else {
+            trump.setVisible(false);
+            moon.setVisible(true);
+            this.trump = trump;
+            float x = (float) (700 * Math.cos(-dayTime/duration * Math.PI * 2) + 540 - (moon.getWidth() / 2));
+            float y = (float) (700 * Math.sin(-dayTime/duration * Math.PI * 2) + 960);
+            moon.setX(x);
+            moon.setY(y);
+        }
     }
 
     public boolean checkTrumpCollision(Rectangle ennemiBounds)

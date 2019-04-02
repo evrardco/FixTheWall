@@ -23,6 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.actors.EnnemiEchelle;
+import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.ui.BigMenuTable;
 import com.fixthewall.game.actors.ui.HealthBar;
@@ -54,6 +56,7 @@ public class GameScreen implements Screen {
     private Image backgroundNight;
     private Dynamite dynamite;
     private Sun trump;
+    private Moon moon;
 
     private LinkedList<PopupLabel> popupLabels;
 
@@ -85,6 +88,8 @@ public class GameScreen implements Screen {
         Wall wall = new Wall(game.ass);
         dynamite = new Dynamite(game.ass);
         hammer = new Hammer(game.ass);
+        trump = new Sun(game.ass);
+        moon = new Moon(game.ass);
         trump = new Sun(
                 game.ass,
                 0,
@@ -212,14 +217,15 @@ public class GameScreen implements Screen {
         stage.addActor(backgroundDay);
         stage.addActor(backgroundNight);
         stage.addActor(trump);
+        stage.addActor(moon);
         stage.addActor(nuages);
         stage.addActor(wall);
         stage.addActor(dynamite);
-
         stage.addActor(ennemiGroup);
         stage.addActor(workerGroup);
         stage.addActor(dollarGroup);
         stage.addActor(pause);
+
         stage.addActor(upgradeButton);
         stage.addActor(bricksLabel);
         stage.addActor(scoreLabel);
@@ -251,7 +257,7 @@ public class GameScreen implements Screen {
         MexicanLogic.getSingleInstance().updateCashRain(dollarGroup, game.ass);
 
         // TRUMP HEAD
-        MexicanLogic.getSingleInstance().updateTrumpHead(trump);
+        MexicanLogic.getSingleInstance().updateTrumpHead(trump, moon, delta, DAY_NIGHT_CYCLE_LEN );
 
         // ENNEMI WAVES
         MexicanLogic.getSingleInstance().updateWave(delta, (backgroundNight.getColor().a <= 0.5f), game.ass);
