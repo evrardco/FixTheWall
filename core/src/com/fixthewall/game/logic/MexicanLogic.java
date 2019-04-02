@@ -181,13 +181,8 @@ public class MexicanLogic implements Serializable {
         }
     }
 
-    public boolean checkTrumpCollision(Rectangle ennemiBounds)
-    {
-        if (trump.getBounds().overlaps(ennemiBounds))
-        {
-            return true;
-        }
-        return false;
+    public boolean checkTrumpCollision(Rectangle ennemiBounds) {
+        return trump.getBounds().overlaps(ennemiBounds);
     }
 
     /**

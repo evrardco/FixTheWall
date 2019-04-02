@@ -6,16 +6,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fixthewall.game.actors.Nuages;
@@ -50,7 +44,7 @@ public class EndScreen implements Screen {
         BitmapFont font = game.ass.get("Germania60.ttf");
 
         BigMenuTable finalMenu = new BigMenuTable(game.ass, "You lost!");
-        finalMenu.addEntry(new DoubleLabel(font, "High Score: ", "TODO"));
+        finalMenu.addEntry(new DoubleLabel(font, "High Score: ", GameLogic.getSingleInstance().getHighScoreString()));
         finalMenu.addEntry(new DoubleLabel(font, "Score: ", GameLogic.getSingleInstance().getScoreString()));
 
         ImageTextButton.ImageTextButtonStyle upgradeButtonStyle = new ImageTextButton.ImageTextButtonStyle();

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -21,24 +22,28 @@ public class BigMenuTable extends Table {
 
     private static final float PADDING = 50;
     private static final float MAX_HEIGHT = Game.GAME_HEIGHT * 0.9f;
+    private static final float POPUP_DURATION = 0.1f;
 
     private Table content;
     private boolean wrapContent;
-    private ScrollPane scrollableContent;
+    private boolean isPopup;
+    private boolean isShowed;
 
     public BigMenuTable(AssetManager ass, String title) {
         super();
         this.wrapContent = true;
-        setup(ass, title, false);
+        this.isPopup = false;
+        setup(ass, title);
     }
 
     public BigMenuTable(AssetManager ass, String title, boolean isPopup, boolean wrapContent) {
         super();
         this.wrapContent = wrapContent;
-        setup(ass, title, isPopup);
+        this.isPopup = isPopup;
+        setup(ass, title);
     }
 
-    private void setup(AssetManager ass, String title, boolean isPopup) {
+    private void setup(AssetManager ass, String title) {
         setTouchable(Touchable.enabled);
         setBackground(new TextureRegionDrawable(ass.get("ui/background.png", Texture.class)));
 
@@ -56,7 +61,7 @@ public class BigMenuTable extends Table {
             backButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    BigMenuTable.this.setVisible(false);
+                    BigMenuTable.this.toggle();
                 }
             });
 
@@ -73,13 +78,18 @@ public class BigMenuTable extends Table {
             setHeight(MAX_HEIGHT);
 
         setWidth(Game.GAME_WIDTH * 0.9f);
-        setPosition(Game.GAME_WIDTH / 2f - getWidth() / 2f, Game.GAME_HEIGHT / 2f - getHeight() / 2f);
+
+        if (isPopup) {
+            setPosition(Game.GAME_WIDTH, Game.GAME_HEIGHT / 2f - getHeight() / 2f);
+            isShowed = false;
+        } else
+            setPosition(Game.GAME_WIDTH / 2f - getWidth() / 2f, Game.GAME_HEIGHT / 2f - getHeight() / 2f);
 
         content = new Table();
         content.setTouchable(Touchable.enabled);
 //        content.setDebug(true);
 
-        scrollableContent = new ScrollPane(content);
+        ScrollPane scrollableContent = new ScrollPane(content);
 
         add(scrollableContent).colspan(2);
     }
@@ -98,7 +108,24 @@ public class BigMenuTable extends Table {
                 setHeight(newHeight);
         }
 
-        setPosition(Game.GAME_WIDTH / 2f - getWidth() / 2f, Game.GAME_HEIGHT / 2f - getHeight() / 2f);
+        setPosition(getX(), Game.GAME_HEIGHT / 2f - getHeight() / 2f);
+    }
+
+    public void toggle() {
+        if (!isPopup) return;
+
+        if (isShowed) hide();
+        else show();
+    }
+
+    public void hide() {
+        isShowed = false;
+        addAction(Actions.moveTo(Game.GAME_WIDTH, getY(), POPUP_DURATION));
+    }
+
+    public void show() {
+        isShowed = true;
+        addAction(Actions.moveTo(Game.GAME_WIDTH / 2f - getWidth() / 2f, getY(), POPUP_DURATION));
     }
 
 }
