@@ -52,7 +52,7 @@ public class MexicanLogic implements Serializable {
         this.heal = heal;
         this.brickPower = brickPower;
         this.mul = mul;
-        dayTime = 5; //TODO : changer cette valeur en la durée de la nuit/4
+        dayTime = 300/4; //TODO : changer cette valeur en la durée de la nuit/4
         this.trump = null;
         ennemiGroup = new Group();
         workerGroup = new Group();
@@ -166,7 +166,7 @@ public class MexicanLogic implements Serializable {
             moon.setVisible(false);
             this.trump = trump;
             float x = (float) (700 * Math.cos(dayTime/duration * Math.PI * 2) + 540 - (moon.getWidth() / 2));
-            float y = (float) (700 * Math.sin(dayTime/duration * Math.PI * 2) + 960);  //Playing with alpha is a bad idea
+            float y = (float) (700 * Math.sin(dayTime/duration * Math.PI * 2) + 830);  //Playing with alpha is a bad idea
             trump.setX(x);
             trump.setY(y);
         }
@@ -175,7 +175,7 @@ public class MexicanLogic implements Serializable {
             moon.setVisible(true);
             this.trump = trump;
             float x = (float) (700 * Math.cos(-dayTime/duration * Math.PI * 2) + 540 - (moon.getWidth() / 2));
-            float y = (float) (700 * Math.sin(-dayTime/duration * Math.PI * 2) + 960);
+            float y = (float) (700 * Math.sin(-dayTime/duration * Math.PI * 2) + 830);
             moon.setX(x);
             moon.setY(y);
         }

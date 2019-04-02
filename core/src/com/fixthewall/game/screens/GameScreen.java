@@ -76,11 +76,11 @@ public class GameScreen implements Screen {
                 batch.setColor(color.r, color.g, color.b, parentAlpha);
             }
         };
-        backgroundNight.addAction(Actions.alpha(0.5f)); //we begin during the day
+        backgroundNight.addAction(Actions.alpha(0.0f)); //we begin during the day
         backgroundNight.addAction(Actions.forever(
                 Actions.sequence(
-                        Actions.alpha(0.0f, DAY_NIGHT_CYCLE_LEN / 2f),
-                        Actions.alpha(1.0f, DAY_NIGHT_CYCLE_LEN / 2f)
+                        Actions.alpha(1.0f, DAY_NIGHT_CYCLE_LEN / 2f),
+                        Actions.alpha(0.0f, DAY_NIGHT_CYCLE_LEN / 2f)
                 )
         ));
 
@@ -88,7 +88,6 @@ public class GameScreen implements Screen {
         Wall wall = new Wall(game.ass);
         dynamite = new Dynamite(game.ass);
         hammer = new Hammer(game.ass);
-        trump = new Sun(game.ass);
         moon = new Moon(game.ass);
         trump = new Sun(
                 game.ass,

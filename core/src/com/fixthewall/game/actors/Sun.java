@@ -54,6 +54,7 @@ public class Sun extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
+        /*
         float a = background.getColor().a;
         float diff = abs(prevBackgroundAlpha - a)*(float)PI;
         prevBackgroundAlpha = a;
@@ -62,6 +63,7 @@ public class Sun extends Actor {
         float x = center.x + radius * (float)cos(alpha + pi2);
         float y = center.y + radius * (float)sin(alpha + pi2);
         this.setPosition(x, y);
+        */
         if (GameLogic.getSingleInstance().getTrumpTime() > 0)
         {
             if (!isTrump) {
@@ -107,5 +109,6 @@ public class Sun extends Actor {
     {
         return bounds.setPosition(getX(), getY());
     }
+
 
 }
