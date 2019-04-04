@@ -28,6 +28,7 @@ import com.fixthewall.game.actors.ui.BigMenuTable;
 import com.fixthewall.game.actors.ui.HealthBar;
 import com.fixthewall.game.actors.Nuages;
 import com.fixthewall.game.actors.ui.PopupLabel;
+import com.fixthewall.game.actors.ui.TeteTrump;
 import com.fixthewall.game.actors.ui.UpgradeButton;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
@@ -220,6 +221,7 @@ public class GameScreen implements Screen {
         stage.addActor(hammerGroup);
         stage.addActor(menuUpgrade);
         stage.addActor(pauseFond);
+        stage.addActor(new TeteTrump(game.ass));
         Gdx.input.setInputProcessor(stage);
     }
 
