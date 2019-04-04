@@ -57,7 +57,7 @@ public class UpgradeButton extends Table {
                 new TextureRegionDrawable((Texture) ass.get("ui/texture_button_disabled.png")),
                 (BitmapFont) ass.get("Germania30.ttf")
         );
-
+        imTxtStyle.fontColor = Color.BLACK;
         button = new ImageTextButton("Upgrade", imTxtStyle);
         button.addListener(upgrade.getListener());
 

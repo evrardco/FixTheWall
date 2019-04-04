@@ -111,7 +111,9 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("anim/brick.png", Texture.class);
         ass.load("dollard.png", Texture.class);
         ass.load("Sun.png", Texture.class);
-
+        ass.load("echelle.png", Texture.class);
+        ass.load("trump.png", Texture.class);
+        ass.load("moon2.png", Texture.class);
         // dossier ui
         ass.load("ui/texture_button.png", Texture.class);
         ass.load("ui/texture_button_down.png", Texture.class);
@@ -156,11 +158,10 @@ public class Game extends com.badlogic.gdx.Game {
 
 
         // Next, let's define the params and then load our medium font
-        FreetypeFontLoader.FreeTypeFontLoaderParameter loadingFont = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
-        loadingFont.fontFileName = "data/Germania.ttf";
-        loadingFont.fontParameters.size = 30;
-        loadingFont.fontParameters.color = Color.BLACK;
-        ass.load("Germania30.ttf", BitmapFont.class, loadingFont);
+        FreetypeFontLoader.FreeTypeFontLoaderParameter smallFont = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        smallFont.fontFileName = "data/Germania.ttf";
+        smallFont.fontParameters.size = 30;
+        ass.load("Germania30.ttf", BitmapFont.class, smallFont);
 
         FreetypeFontLoader.FreeTypeFontLoaderParameter mediumFont = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         mediumFont.fontFileName = "data/Germania.ttf";

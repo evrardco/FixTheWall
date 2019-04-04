@@ -7,22 +7,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fixthewall.game.actors.Dynamite;
-import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.ui.BigMenuTable;
 import com.fixthewall.game.actors.ui.HealthBar;
@@ -54,11 +50,13 @@ public class GameScreen implements Screen {
     private Group dollarGroup;
     private Image backgroundNight;
     private Dynamite dynamite;
+    private Group dynamiteGroup;
     private Sun trump;
+    private Moon moon;
 
     private LinkedList<PopupLabel> popupLabels;
 
-    public static final transient int DAY_NIGHT_CYCLE_LEN = 20; //10 minutes
+    public static final transient int DAY_NIGHT_CYCLE_LEN = 300; //10 minutes
 
     public GameScreen(final Game game) {
         this.game = game;
@@ -85,8 +83,17 @@ public class GameScreen implements Screen {
         Nuages nuages = new Nuages(game.ass);
         Wall wall = new Wall(game.ass);
         dynamite = new Dynamite(game.ass);
+        dynamiteGroup = new Group();
+        dynamiteGroup.addActor(dynamite);
         hammer = new Hammer(game.ass);
-        trump = new Sun(game.ass);
+        moon = new Moon(game.ass);
+        trump = new Sun(
+                game.ass,
+                0,
+                game.viewport.getWorldHeight()/2,
+                game.viewport.getWorldWidth()*0.6f,
+                backgroundNight
+        );
         pause = new Image(game.ass.get("imgPause.png", Texture.class));
         pause.setPosition(30, 1810);
         pauseFond = new Image(game.ass.get("imgPauseFond.png", Texture.class));
@@ -115,7 +122,6 @@ public class GameScreen implements Screen {
 
         //Initializing upgrade menu
         final BigMenuTable menuUpgrade = new BigMenuTable(game.ass, "Upgrades", true, false);
-        menuUpgrade.setVisible(false);
 
         AbstractUpgrade[] upArray = UpgradeManager.getSingleInstance().getAllUpgrade();
         for(int i=0; i < upArray.length; i++) {
@@ -150,10 +156,10 @@ public class GameScreen implements Screen {
         float y = 0.95f * game.viewport.getWorldHeight() - upgradeButton.getHeight();
         upgradeButton.setPosition(x, y);
 
-        upgradeButton.addListener(new ChangeListener() {
+        upgradeButton.addListener(new ClickListener() {
             @Override
-            public void changed (ChangeEvent event, Actor actor) {
-                menuUpgrade.setVisible(!menuUpgrade.isVisible());
+            public void clicked(InputEvent event, float x, float y) {
+                menuUpgrade.toggle();
             }
         });
 
@@ -183,7 +189,6 @@ public class GameScreen implements Screen {
             public  void clicked(InputEvent event, float x, float y){
                 pause.setVisible(false);
                 pauseFond.setVisible(true);
-                menuUpgrade.setVisible(false);
                 GameLogic.getSingleInstance().togglePaused();
                 Dynamite.onPause =  GameLogic.getSingleInstance().isPaused();
             }
@@ -206,14 +211,16 @@ public class GameScreen implements Screen {
         //Add all the things to runescape (add a deadman mode)
         stage.addActor(backgroundDay);
         stage.addActor(backgroundNight);
+        stage.addActor(trump);
+        stage.addActor(moon);
         stage.addActor(nuages);
         stage.addActor(wall);
-        stage.addActor(dynamite);
-        stage.addActor(trump);
+        stage.addActor(dynamiteGroup);
         stage.addActor(ennemiGroup);
         stage.addActor(workerGroup);
         stage.addActor(dollarGroup);
         stage.addActor(pause);
+
         stage.addActor(upgradeButton);
         stage.addActor(bricksLabel);
         stage.addActor(scoreLabel);
@@ -246,7 +253,7 @@ public class GameScreen implements Screen {
         MexicanLogic.getSingleInstance().updateCashRain(dollarGroup, game.ass);
 
         // TRUMP HEAD
-        MexicanLogic.getSingleInstance().updateTrumpHead(trump);
+        MexicanLogic.getSingleInstance().updateTrumpHead(trump, moon, delta, DAY_NIGHT_CYCLE_LEN );
 
         // ENNEMI WAVES
         MexicanLogic.getSingleInstance().updateWave(delta, (backgroundNight.getColor().a <= 0.5f), game.ass);

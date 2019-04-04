@@ -8,7 +8,7 @@ public class TrumpUpgrade extends AbstractUpgrade{
         public TrumpUpgrade(int level, double cost) {
             super(level, cost);
             this.setName("Be proud of your savior");
-            this.setDesc("Something strange will appears ...");
+            this.setDesc("Something strange will appear...");
         }
         @Override
         public void apply() {
