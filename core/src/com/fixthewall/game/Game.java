@@ -99,6 +99,18 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("imgPause.png", Texture.class);
         ass.load("imgPauseFond.png", Texture.class);
         ass.load("nuages.png", Texture.class);
+        ass.load("pioche.png", Texture.class);
+
+        ass.load("dollard.png", Texture.class);
+        ass.load("Sun.png", Texture.class);
+        ass.load("echelle.png", Texture.class);
+        ass.load("trump.png", Texture.class);
+        ass.load("moon2.png", Texture.class);
+
+        // dossier anim
+        ass.load("anim/brick.png", Texture.class);
+
+        // dossier Marteaux
         ass.load("Marteaux/Ghal_Maraz.png", Texture.class);
         ass.load("Marteaux/marteau.png", Texture.class);
         ass.load("Marteaux/marteau_Brique.png", Texture.class);
@@ -107,13 +119,7 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("Marteaux/marteau_Trump.png", Texture.class);
         ass.load("Marteaux/marteauDiam.png", Texture.class);
         ass.load("Marteaux/War_hammer.png", Texture.class);
-        ass.load("pioche.png", Texture.class);
-        ass.load("anim/brick.png", Texture.class);
-        ass.load("dollard.png", Texture.class);
-        ass.load("Sun.png", Texture.class);
-        ass.load("echelle.png", Texture.class);
-        ass.load("trump.png", Texture.class);
-        ass.load("moon2.png", Texture.class);
+
         // dossier ui
         ass.load("ui/texture_button.png", Texture.class);
         ass.load("ui/texture_button_down.png", Texture.class);
