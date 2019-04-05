@@ -41,12 +41,14 @@ public class EndScreen implements Screen {
         stage.addActor(nuages);
 
         //Import font
-        BitmapFont font = game.ass.get("Germania60.ttf");
+        BitmapFont font = game.ass.get("PoetsenOne50.ttf");
 
         BigMenuTable finalMenu = new BigMenuTable(game.ass, "You lost!");
         finalMenu.addEntry(new DoubleLabel(font, "High Score: ", GameLogic.getSingleInstance().getHighScoreString()));
         finalMenu.addEntry(new DoubleLabel(font, "Score: ", GameLogic.getSingleInstance().getScoreString()));
 
+
+        // TODO tester avec une table qui est de width égale à la width du bigmenu
         ImageTextButton.ImageTextButtonStyle restartButtonStyle = new ImageTextButton.ImageTextButtonStyle();
         restartButtonStyle.up = new TextureRegionDrawable(game.ass.get("ui/texture_button.png", Texture.class));
         restartButtonStyle.down = new TextureRegionDrawable(game.ass.get("ui/texture_button_down.png", Texture.class));

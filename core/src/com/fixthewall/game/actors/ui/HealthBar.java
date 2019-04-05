@@ -30,14 +30,14 @@ public class HealthBar extends Group {
         healthBar.setWidth(BAR_WIDTH);
         addActor(healthBar);
 
-        BitmapFont font30 = ass.get("Germania30.ttf");
-        Label label = new Label("Health", new Label.LabelStyle(font30, Color.BLACK));
+        BitmapFont font30Outline = ass.get("PoetsenOne30_outline.ttf");
+        Label label = new Label("Health", new Label.LabelStyle(font30Outline, null));
         label.setPosition(0,
                 healthBar.getHeight() + 10);
         addActor(label);
 
-        BitmapFont font30White = ass.get("GermaniaLoading.ttf");
-        health = new Label("100/100", new Label.LabelStyle(font30White, Color.WHITE));
+        BitmapFont font30 = ass.get("PoetsenOne30.ttf");
+        health = new Label("100/100", new Label.LabelStyle(font30, Color.WHITE));
         health.setPosition(healthBar.getWidth() / 2f - health.getWidth() / 2f,
                 healthBar.getHeight() / 2f - health.getHeight() / 2f);
         addActor(health);

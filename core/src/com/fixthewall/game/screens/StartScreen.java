@@ -49,7 +49,7 @@ public class StartScreen implements Screen {
         ImageTextButton.ImageTextButtonStyle playButtonStyle = new ImageTextButton.ImageTextButtonStyle();
         playButtonStyle.up = new TextureRegionDrawable(game.ass.get("ui/texture_button_play.png", Texture.class));
         playButtonStyle.down = new TextureRegionDrawable(game.ass.get("ui/texture_button_play_down.png", Texture.class));
-        playButtonStyle.font = game.ass.get("Germania120.ttf");
+        playButtonStyle.font = game.ass.get("PoetsenOne120.ttf");
         ImageTextButton playButton = new ImageTextButton("", playButtonStyle);
 
         float x = game.viewport.getWorldWidth() / 2f;
@@ -100,7 +100,7 @@ public class StartScreen implements Screen {
         // End settings menu
 
         // Game Title
-        Label.LabelStyle titleStyle = new Label.LabelStyle(game.ass.get("Germania120.ttf", BitmapFont.class), Color.WHITE);
+        Label.LabelStyle titleStyle = new Label.LabelStyle(game.ass.get("Western_outline.ttf", BitmapFont.class), null);
         Label title = new Label("Fix the Wall!", titleStyle);
         Container<Label> containerTitle = new Container<Label>(title);
         containerTitle.setPosition(stage.getWidth() / 2f, stage.getHeight() * 0.75f - title.getHeight() * 0.75f);

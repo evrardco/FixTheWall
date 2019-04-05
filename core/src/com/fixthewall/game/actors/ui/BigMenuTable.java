@@ -49,7 +49,7 @@ public class BigMenuTable extends Table {
         top();
         pad(PADDING);
 
-        BitmapFont font = ass.get("Germania120.ttf");
+        BitmapFont font = ass.get("PoetsenOne120.ttf");
         Label titleLabel = new Label(title, new Label.LabelStyle(font, Color.WHITE));
 
         if (isPopup) {

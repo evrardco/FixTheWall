@@ -94,7 +94,7 @@ public class GameScreen implements Screen {
                 backgroundNight
         );
         pause = new Image(game.ass.get("imgPause.png", Texture.class));
-        pause.setPosition(30, 1810);
+        pause.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.95f - pause.getHeight() / 2f);
         pauseFond = new Image(game.ass.get("imgPauseFond.png", Texture.class));
         pauseFond.addListener(new ClickListener() {
             @Override
@@ -117,8 +117,6 @@ public class GameScreen implements Screen {
             ennemiGroup.addActor(MexicanLogic.getSingleInstance().pool.obtain());
 
 
-
-
         //Initializing upgrade menu
         final BigMenuTable menuUpgrade = new BigMenuTable(game.ass, "Upgrades", true, false);
 
@@ -138,8 +136,9 @@ public class GameScreen implements Screen {
 
         //Import font
 
-        BitmapFont font = game.ass.get("Germania30.ttf"); // font size 12 pixels
-        BitmapFont fontUps = game.ass.get("Germania60.ttf");
+        BitmapFont font = game.ass.get("PoetsenOne30.ttf"); // font size 12 pixels
+        BitmapFont fontUps = game.ass.get("PoetsenOne50.ttf");
+        BitmapFont fontOutline = game.ass.get("PoetsenOne30_outline.ttf");
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.font = fontUps;
         //Setting up listeners
@@ -147,7 +146,7 @@ public class GameScreen implements Screen {
         ImageTextButton.ImageTextButtonStyle upgradeButtonStyle = new ImageTextButton.ImageTextButtonStyle();
         upgradeButtonStyle.up = new TextureRegionDrawable(game.ass.get("ui/texture_button.png", Texture.class));
         upgradeButtonStyle.down = new TextureRegionDrawable(game.ass.get("ui/texture_button_down.png", Texture.class));
-        upgradeButtonStyle.font = game.ass.get("Germania60.ttf");
+        upgradeButtonStyle.font = game.ass.get("PoetsenOne50.ttf");
         upgradeButtonStyle.fontColor = Color.BLACK;
         ImageTextButton upgradeButton = new ImageTextButton("Upgrades", upgradeButtonStyle);
 
@@ -196,16 +195,17 @@ public class GameScreen implements Screen {
 
         dynamite.addListener(dynamite.getListener());
 
-        bricksLabel = new Label("Bricks: " + GameLogic.getSingleInstance().getBricksString(), new Label.LabelStyle(font, Color.BLACK));
-        bricksLabel.setPosition(game.viewport.getWorldWidth() * 0.05f, game.viewport.getWorldHeight() * 0.85f);
-
-        scoreLabel = new Label("Score: " + GameLogic.getSingleInstance().getScoreString(), new Label.LabelStyle(font, Color.BLACK));
-        scoreLabel.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.8f);
-
         // health bar
         HealthBar healthBar = new HealthBar(game.ass);
-        healthBar.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.9f);
+        healthBar.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.86f);
         //
+
+        bricksLabel = new Label("Bricks: " + GameLogic.getSingleInstance().getBricksString(), new Label.LabelStyle(fontOutline, null));
+        bricksLabel.setPosition(game.viewport.getWorldWidth() * 0.05f, game.viewport.getWorldHeight() * 0.81f);
+
+        scoreLabel = new Label("Score: " + GameLogic.getSingleInstance().getScoreString(), new Label.LabelStyle(fontOutline, null));
+        scoreLabel.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.76f);
+
 
         //Add all the things to runescape (add a deadman mode)
         stage.addActor(backgroundDay);

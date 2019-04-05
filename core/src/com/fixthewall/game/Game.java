@@ -78,11 +78,11 @@ public class Game extends com.badlogic.gdx.Game {
         // First, let's define the params and then load our bigger font
         FreetypeFontLoader.FreeTypeFontLoaderParameter smallFont
                 = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
-        smallFont.fontFileName = "data/Germania.ttf";
+        smallFont.fontFileName = "font/PoetsenOne-Regular.ttf";
         smallFont.fontParameters.size = 30;
         smallFont.fontParameters.color = Color.WHITE;
 
-        ass.load("GermaniaLoading.ttf", BitmapFont.class, smallFont);
+        ass.load("PoetsenOne_loading.ttf", BitmapFont.class, smallFont);
 
         // dossier logoGG
         // (voir pour les perfs si c'est pas mieux de faire une seule Texture et choper les images en TextureRegion)
@@ -153,24 +153,36 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("Frames/SheetFrameDynamite.png", Texture.class);
         ass.load("Frames/SheetFrameWorker.png", Texture.class);
 
-        // dossier data
-
-
-        // Next, let's define the params and then load our medium font
+        // dossier font
         FreetypeFontLoader.FreeTypeFontLoaderParameter smallFont = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
-        smallFont.fontFileName = "data/Germania.ttf";
+        smallFont.fontFileName = "font/PoetsenOne-Regular.ttf";
         smallFont.fontParameters.size = 30;
-        ass.load("Germania30.ttf", BitmapFont.class, smallFont);
+        ass.load("PoetsenOne30.ttf", BitmapFont.class, smallFont);
+
+        FreetypeFontLoader.FreeTypeFontLoaderParameter smallFontOutline = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        smallFontOutline.fontFileName = "font/PoetsenOne-Regular.ttf";
+        smallFontOutline.fontParameters.size = 30;
+        smallFontOutline.fontParameters.color = Color.WHITE;
+        smallFontOutline.fontParameters.borderColor = Color.BLACK;
+        smallFontOutline.fontParameters.borderWidth = 3;
+        ass.load("PoetsenOne30_outline.ttf", BitmapFont.class, smallFontOutline);
 
         FreetypeFontLoader.FreeTypeFontLoaderParameter mediumFont = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
-        mediumFont.fontFileName = "data/Germania.ttf";
-        mediumFont.fontParameters.size = 60;
-        ass.load("Germania60.ttf", BitmapFont.class, mediumFont);
+        mediumFont.fontFileName = "font/PoetsenOne-Regular.ttf";
+        mediumFont.fontParameters.size = 50;
+        ass.load("PoetsenOne50.ttf", BitmapFont.class, mediumFont);
 
-        // Next, let's define the params and then load our bigger font
         FreetypeFontLoader.FreeTypeFontLoaderParameter bigFont = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
-        bigFont.fontFileName = "data/Germania.ttf";
+        bigFont.fontFileName = "font/PoetsenOne-Regular.ttf";
         bigFont.fontParameters.size = 120;
-        ass.load("Germania120.ttf", BitmapFont.class, bigFont);
+        ass.load("PoetsenOne120.ttf", BitmapFont.class, bigFont);
+
+        FreetypeFontLoader.FreeTypeFontLoaderParameter titleFont = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        titleFont.fontFileName = "font/gomarice_nandaka_western.ttf";
+        titleFont.fontParameters.size = 100;
+        titleFont.fontParameters.color = Color.BLACK;
+        titleFont.fontParameters.borderColor = Color.WHITE;
+        titleFont.fontParameters.borderWidth = 10;
+        ass.load("Western_outline.ttf", BitmapFont.class, titleFont);
     }
 }

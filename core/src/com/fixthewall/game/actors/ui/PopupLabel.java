@@ -14,7 +14,7 @@ public class PopupLabel extends Label {
     private ParallelAction parallel;
 
     public PopupLabel(AssetManager ass) {
-        super("This is a popup label !", new LabelStyle(ass.get("Germania30.ttf", BitmapFont.class), Color.BLACK));
+        super("This is a popup label !", new LabelStyle(ass.get("PoetsenOne30.ttf", BitmapFont.class), Color.BLACK));
         parallel = new ParallelAction();
         parallel.addAction(Actions.moveBy(0f, 150f, 1f));
         parallel.addAction(Actions.alpha(0f, 1f));
