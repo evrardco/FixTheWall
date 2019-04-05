@@ -47,12 +47,12 @@ public class EndScreen implements Screen {
         finalMenu.addEntry(new DoubleLabel(font, "High Score: ", GameLogic.getSingleInstance().getHighScoreString()));
         finalMenu.addEntry(new DoubleLabel(font, "Score: ", GameLogic.getSingleInstance().getScoreString()));
 
-        ImageTextButton.ImageTextButtonStyle upgradeButtonStyle = new ImageTextButton.ImageTextButtonStyle();
-        upgradeButtonStyle.up = new TextureRegionDrawable(game.ass.get("ui/texture_button.png", Texture.class));
-        upgradeButtonStyle.down = new TextureRegionDrawable(game.ass.get("ui/texture_button_down.png", Texture.class));
-        upgradeButtonStyle.font = font;
-        upgradeButtonStyle.fontColor = Color.BLACK;
-        ImageTextButton restartButton = new ImageTextButton("Restart", upgradeButtonStyle);
+        ImageTextButton.ImageTextButtonStyle restartButtonStyle = new ImageTextButton.ImageTextButtonStyle();
+        restartButtonStyle.up = new TextureRegionDrawable(game.ass.get("ui/texture_button.png", Texture.class));
+        restartButtonStyle.down = new TextureRegionDrawable(game.ass.get("ui/texture_button_down.png", Texture.class));
+        restartButtonStyle.font = font;
+        restartButtonStyle.fontColor = Color.BLACK;
+        ImageTextButton restartButton = new ImageTextButton("Restart", restartButtonStyle);
 
         restartButton.addListener(new ClickListener() {
             @Override
