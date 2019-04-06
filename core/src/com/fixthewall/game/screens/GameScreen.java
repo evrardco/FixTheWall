@@ -61,7 +61,6 @@ public class GameScreen implements Screen {
         this.game = game;
         stage = new Stage(game.viewport);
 
-
         Image backgroundDay = new Image(game.ass.get("fondWall.png", Texture.class));
         backgroundNight = new Image(game.ass.get("fondWall-nuit.png", Texture.class)){
             @Override
@@ -237,6 +236,9 @@ public class GameScreen implements Screen {
             stage.draw();
             return;
         }
+
+        if (GameLogic.getSingleInstance().isTimeSlowed())
+            delta /= GameLogic.SLOW_FACTOR;
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

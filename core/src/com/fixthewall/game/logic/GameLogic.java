@@ -8,6 +8,9 @@ import com.fixthewall.game.Perziztancinator;
 import java.io.Serializable;
 
 public class GameLogic implements Serializable {
+
+    public static transient final float SLOW_FACTOR = 2;
+
     private double health;
     private double maxHealth;
     private double bricks;
@@ -19,6 +22,7 @@ public class GameLogic implements Serializable {
     private double score;
     private double highScore;
     private boolean isPaused;
+    private boolean isTimeSlowed;
     private transient Timer timer;
 
     public Timer getTimer() {
@@ -48,6 +52,7 @@ public class GameLogic implements Serializable {
         trumpTime = 0.0f;
         timer = new Timer();
         isPaused = false;
+        isTimeSlowed = false;
 
         Timer.Task saveTask = new Timer.Task(){
             public void run(){
@@ -164,6 +169,14 @@ public class GameLogic implements Serializable {
         if(0<=hammerLevel && hammerLevel<=6){
             hammerLevel++;
         }
+    }
+
+    public boolean isTimeSlowed() {
+        return isTimeSlowed;
+    }
+
+    public void setTimeSlowed(boolean isTimeSlowed) {
+        this.isTimeSlowed = isTimeSlowed;
     }
 
     public double getHighScore() {

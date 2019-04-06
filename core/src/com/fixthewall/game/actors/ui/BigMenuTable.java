@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fixthewall.game.Game;
+import com.fixthewall.game.logic.GameLogic;
 
 public class BigMenuTable extends Table {
 
@@ -110,6 +111,13 @@ public class BigMenuTable extends Table {
         setPosition(getX(), Game.GAME_HEIGHT / 2f - getHeight() / 2f);
     }
 
+    @Override
+    public void act(float delta) {
+        if (GameLogic.getSingleInstance().isTimeSlowed())
+            delta *= GameLogic.SLOW_FACTOR;
+        super.act(delta);
+    }
+
     public void toggle() {
         if (!isPopup) return;
 
@@ -120,11 +128,15 @@ public class BigMenuTable extends Table {
     public void hide() {
         isShowed = false;
         addAction(Actions.moveTo(Game.GAME_WIDTH, getY(), POPUP_DURATION));
+
+        GameLogic.getSingleInstance().setTimeSlowed(false);
     }
 
     public void show() {
         isShowed = true;
         addAction(Actions.moveTo(Game.GAME_WIDTH / 2f - getWidth() / 2f, getY(), POPUP_DURATION));
+
+        GameLogic.getSingleInstance().setTimeSlowed(true);
     }
 
 }
