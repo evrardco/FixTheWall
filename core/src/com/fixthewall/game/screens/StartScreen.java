@@ -70,30 +70,48 @@ public class StartScreen implements Screen {
         // Settings menu
         Texture imgButton = game.ass.get("ui/texture_button_settings.png");
         Texture imgButtonDown = game.ass.get("ui/texture_button_settings_down.png");
-        Button settingsButton = new ImageButton(new TextureRegionDrawable(imgButton), new TextureRegionDrawable(imgButtonDown));
+        final ImageButton settingsButton = new ImageButton(new TextureRegionDrawable(imgButton), new TextureRegionDrawable(imgButtonDown));
         settingsButton.setPosition(game.viewport.getWorldWidth() * 0.1f, game.viewport.getWorldHeight() * 0.9f);
 
         final MenuTable settingsTable = new MenuTable(game.ass, settingsButton.getX(), settingsButton.getY(), settingsButton.getPrefWidth());
         settingsTable.setVisible(false);
 
-        Button volumeButton = new ImageButton(
+        final ImageButton.ImageButtonStyle volumeButtonOnStyle = new ImageButton.ImageButtonStyle(
+                null, null, null,
                 new TextureRegionDrawable(game.ass.get("ui/texture_button_volume.png", Texture.class)),
-                new TextureRegionDrawable(game.ass.get("ui/texture_button_volume_down.png", Texture.class))
+                new TextureRegionDrawable(game.ass.get("ui/texture_button_volume_down.png", Texture.class)),
+                null
         );
+        final ImageButton.ImageButtonStyle volumeButtonOffStyle = new ImageButton.ImageButtonStyle(
+                null, null, null,
+                new TextureRegionDrawable(game.ass.get("ui/texture_button_volume_off.png", Texture.class)),
+                new TextureRegionDrawable(game.ass.get("ui/texture_button_volume_off_down.png", Texture.class)),
+                null
+        );
+
+        final ImageButton volumeButton;
+        if (game.playlist.isPlaying())
+            volumeButton = new ImageButton(volumeButtonOnStyle);
+        else
+            volumeButton = new ImageButton(volumeButtonOffStyle);
+
         volumeButton.addListener(new ClickListener() {
             @Override
-            public  void clicked(InputEvent event, float x, float y) {
-                if (game.playlist.isPlaying())
+            public void clicked(InputEvent event, float x, float y) {
+                if (game.playlist.isPlaying()) {
                     game.playlist.pause();
-                else
+                    volumeButton.setStyle(volumeButtonOffStyle);
+                } else {
                     game.playlist.play();
+                    volumeButton.setStyle(volumeButtonOnStyle);
+                }
             }
         });
         settingsTable.addEntry(volumeButton);
 
         settingsButton.addListener(new ClickListener() {
             @Override
-            public  void clicked(InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {
                 settingsTable.setVisible(!settingsTable.isVisible());
             }
         });
