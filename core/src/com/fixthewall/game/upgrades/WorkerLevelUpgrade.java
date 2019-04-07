@@ -6,7 +6,7 @@ public class WorkerLevelUpgrade extends AbstractUpgrade {
 
     public WorkerLevelUpgrade(int level, double cost) {
         super(level, cost);
-        this.setName("Recruit level++");
+        this.setName("Worker level++");
         this.setDesc("Give your workers a raise to\nmake them work harder!");
     }
 

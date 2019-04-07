@@ -10,8 +10,8 @@ public class WorkerUpgrade extends AbstractUpgrade {
 
     public WorkerUpgrade(int level, double cost, AssetManager ass) {
         super(level, cost);
-        this.setName("Recruit");
-        this.setDesc("Give an invader a \"better\" life\nby giving him a job to help fix your wall.");
+        this.setName("Worker");
+        this.setDesc("Give an invader a \"better\" life\nby giving him a job to\nhelp fix your wall.");
         this.ass = ass;
     }
 

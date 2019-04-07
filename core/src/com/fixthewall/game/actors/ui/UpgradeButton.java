@@ -46,7 +46,7 @@ public class UpgradeButton extends Table {
 
         pannelTex = ass.get("ui/texture_upgrade_pannel.png");
         this.setBackground(new TextureRegionDrawable(pannelTex));//BackGround Vert des bouttons
-        Label.LabelStyle style = new Label.LabelStyle((BitmapFont)ass.get("Germania30.ttf"), Color.BLACK);
+        Label.LabelStyle style = new Label.LabelStyle((BitmapFont)ass.get("PoetsenOne30.ttf"), Color.BLACK);
         cost = new Label(Helpers.formatBigNumbers(upgrade.getCost()), style);
         level = new Label(""+upgrade.getLevel(), style);
 
@@ -55,7 +55,7 @@ public class UpgradeButton extends Table {
                 new TextureRegionDrawable((Texture) ass.get("ui/texture_button.png")),
                 new TextureRegionDrawable((Texture) ass.get("ui/texture_button_down.png")),
                 new TextureRegionDrawable((Texture) ass.get("ui/texture_button_disabled.png")),
-                (BitmapFont) ass.get("Germania30.ttf")
+                (BitmapFont) ass.get("PoetsenOne30.ttf")
         );
         imTxtStyle.fontColor = Color.BLACK;
         button = new ImageTextButton("Upgrade", imTxtStyle);

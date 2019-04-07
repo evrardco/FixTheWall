@@ -8,7 +8,7 @@ public class UpgradeCashRain extends AbstractUpgrade {
     {
         super(level, cost);
         this.setName("Cashrain");
-        this.setDesc("Pay mexicans and see what happens !");
+        this.setDesc("Pay mexicans and see what\nhappens !");
 
     }
 

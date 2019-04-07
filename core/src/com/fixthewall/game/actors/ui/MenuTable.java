@@ -28,4 +28,9 @@ public class MenuTable extends Table {
         add(entry).pad(padding);
     }
 
+    public void removeEntry(int index) {
+        if (getChildren().size < 1 && index >= getChildren().size) return;
+        getChildren().removeIndex(index);
+    }
+
 }

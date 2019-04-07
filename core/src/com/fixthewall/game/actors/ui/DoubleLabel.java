@@ -12,8 +12,8 @@ public class DoubleLabel extends Table {
     public DoubleLabel(BitmapFont font, String left, String right) {
         Label temp = new Label(left, new Label.LabelStyle(font, Color.WHITE));
         this.height = temp.getHeight();
-        add(temp).left();
-        add(new Label(right, new Label.LabelStyle(font, Color.WHITE))).right();
+        add(temp);
+        add(new Label(right, new Label.LabelStyle(font, Color.WHITE)));
 //        setDebug(true);
     }
 

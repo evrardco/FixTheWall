@@ -49,7 +49,7 @@ public class StartScreen implements Screen {
         ImageTextButton.ImageTextButtonStyle playButtonStyle = new ImageTextButton.ImageTextButtonStyle();
         playButtonStyle.up = new TextureRegionDrawable(game.ass.get("ui/texture_button_play.png", Texture.class));
         playButtonStyle.down = new TextureRegionDrawable(game.ass.get("ui/texture_button_play_down.png", Texture.class));
-        playButtonStyle.font = game.ass.get("Germania120.ttf");
+        playButtonStyle.font = game.ass.get("PoetsenOne120.ttf");
         ImageTextButton playButton = new ImageTextButton("", playButtonStyle);
 
         float x = game.viewport.getWorldWidth() / 2f;
@@ -70,37 +70,55 @@ public class StartScreen implements Screen {
         // Settings menu
         Texture imgButton = game.ass.get("ui/texture_button_settings.png");
         Texture imgButtonDown = game.ass.get("ui/texture_button_settings_down.png");
-        Button settingsButton = new ImageButton(new TextureRegionDrawable(imgButton), new TextureRegionDrawable(imgButtonDown));
+        final ImageButton settingsButton = new ImageButton(new TextureRegionDrawable(imgButton), new TextureRegionDrawable(imgButtonDown));
         settingsButton.setPosition(game.viewport.getWorldWidth() * 0.1f, game.viewport.getWorldHeight() * 0.9f);
 
         final MenuTable settingsTable = new MenuTable(game.ass, settingsButton.getX(), settingsButton.getY(), settingsButton.getPrefWidth());
         settingsTable.setVisible(false);
 
-        Button volumeButton = new ImageButton(
+        final ImageButton.ImageButtonStyle volumeButtonOnStyle = new ImageButton.ImageButtonStyle(
+                null, null, null,
                 new TextureRegionDrawable(game.ass.get("ui/texture_button_volume.png", Texture.class)),
-                new TextureRegionDrawable(game.ass.get("ui/texture_button_volume_down.png", Texture.class))
+                new TextureRegionDrawable(game.ass.get("ui/texture_button_volume_down.png", Texture.class)),
+                null
         );
+        final ImageButton.ImageButtonStyle volumeButtonOffStyle = new ImageButton.ImageButtonStyle(
+                null, null, null,
+                new TextureRegionDrawable(game.ass.get("ui/texture_button_volume_off.png", Texture.class)),
+                new TextureRegionDrawable(game.ass.get("ui/texture_button_volume_off_down.png", Texture.class)),
+                null
+        );
+
+        final ImageButton volumeButton;
+        if (game.playlist.isPlaying())
+            volumeButton = new ImageButton(volumeButtonOnStyle);
+        else
+            volumeButton = new ImageButton(volumeButtonOffStyle);
+
         volumeButton.addListener(new ClickListener() {
             @Override
-            public  void clicked(InputEvent event, float x, float y) {
-                if (game.playlist.isPlaying())
+            public void clicked(InputEvent event, float x, float y) {
+                if (game.playlist.isPlaying()) {
                     game.playlist.pause();
-                else
+                    volumeButton.setStyle(volumeButtonOffStyle);
+                } else {
                     game.playlist.play();
+                    volumeButton.setStyle(volumeButtonOnStyle);
+                }
             }
         });
         settingsTable.addEntry(volumeButton);
 
         settingsButton.addListener(new ClickListener() {
             @Override
-            public  void clicked(InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {
                 settingsTable.setVisible(!settingsTable.isVisible());
             }
         });
         // End settings menu
 
         // Game Title
-        Label.LabelStyle titleStyle = new Label.LabelStyle(game.ass.get("Germania120.ttf", BitmapFont.class), Color.WHITE);
+        Label.LabelStyle titleStyle = new Label.LabelStyle(game.ass.get("Western_outline.ttf", BitmapFont.class), null);
         Label title = new Label("Fix the Wall!", titleStyle);
         Container<Label> containerTitle = new Container<Label>(title);
         containerTitle.setPosition(stage.getWidth() / 2f, stage.getHeight() * 0.75f - title.getHeight() * 0.75f);
