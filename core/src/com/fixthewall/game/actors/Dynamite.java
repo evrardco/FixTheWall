@@ -1,14 +1,17 @@
 package com.fixthewall.game.actors;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.fixthewall.game.actors.anim.Brixplosion;
 import com.fixthewall.game.actors.physics.Constants;
@@ -16,17 +19,25 @@ import com.fixthewall.game.logic.GameLogic;
 
 public class Dynamite extends Actor{
 
+    private static final float DETONATION_TIME = 3f;
+
     public static boolean onPause;
     private final AssetManager ass;
     private boolean visible;
     private Animation<TextureRegion> dynamiteAnimation;
     // Variable for tracking elapsed time for the animation
     private float elapsedTime;
-    private float Time;
+    private float countdown;
     private TextureRegion currentFrame;
     private boolean isFalling;
     private boolean isExploding;
     private Rectangle bounds;
+    private Label countdownLabel;
+
+    // moche mais le setColor du Label est buggué et affiche du noir si on l'utilise
+    private Label.LabelStyle redStyle;
+    private Label.LabelStyle yellowStyle;
+    private Label.LabelStyle greenStyle;
 
     private float velY;
 
@@ -42,6 +53,12 @@ public class Dynamite extends Actor{
         visible = false;
         setTouchable(Touchable.disabled);
 
+        redStyle = new Label.LabelStyle(ass.get("PoetsenOne30.ttf", BitmapFont.class), Color.RED);
+        yellowStyle = new Label.LabelStyle(ass.get("PoetsenOne30.ttf", BitmapFont.class), Color.YELLOW);
+        greenStyle = new Label.LabelStyle(ass.get("PoetsenOne30.ttf", BitmapFont.class), Color.GREEN);
+        countdownLabel = new Label("" + (int) Math.ceil(DETONATION_TIME), greenStyle);
+        countdownLabel.setPosition(getX() + getWidth() / 2f - countdownLabel.getWidth() / 2f, getY() - countdownLabel.getHeight() / 2f);
+
         //Set animation
         TextureRegion[][] tmp = TextureRegion.split(texture,
                 texture.getWidth()/3,
@@ -56,7 +73,7 @@ public class Dynamite extends Actor{
         dynamiteAnimation = new Animation<TextureRegion>(0.1f, DynamiteFrames);
         //
         elapsedTime = 0f;
-        Time = 0f;
+        countdown = DETONATION_TIME;
 
         bounds = new Rectangle(this.getX() - 50, this.getY(), this.getWidth() + 100, this.getHeight());
 
@@ -70,17 +87,26 @@ public class Dynamite extends Actor{
         if (!isFalling) {
 
             if (visible) {
-                Time = Time + delta;
+                countdown -= delta;
+                int temp = (int) Math.ceil(countdown);
+                countdownLabel.setText("" + temp);
+                if (temp == 3)
+                    countdownLabel.setStyle(greenStyle);
+                else if (temp == 2)
+                    countdownLabel.setStyle(yellowStyle);
+                else
+                    countdownLabel.setStyle(redStyle);
             }
-            if (Time > 10f) {
+            if (countdown <= 0) {
                 GameLogic.getSingleInstance().reduceHealth(GameLogic.getSingleInstance().getHealth() * 0.5);
-                Time = 0f;
+                countdown = DETONATION_TIME;
                 visible = false;
                 setTouchable(Touchable.disabled);
             }
         } else {
             velY += Constants.GRAVITY * delta;
             this.setY(this.getY() + velY * delta);
+            countdownLabel.setPosition(getX() + getWidth() / 2f - countdownLabel.getWidth() / 2f, getY() - countdownLabel.getHeight() / 2f);
             if (this.getY() < 300) {
                 this.explode();
             }
@@ -90,6 +116,7 @@ public class Dynamite extends Actor{
             visible = true;
             setTouchable(Touchable.enabled);
             this.setPosition(getRandom(1021), 300+getRandom(461));
+            countdownLabel.setPosition(getX() + getWidth() / 2f - countdownLabel.getWidth() / 2f, getY() - countdownLabel.getHeight() / 2f);
             velY = 0f;
         }
 
@@ -103,8 +130,11 @@ public class Dynamite extends Actor{
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if(visible)
+        if(visible) {
             batch.draw(currentFrame, this.getX(), this.getY());
+            if (!isFalling)
+                countdownLabel.draw(batch, parentAlpha);
+        }
     }
 
     public ClickListener getListener() {
@@ -130,7 +160,7 @@ public class Dynamite extends Actor{
         this.getParent().addActor(brixplosion);
         visible = false;
         setTouchable(Touchable.disabled);
-        Time = 0;
+        countdown = DETONATION_TIME;
     }
 
     public void setExploding(boolean val)
