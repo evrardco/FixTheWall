@@ -18,6 +18,8 @@ import com.fixthewall.game.actors.anim.Brixplosion;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.logic.MexicanLogic;
 
+import java.io.Serializable;
+
 /*
 * TARGET ENNEMI:    X = [0; 984] et Y = [242; 298]
 *
@@ -30,7 +32,7 @@ import com.fixthewall.game.logic.MexicanLogic;
 *
 * */
 
-public class Ennemi extends Actor implements Pool.Poolable {
+public class Ennemi extends Actor implements Serializable {
     private final AssetManager ass;
     private TextureRegion hitFrame;
     private TextureRegion previousFrame;
@@ -110,7 +112,6 @@ public class Ennemi extends Actor implements Pool.Poolable {
     }
 
 
-    @Override
     public void reset() {
 
         //Set animation move
@@ -239,7 +240,7 @@ public class Ennemi extends Actor implements Pool.Poolable {
 
     public void kill() {
         if(hidden) return;
-        Brixplosion explosion = new Brixplosion(15, ass, getX(), getY(), 0f);
+        Brixplosion explosion = new Brixplosion(32, ass, getX(), getY(), 0f);
         explosion.setPosition(getX(), getY());
         getParent().addActor(explosion);
         setVisible(false);

@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.fixthewall.game.actors.anim.Brixplosion;
+import com.fixthewall.game.actors.anim.Explosion;
 import com.fixthewall.game.actors.physics.Constants;
 import com.fixthewall.game.logic.GameLogic;
 
@@ -156,8 +157,11 @@ public class Dynamite extends Actor{
     public void explode() {
         isFalling = false;
         isExploding = true;
-        Brixplosion brixplosion = new Brixplosion(15, ass, this.getX(), this.getY(), 500.0f);
-        this.getParent().addActor(brixplosion);
+        //Brixplosion brixplosion = new Brixplosion(15, ass, this.getX(), this.getY(), 500.0f);
+        Explosion explosion = new Explosion(this.getX(), this.getY(), ass);
+        //this.getParent().addActor(brixplosion);
+        this.getParent().addActor(explosion);
+        explosion.explode();
         visible = false;
         setTouchable(Touchable.disabled);
         countdown = DETONATION_TIME;

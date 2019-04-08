@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.fixthewall.game.actors.physics.Brick;
 
 public class Brixplosion extends Actor{
-    public static final int MAX_BRICKS_COUNT = 64;
+    public static final int MAX_BRICKS_COUNT = 128;
     public static int brickCount = 0;
     private Group bricks;
     private float alpha;

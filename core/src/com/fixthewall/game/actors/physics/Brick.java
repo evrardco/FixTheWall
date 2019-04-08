@@ -1,33 +1,14 @@
 package com.fixthewall.game.actors.physics;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.fixthewall.game.Game;
 import com.fixthewall.game.actors.anim.Brixplosion;
 
-public class Brick extends Actor {
-    private float alpha;
-    private float y;
-    private float x;
-    private float velX;
-    private float velY;
-    private float angVel;
-    private float ttl;
-    private float groundLevel;
-    private Sprite sprite;
-    private boolean isPulledBygravity;
-    private boolean onGround;
-
-
-
+public class Brick extends BaseParticle {
     public Brick(float x, float y, float velX, float velY, float angVel, float ttl, boolean gravity, AssetManager ass){
+        super(ass.get("anim/brick.png", Texture.class));
         this.x = x;
         this.y = y;
         this.groundLevel = this.y - 100f; //arbitrary should be changed
@@ -35,59 +16,18 @@ public class Brick extends Actor {
         this.velY = velY;
         this.angVel = angVel;
         this.ttl = ttl;
-        this.isPulledBygravity = gravity;
-        this.sprite = new Sprite((Texture)ass.get("anim/brick.png"));
+        this.isPulledBygravity = true;
         this.sprite.setPosition(x, y);
         onGround = false;
         this.alpha = 1.0f;
         Brixplosion.brickCount++;
-        this.setScale(0.5f);
-
-
+        sprite.setScale(0.75f);
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
-        sprite.draw(batch, alpha);
-
-    }
-
-    @Override
-    public void act(float delta) {
-        super.act(delta);
-        this.setPosition(sprite.getX(), sprite.getY());
-        //  Gdx.app.log("Brick", "velX = "+velX);
-        sprite.setPosition(getX() + velX * delta, getY() + velY * delta);
-        sprite.rotate(angVel * delta);
-
-        //Gdx.app.log("Brick", ""+onGround+"\n\n\n");
-        if(!onGround && sprite.getY() <= groundLevel){
-            velY = 0;
-            sprite.setRotation(0f);
-            angVel = 0.0f;
-            onGround = true;
-        }if(onGround){
-            sprite.setY(groundLevel);
-            velX += Constants.SLOWING_FACTOR * -1.0f * Math.signum(velX) * delta;
-        } else if(isPulledBygravity){
-            velY += Constants.GRAVITY * delta;
-        }
-        //here we do the fading stuff
-        ttl = Math.max(ttl-delta, 0.0f);
-        if(ttl <= 0.0f){
-            this.alpha -= delta;
-            if(alpha < 0.0f){
-                this.remove();
-                Brixplosion.brickCount--;
-            }
-        }
-    }
-
-    public void setVelInDir(float degrees, float speedAbs){
-        degrees = (float)Math.toRadians(degrees);
-        velX = (float)Math.cos(degrees) * speedAbs;
-        velY = (float)Math.sin(degrees) * speedAbs;
+    public boolean remove(){
+        Brixplosion.brickCount--;
+        return super.remove();
     }
 
 }
