@@ -157,8 +157,7 @@ public class MexicanLogic implements Serializable {
     public void updateTrumpHead(Sun trump, Moon moon, float delta, float duration) {
 
         dayTime = dayTime + delta;
-        if (dayTime > duration)
-        {
+        if (dayTime > duration) {
             dayTime = 0f;
         }
         if (dayTime < duration/2 ) {
@@ -167,8 +166,7 @@ public class MexicanLogic implements Serializable {
             this.trump = trump;
             float x = (float) (700 * Math.cos(dayTime/duration * Math.PI * 2) + 540 - (moon.getWidth() / 2));
             float y = (float) (700 * Math.sin(dayTime/duration * Math.PI * 2) + 830);  //Playing with alpha is a bad idea
-            trump.setX(x);
-            trump.setY(y);
+            trump.setPosition(x, y);
         }
         else {
             trump.setVisible(false);
@@ -176,8 +174,7 @@ public class MexicanLogic implements Serializable {
             this.trump = trump;
             float x = (float) (700 * Math.cos(-dayTime/duration * Math.PI * 2) + 540 - (moon.getWidth() / 2));
             float y = (float) (700 * Math.sin(-dayTime/duration * Math.PI * 2) + 830);
-            moon.setX(x);
-            moon.setY(y);
+            moon.setPosition(x, y);
         }
     }
 

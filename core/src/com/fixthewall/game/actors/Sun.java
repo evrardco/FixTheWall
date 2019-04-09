@@ -20,18 +20,13 @@ import static java.lang.Math.toRadians;
 
 public class Sun extends Actor {
 
-    private float alpha;
     private TextureRegion texture;
     private TextureRegion textureTrump;
     private TextureRegion textureSun;
     private Rectangle bounds;
     private Boolean isTrump;
-    private Vector2 center;
-    private float radius;
-    private Image background;
-    private float prevBackgroundAlpha;
 
-    public Sun (AssetManager ass, float xMidLeft, float yLMidLeft, float radius, Image background){
+    public Sun (AssetManager ass) {
 
 
         //background's    0.5<alpha<1 -> night time
@@ -42,11 +37,6 @@ public class Sun extends Actor {
         isTrump = false;
         this.setWidth(texture.getRegionWidth());
         this.setHeight(texture.getRegionWidth());
-        this.center = new Vector2(xMidLeft, yLMidLeft);
-        this.background = background;
-        this.radius = radius;
-        this.prevBackgroundAlpha = 0.0f;
-        this.alpha = (float)PI;
         this.bounds = new Rectangle(getX(), getY(), getWidth(), getHeight());
         setVisible(true);
     }

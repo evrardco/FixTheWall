@@ -19,10 +19,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Nuages;
+import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.ui.MenuTable;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
+import com.fixthewall.game.logic.MexicanLogic;
 import com.fixthewall.game.logic.MusicLogic;
 
 
@@ -43,7 +46,7 @@ public class StartScreen implements Screen {
         Image imgFond = new Image(textureFond);
         stage = new Stage(game.viewport);
 
-        Nuages nuages = new Nuages(game.ass);
+        final Nuages nuages = new Nuages(game.ass);
 
         //setup Button
         ImageTextButton.ImageTextButtonStyle playButtonStyle = new ImageTextButton.ImageTextButtonStyle();
@@ -63,7 +66,7 @@ public class StartScreen implements Screen {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
                 dispose();
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new GameScreen(game, nuages));
             }
         });
 

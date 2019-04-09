@@ -52,12 +52,13 @@ public class GameScreen implements Screen {
     private Group dynamiteGroup;
     private Sun trump;
     private Moon moon;
+    private Nuages nuages;
 
     private LinkedList<PopupLabel> popupLabels;
 
     public static final transient int DAY_NIGHT_CYCLE_LEN = 300; //10 minutes
 
-    public GameScreen(final Game game) {
+    public GameScreen(final Game game, Nuages nuages) {
         this.game = game;
         stage = new Stage(game.viewport);
 
@@ -78,20 +79,19 @@ public class GameScreen implements Screen {
                 )
         ));
 
-        Nuages nuages = new Nuages(game.ass);
+        if (nuages == null)
+            this.nuages = new Nuages(game.ass);
+        else
+            this.nuages = nuages;
+
         Wall wall = new Wall(game.ass);
         dynamite = new Dynamite(game.ass);
         dynamiteGroup = new Group();
         dynamiteGroup.addActor(dynamite);
         hammer = new Hammer(game.ass);
         moon = new Moon(game.ass);
-        trump = new Sun(
-                game.ass,
-                0,
-                game.viewport.getWorldHeight()/2,
-                game.viewport.getWorldWidth()*0.6f,
-                backgroundNight
-        );
+        trump = new Sun(game.ass);
+
         pause = new Image(game.ass.get("imgPause.png", Texture.class));
         pause.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.95f - pause.getHeight() / 2f);
         pauseFond = new Image(game.ass.get("imgPauseFond.png", Texture.class));
@@ -211,7 +211,7 @@ public class GameScreen implements Screen {
         stage.addActor(backgroundNight);
         stage.addActor(trump);
         stage.addActor(moon);
-        stage.addActor(nuages);
+        stage.addActor(this.nuages);
         stage.addActor(wall);
         stage.addActor(dynamiteGroup);
         stage.addActor(ennemiGroup);
@@ -262,7 +262,7 @@ public class GameScreen implements Screen {
 
         if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
             dispose();
-            game.setScreen(new EndScreen(game));
+            game.setScreen(new EndScreen(game, nuages));
         }
 
         stage.draw();

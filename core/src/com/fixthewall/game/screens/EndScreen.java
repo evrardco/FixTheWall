@@ -26,7 +26,7 @@ public class EndScreen implements Screen {
     private final Game game;
     private Stage stage;
 
-    public EndScreen(final Game game) {
+    public EndScreen(final Game game, Nuages nuages) {
         this.game = game;
         stage = new Stage(game.viewport);
 
@@ -37,7 +37,6 @@ public class EndScreen implements Screen {
         Wall wall = new Wall(game.ass);
         stage.addActor(wall);
 
-        Nuages nuages = new Nuages(game.ass);
         stage.addActor(nuages);
 
         //Import font
@@ -63,7 +62,7 @@ public class EndScreen implements Screen {
                 UpgradeManager.getSingleInstance().init(game.ass);
                 MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);
                 dispose();
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new GameScreen(game, null));
             }
         });
 
