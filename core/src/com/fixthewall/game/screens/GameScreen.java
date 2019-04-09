@@ -260,12 +260,12 @@ public class GameScreen implements Screen {
 
         stage.act(delta);
 
+        stage.draw();
+
         if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
             dispose();
             game.setScreen(new EndScreen(game, nuages));
         }
-
-        stage.draw();
     }
 
     @Override
