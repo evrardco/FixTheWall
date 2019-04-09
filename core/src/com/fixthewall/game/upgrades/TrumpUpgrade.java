@@ -9,6 +9,7 @@ public class TrumpUpgrade extends AbstractUpgrade{
             super(level, cost);
             this.setName("Be proud of your savior");
             this.setDesc("Something strange will appear...");
+            this.setType(AbstractUpgrade.TYPE_OTHER);
         }
         @Override
         public void apply() {

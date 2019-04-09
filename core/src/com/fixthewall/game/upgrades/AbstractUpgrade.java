@@ -9,12 +9,16 @@ import java.io.Serializable;
 
 public abstract class AbstractUpgrade implements Serializable {
 
+    public static final int TYPE_HAMMER = 0;
+    public static final int TYPE_WALL = 1;
+    public static final int TYPE_OTHER = 2;
+
     private int level;
     private float base;
     private double cost;
     private String desc;
     private String name;
-
+    private int type;
 
     private boolean applied;
 
@@ -35,6 +39,14 @@ public abstract class AbstractUpgrade implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public AbstractUpgrade(int level, double cost){

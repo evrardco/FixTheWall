@@ -19,25 +19,22 @@ public class UpgradeManager implements Serializable {
     }
 
     public void init(AssetManager ass) {
-        allUpgrade[0] = new UpgradeLife(0, 10);//Life++
-        allUpgrade[1] = new UpgradeBricks(0, 100);//Bricks++
-        allUpgrade[2] = new UpgradeHP(0, 2000);//HP++
-        allUpgrade[3] = new UpgradeCashRain(0, 50);//CashRain
-        allUpgrade[4] = new WorkerUpgrade(0, 10, ass);
-        allUpgrade[5] = new WorkerLevelUpgrade(0, 10);
+        allUpgrade[0] = new UpgradeBricks(0, 100);//Bricks++
+        allUpgrade[1] = new UpgradeHP(0, 2000);//HP++
+        allUpgrade[2] = new UpgradeLife(0, 10);//Life++
+        allUpgrade[3] = new WorkerUpgrade(0, 10, ass);
+        allUpgrade[4] = new WorkerLevelUpgrade(0, 10);
+        allUpgrade[5] = new UpgradeCashRain(0, 50);//CashRain
         allUpgrade[6] = new TrumpUpgrade(0, 10);
         update();
     }
 
 
-    public void update()
-    {
+    public void update() {
         AbstractUpgrade currentUpgrade;
-        for (int i = 0; i < allUpgrade.length; i++)
-        {
+        for (int i = 0; i < allUpgrade.length; i++) {
             currentUpgrade = allUpgrade[i];
-            if (currentUpgrade.isApplied())
-            {
+            if (currentUpgrade.isApplied()) {
                 currentUpgrade.apply();
                 currentUpgrade.setApplied(false);//Permet de ne pas upgrade plusieurs à la foi.
             }
@@ -45,23 +42,19 @@ public class UpgradeManager implements Serializable {
 
     }
 
-    public void unupdate()
-    {
+    public void unupdate() {
         AbstractUpgrade currentUpgrade;
-        for (int i = 0; i < allUpgrade.length; i++)
-        {
+        for (int i = 0; i < allUpgrade.length; i++) {
             currentUpgrade = allUpgrade[i];
             currentUpgrade.unApply();
         }
 
     }
 
-    public double totalSum()
-    {
+    public double totalSum() {
         double totalCost = 0;
         AbstractUpgrade currentUpgrade;
-        for (int i = 0; i < allUpgrade.length; i++)
-        {
+        for (int i = 0; i < allUpgrade.length; i++) {
             currentUpgrade = allUpgrade[i];
             totalCost = totalCost+currentUpgrade.getCost();
         }
@@ -70,14 +63,14 @@ public class UpgradeManager implements Serializable {
 
     }
 
-    public void increaseLevelUpgradeHammer(){
+    public void increaseLevelUpgradeHammer() {
         levelUpgradeHammer++;
-        if(levelUpgradeHammer<=70){
+        if(levelUpgradeHammer<=70) {
             GameLogic.getSingleInstance().setHammerLevel(levelUpgradeHammer/10);
         }
     }
 
-    public static UpgradeManager getSingleInstance(){
+    public static UpgradeManager getSingleInstance() {
         if(singleInstance == null) singleInstance = new UpgradeManager();
         return singleInstance;
     }

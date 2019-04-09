@@ -12,6 +12,7 @@ public class WorkerUpgrade extends AbstractUpgrade {
         super(level, cost);
         this.setName("Worker");
         this.setDesc("Give an invader a \"better\" life\nby giving him a job to\nhelp fix your wall.");
+        this.setType(AbstractUpgrade.TYPE_WALL);
         this.ass = ass;
     }
 

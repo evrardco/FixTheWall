@@ -44,7 +44,14 @@ public class UpgradeButton extends Table {
         super();
         this.upgrade = upgrade;
 
-        pannelTex = ass.get("ui/texture_upgrade_pannel.png");
+        if (upgrade.getType() == AbstractUpgrade.TYPE_HAMMER)
+            pannelTex = ass.get("ui/texture_upgrade_panel_hammer.png");
+        else if (upgrade.getType() == AbstractUpgrade.TYPE_WALL)
+            pannelTex = ass.get("ui/texture_upgrade_panel_wall.png");
+        else
+            pannelTex = ass.get("ui/texture_upgrade_panel_other.png");
+
+
         this.setBackground(new TextureRegionDrawable(pannelTex));//BackGround Vert des bouttons
         Label.LabelStyle style = new Label.LabelStyle((BitmapFont)ass.get("PoetsenOne30.ttf"), Color.BLACK);
         cost = new Label(Helpers.formatBigNumbers(upgrade.getCost()), style);

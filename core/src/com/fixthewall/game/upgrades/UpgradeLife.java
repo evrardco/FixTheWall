@@ -8,7 +8,9 @@ public class UpgradeLife extends AbstractUpgrade {
         super(level, cost);
         this.setName("Life++");
         this.setDesc("Increase your wall's life !");
+        this.setType(AbstractUpgrade.TYPE_WALL);
     }
+
     @Override
     public void apply() {
         super.apply();

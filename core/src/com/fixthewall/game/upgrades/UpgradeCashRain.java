@@ -4,12 +4,11 @@ import com.fixthewall.game.logic.MexicanLogic;
 
 public class UpgradeCashRain extends AbstractUpgrade {
 
-    public UpgradeCashRain(int level, double cost)
-    {
+    public UpgradeCashRain(int level, double cost) {
         super(level, cost);
         this.setName("Cashrain");
         this.setDesc("Pay mexicans and see what\nhappens !");
-
+        this.setType(AbstractUpgrade.TYPE_OTHER);
     }
 
     @Override

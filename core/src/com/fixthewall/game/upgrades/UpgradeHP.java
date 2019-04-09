@@ -7,8 +7,9 @@ public class UpgradeHP extends AbstractUpgrade {
         super(level, cost);
         this.setName("HP++");
         this.setDesc("Increases the HP you gain");
-
+        this.setType(AbstractUpgrade.TYPE_HAMMER);
     }
+
     @Override
     public void apply() {
         super.apply();
