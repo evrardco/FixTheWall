@@ -13,13 +13,13 @@ public class WorkerUpgrade extends AbstractUpgrade {
         this.setName("Worker");
         this.setDesc("Give an invader a \"better\" life\nby giving him a job to\nhelp fix your wall.");
         this.setType(AbstractUpgrade.TYPE_WALL);
-        this.ass = ass;
+
     }
 
     @Override
     public void apply() {
         super.apply();
         this.setCost(this.getCost() + this.getCost() * 0.25);
-        MexicanLogic.getSingleInstance().getWorkerGroup().addActor(new Worker(ass));
+        MexicanLogic.getSingleInstance().addWorker();
     }
 }

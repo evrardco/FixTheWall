@@ -9,6 +9,7 @@ import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Sun;
+import com.fixthewall.game.actors.Worker;
 import com.fixthewall.game.actors.pools.EnnemiPool;
 import com.fixthewall.game.actors.recyclers.DollarRecycler;
 import com.fixthewall.game.upgrades.UpgradeManager;
@@ -17,10 +18,15 @@ import java.io.Serializable;
 
 public class MexicanLogic implements Serializable {
 
-    private AssetManager ass;
+    private transient AssetManager ass;
 
     private transient Group ennemiGroup;
     private transient Group workerGroup;
+    private transient Sun trump;
+    private transient DollarRecycler dollarRecycler;
+    public transient EnnemiPool pool;
+
+
 
     private double damage;
     private double heal;
@@ -29,15 +35,23 @@ public class MexicanLogic implements Serializable {
 
     private float elapsedTime;
     private float waveNumber;
-    private Sun trump;
-    private DollarRecycler dollarRecycler;
+
     private double dayTime;
 
-    private int ennemiToRemove;
+    public int getEnnemiCount() {
+        return ennemiCount;
+    }
 
-    public EnnemiPool pool;
+    public void setEnnemiCount(int ennemiCount) {
+        this.ennemiCount = ennemiCount;
+    }
+
+    private int ennemiToRemove;
+    private int ennemiCount;
+
 
     private static MexicanLogic singleInstance = null;
+    private boolean finishedLoading;
 
     public static MexicanLogic getSingleInstance() {
         if(singleInstance == null) singleInstance = new MexicanLogic();
@@ -45,8 +59,37 @@ public class MexicanLogic implements Serializable {
     }
 
     private MexicanLogic() {}
+    /**
+     * Pour sauvegarde
+     */
+    public static void init(MexicanLogic instance, AssetManager ass){
+        singleInstance = instance;
+        instance.trump = null;
+        instance.ennemiGroup = new Group();
+        instance.workerGroup = new Group();
+        instance.ennemiToRemove = 0;
+        instance.ass = ass;
+        instance.pool = new EnnemiPool(ass);
+        instance.dollarRecycler = new DollarRecycler(128);
+        instance.finishedLoading = false;
+
+    }
+
+    private void finishLoading(){
+
+        int numWorker = UpgradeManager.getSingleInstance().getAllUpgrade()[3].getLevel();
+        for(int i = 0; i < numWorker; i++){
+            addWorker();
+        }
+        for(int i = 0; i < ennemiCount; i++ ){
+            ennemiGroup.addActor(pool.obtain());
+        }
+        this.finishedLoading = true;
+
+    }
 
     public void init(double damage, double heal, double brickPower, double mul, AssetManager ass) {
+
         this.waveNumber = 0;
         this.damage = damage;
         this.heal = heal;
@@ -60,6 +103,8 @@ public class MexicanLogic implements Serializable {
         this.ass = ass;
         pool = new EnnemiPool(ass);
         dollarRecycler = new DollarRecycler(128);
+        this.ennemiCount = 0;
+        this.finishedLoading = true;
     }
 
     public double getDamage() {
@@ -76,6 +121,10 @@ public class MexicanLogic implements Serializable {
 
     public void setMul(float mul) {
         this.mul = mul;
+    }
+
+    public void addWorker() {
+        this.workerGroup.addActor(new Worker(ass));
     }
 
     public void doDamage() {
@@ -96,7 +145,6 @@ public class MexicanLogic implements Serializable {
         );
     }
 
-    // TODO remplacer dollarGroup par le pool
     public void updateCashRain(Group dollarGroup, AssetManager ass) {
         if (ennemiToRemove > 0) {
             for(int i = 0; i < UpgradeManager.getSingleInstance().getAllUpgrade()[2].getLevel() * 2 + 3; i++) {
@@ -142,6 +190,7 @@ public class MexicanLogic implements Serializable {
 
 
     public void updateWave(float delta, boolean isDay, AssetManager ass) {
+        if(!finishedLoading) finishLoading();
         elapsedTime += delta;
         // new wave every 45 seconds if day, every 25 seconds if night
         if ((elapsedTime >= 45 && isDay) || (elapsedTime >= 25 && !isDay)) {
@@ -182,12 +231,7 @@ public class MexicanLogic implements Serializable {
         return trump.getBounds().overlaps(ennemiBounds);
     }
 
-    /**
-     * Pour sauvegarde
-     */
-    public void init(MexicanLogic instance){
-        singleInstance = instance;
-    }
+
 
     public Group getWorkerGroup() {
         return workerGroup;

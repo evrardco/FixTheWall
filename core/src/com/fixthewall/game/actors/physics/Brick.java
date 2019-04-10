@@ -11,7 +11,7 @@ public class Brick extends BaseParticle {
         super(ass.get("anim/brick.png", Texture.class));
         this.x = x;
         this.y = y;
-        this.groundLevel = this.y - 100f; //arbitrary should be changed
+        this.groundLevel = this.y - 100f > Constants.GROUND_LEVEL ? Constants.GROUND_LEVEL : this.y - 100f; //arbitrary should be changed
         this.velX = velX;
         this.velY = velY;
         this.angVel = angVel;

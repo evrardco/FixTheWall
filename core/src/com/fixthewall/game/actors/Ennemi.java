@@ -61,6 +61,11 @@ public class Ennemi extends Actor implements Serializable {
 
 
     public Ennemi(final AssetManager ass) {
+
+        MexicanLogic.getSingleInstance().setEnnemiCount(
+                MexicanLogic.getSingleInstance().getEnnemiToRemove()+1
+        );
+
         this.ass = ass;
         this.setupTexture();
         this.fromLeft = false;
@@ -245,6 +250,9 @@ public class Ennemi extends Actor implements Serializable {
         getParent().addActor(explosion);
         setVisible(false);
         MexicanLogic.getSingleInstance().pool.free(this);
+        MexicanLogic.getSingleInstance().setEnnemiCount(
+                MexicanLogic.getSingleInstance().getEnnemiToRemove()-1
+        );
 
     }
 

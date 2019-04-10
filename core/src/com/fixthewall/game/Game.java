@@ -1,5 +1,6 @@
 package com.fixthewall.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
@@ -40,22 +41,23 @@ public class Game extends com.badlogic.gdx.Game {
         loadVIPAssets();
         loadAssets();
         //We see whether we must load the saved game.
+        Perziztancinator.load();
+        if(Perziztancinator.isNewGame() || Perziztancinator.isCorrupt() ){
+            UpgradeManager.getSingleInstance().init(ass);
+            GameLogic.getSingleInstance().init();
+            MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, this.ass);
+            Perziztancinator.getSingleInstance().init();
+            Gdx.app.log("Game", "Done new game.");
 
-//        if(Perziztancinator.isNewGame()){
-//            UpgradeManager.getSingleInstance().init();
-//            GameLogic.getSingleInstance().init();
-//            MexicanLogic.getSingleInstance().init(3.0, 1.0f);
-//            Perziztancinator.getSingleInstance().init();
-//
-//        }else{
-//            Perziztancinator.load();
-//            UpgradeManager.getSingleInstance().init(Perziztancinator.getSingleInstance().getUpgManager());
-//            GameLogic.getSingleInstance().init(Perziztancinator.getSingleInstance().getLogic());
-//            MexicanLogic.getSingleInstance().init(Perziztancinator.getSingleInstance().getBadLogic());
-//        }
-        UpgradeManager.getSingleInstance().init(ass);
-        GameLogic.getSingleInstance().init();
-        MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, this.ass);
+
+        }else {
+            UpgradeManager.getSingleInstance().init(Perziztancinator.getSingleInstance().getUpgManager());
+            GameLogic.getSingleInstance().init(Perziztancinator.getSingleInstance().getLogic());
+            MexicanLogic.init(Perziztancinator.getSingleInstance().getBadLogic(), this.ass);
+            Gdx.app.log("Game", "Done loading.");
+
+        }
+
 
 
 

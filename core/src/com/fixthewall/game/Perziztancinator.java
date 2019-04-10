@@ -22,7 +22,7 @@ public class Perziztancinator implements Serializable {
             out.writeObject(instance);
             out.close();
             fileOut.close();
-            System.out.printf("Serialized data is saved in "+SAVE_FILE_NAME);
+            Gdx.app.log("Perziztancinator","Serialized data is saved in "+SAVE_FILE_NAME);
         } catch (IOException i) {
             i.printStackTrace();
         }
@@ -48,6 +48,12 @@ public class Perziztancinator implements Serializable {
     public static boolean isNewGame(){
         boolean ret = !Gdx.files.local(SAVE_FILE_NAME).exists();
         return ret;
+    }
+    public static boolean isCorrupt(){
+        return instance == null ||
+                instance.logic == null ||
+                instance.upgManager == null ||
+                instance.badLogic == null;
     }
 
     private transient static Perziztancinator instance;
