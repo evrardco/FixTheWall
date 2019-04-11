@@ -9,7 +9,7 @@ public class UpgradeManager implements Serializable {
 
     private int levelUpgradeHammer;
 
-    private AbstractUpgrade [] allUpgrade = new AbstractUpgrade[7];
+    private AbstractUpgrade [] allUpgrade = new AbstractUpgrade[8];
     private static UpgradeManager singleInstance = null;
 
     private UpgradeManager() {}
@@ -26,6 +26,7 @@ public class UpgradeManager implements Serializable {
         allUpgrade[4] = new WorkerLevelUpgrade(0, 10);
         allUpgrade[5] = new UpgradeCashRain(0, 50);//CashRain
         allUpgrade[6] = new TrumpUpgrade(0, 10);
+        allUpgrade[7] = new NukeUpgrade(0, 0);
         update();
     }
 

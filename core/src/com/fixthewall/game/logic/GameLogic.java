@@ -44,9 +44,9 @@ public class GameLogic implements Serializable {
         this.maxHealth = 100;
         health = maxHealth;
         bricks = 0;
-        hammerLevel = 0;
-        healingPower = 1.0;
-        bricksPower = 1.0;
+        hammerLevel = 1;
+        healingPower = 1;
+        bricksPower = 1;
         score = 0.0;
         highScore = 999999999999d; // TODO quand persistance sera faite changer la valeur
         trumpTime = 0.0f;

@@ -8,6 +8,7 @@ import com.fixthewall.game.actors.Dollar;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.Moon;
+import com.fixthewall.game.actors.Nuke;
 import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.Worker;
 import com.fixthewall.game.actors.pools.EnnemiPool;
@@ -25,6 +26,10 @@ public class MexicanLogic implements Serializable {
     private transient Sun trump;
     private transient DollarRecycler dollarRecycler;
     public transient EnnemiPool pool;
+
+
+
+    private transient Group dayNightCycleGroup;
 
 
 
@@ -53,12 +58,20 @@ public class MexicanLogic implements Serializable {
     private static MexicanLogic singleInstance = null;
     private boolean finishedLoading;
 
+    private float timeBetweenWavesDay;
+    private float timeBetweenWavesNight;
+
     public static MexicanLogic getSingleInstance() {
         if(singleInstance == null) singleInstance = new MexicanLogic();
         return singleInstance;
     }
 
     private MexicanLogic() {}
+
+    public EnnemiPool getPool() {
+        return pool;
+    }
+
     /**
      * Pour sauvegarde
      */
@@ -67,6 +80,8 @@ public class MexicanLogic implements Serializable {
         instance.trump = null;
         instance.ennemiGroup = new Group();
         instance.workerGroup = new Group();
+        instance.dayNightCycleGroup = new Group();
+
         instance.ennemiToRemove = 0;
         instance.ass = ass;
         instance.pool = new EnnemiPool(ass);
@@ -99,14 +114,30 @@ public class MexicanLogic implements Serializable {
         this.trump = null;
         ennemiGroup = new Group();
         workerGroup = new Group();
+        dayNightCycleGroup = new Group();
+
         ennemiToRemove = 0;
         this.ass = ass;
         pool = new EnnemiPool(ass);
         dollarRecycler = new DollarRecycler(128);
         this.ennemiCount = 0;
         this.finishedLoading = true;
+        this.timeBetweenWavesDay = 45f;
+        this.timeBetweenWavesDay = 25f;
     }
 
+    public void launchNuke(){
+        Nuke nuke = new Nuke(ass);
+        this.dayNightCycleGroup.addActor(nuke);
+        nuke.launch();
+    }
+    public Group getDayNightCycleGroup() {
+        return dayNightCycleGroup;
+    }
+
+    public void setDayNightCycleGroup(Group dayNightCycleGroup) {
+        this.dayNightCycleGroup = dayNightCycleGroup;
+    }
     public double getDamage() {
         return damage;
     }
@@ -188,13 +219,17 @@ public class MexicanLogic implements Serializable {
         }
     }
 
+    public void resetWaveTime(){elapsedTime = 0f;}
 
     public void updateWave(float delta, boolean isDay, AssetManager ass) {
         if(!finishedLoading) finishLoading();
         elapsedTime += delta;
         // new wave every 45 seconds if day, every 25 seconds if night
-        if ((elapsedTime >= 45 && isDay) || (elapsedTime >= 25 && !isDay)) {
+        if ((elapsedTime >= 45f && isDay) || (elapsedTime >= 25f && !isDay)) {
             elapsedTime = 0f;
+            //if(isDay) timeBetweenWavesDay *=  0.9f;
+            //else timeBetweenWavesNight *=  0.7f;
+
             waveNumber++;
             // TODO utiliser les Pools ici
             for (int i = 0; i < 1 + 2 * waveNumber; i++) {

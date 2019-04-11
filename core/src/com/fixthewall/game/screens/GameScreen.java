@@ -89,8 +89,11 @@ public class GameScreen implements Screen {
         dynamiteGroup = new Group();
         dynamiteGroup.addActor(dynamite);
         hammer = new Hammer(game.ass);
+        Group dayNightCycleGroup = MexicanLogic.getSingleInstance().getDayNightCycleGroup();
         moon = new Moon(game.ass);
         trump = new Sun(game.ass);
+        dayNightCycleGroup.addActor(moon);
+        dayNightCycleGroup.addActor(trump);
 
         pause = new Image(game.ass.get("imgPause.png", Texture.class));
         pause.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.95f - pause.getHeight() / 2f);
@@ -157,6 +160,9 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 menuUpgrade.toggle();
+                UpgradeManager.getSingleInstance().getAllUpgrade()[7].setCost(
+                        GameLogic.getSingleInstance().getBricks()
+                );
             }
         });
 
@@ -209,8 +215,7 @@ public class GameScreen implements Screen {
         //Add all the things to runescape (add a deadman mode)
         stage.addActor(backgroundDay);
         stage.addActor(backgroundNight);
-        stage.addActor(trump);
-        stage.addActor(moon);
+        stage.addActor(dayNightCycleGroup);
         stage.addActor(this.nuages);
         stage.addActor(wall);
         stage.addActor(dynamiteGroup);

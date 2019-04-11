@@ -48,6 +48,11 @@ public class EnnemiPool {
         hidden.add(toHide);
     }
 
+    public void clear(){
+        hidden = new Array<Ennemi>(MAX_ENNEMI_ON_SCREEN);
+        shown = new Array<Ennemi>(MAX_ENNEMI_ON_SCREEN);
+    }
+
     private Ennemi createObject(){
         return new Ennemi(ass);
     }

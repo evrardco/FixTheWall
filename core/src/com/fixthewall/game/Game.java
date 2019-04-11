@@ -18,6 +18,8 @@ import com.fixthewall.game.upgrades.UpgradeManager;
 import com.fixthewall.game.logic.MusicLogic;
 import com.fixthewall.game.logic.GameLogic;
 
+import javax.xml.soap.Text;
+
 public class Game extends com.badlogic.gdx.Game {
 
     public FitViewport viewport;
@@ -41,8 +43,8 @@ public class Game extends com.badlogic.gdx.Game {
         loadVIPAssets();
         loadAssets();
         //We see whether we must load the saved game.
-        Perziztancinator.load();
-        if(Perziztancinator.isNewGame() || Perziztancinator.isCorrupt() ){
+        if(!Perziztancinator.isNewGame()) Perziztancinator.load();
+        if(true || Perziztancinator.isNewGame() || Perziztancinator.isCorrupt() ){
             UpgradeManager.getSingleInstance().init(ass);
             GameLogic.getSingleInstance().init();
             MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, this.ass);
@@ -108,7 +110,11 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("echelle.png", Texture.class);
         ass.load("trump.png", Texture.class);
         ass.load("moon2.png", Texture.class);
-
+        //dossier nuke
+        ass.load("nuke/nuke.png", Texture.class);
+        //dossier fx
+        ass.load("fx/blinding_foreground.png", Texture.class);
+        ass.load("fx/fusion.png", Texture.class);
         // dossier anim
         ass.load("anim/brick.png", Texture.class);
         ass.load("anim/explosion/flame.png", Texture.class);
