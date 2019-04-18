@@ -44,7 +44,7 @@ public class GameLogic implements Serializable {
         this.maxHealth = 100;
         health = maxHealth;
         bricks = 0;
-        hammerLevel = 1;
+        hammerLevel = 0;// 0 correspond au premier indice de l'array d'images de marteaux.
         healingPower = 1;
         bricksPower = 1;
         score = 0.0;

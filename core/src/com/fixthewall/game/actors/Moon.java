@@ -16,7 +16,7 @@ public class Moon extends Actor {
     public Moon (AssetManager ass){
         //set position
         setCoor();
-        texture = new TextureRegion(ass.get("moon2.png", Texture.class));
+        texture = new TextureRegion(ass.get("TheMoon.png", Texture.class));
         this.setWidth(texture.getRegionWidth());
         this.setHeight(texture.getRegionWidth());
         this.bounds = new Rectangle(getX(), getY(), getWidth(), getHeight());

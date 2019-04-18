@@ -109,7 +109,7 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("Sun.png", Texture.class);
         ass.load("echelle.png", Texture.class);
         ass.load("trump.png", Texture.class);
-        ass.load("moon2.png", Texture.class);
+        ass.load("TheMoon.png", Texture.class);
         //dossier nuke
         ass.load("nuke/nuke.png", Texture.class);
         //dossier fx
