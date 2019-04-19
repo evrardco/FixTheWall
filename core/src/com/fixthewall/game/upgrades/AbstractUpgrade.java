@@ -13,14 +13,14 @@ public abstract class AbstractUpgrade implements Serializable {
     public static final int TYPE_WALL = 1;
     public static final int TYPE_OTHER = 2;
 
-    private int level;
+    protected int level;
     private float base;
-    private double cost;
+    protected double cost;
     private String desc;
     private String name;
     private int type;
 
-    private boolean applied;
+    protected boolean applied;
 
     public boolean isAffordable(){
         return (GameLogic.getSingleInstance().getBricks() >= this.cost);

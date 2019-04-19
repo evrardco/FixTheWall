@@ -251,6 +251,7 @@ public class GameScreen implements Screen {
         bricksLabel.setText("Bricks: " + GameLogic.getSingleInstance().getBricksString());
         scoreLabel.setText("Score: " + GameLogic.getSingleInstance().getScoreString());
 
+
         // DYNAMITE EXPLOSION
         MexicanLogic.getSingleInstance().updateDynamite(dynamite);
 

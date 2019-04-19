@@ -42,6 +42,7 @@ public class MexicanLogic implements Serializable {
     private float waveNumber;
 
     private double dayTime;
+    private boolean isDay;
 
     public int getEnnemiCount() {
         return ennemiCount;
@@ -111,6 +112,7 @@ public class MexicanLogic implements Serializable {
         this.brickPower = brickPower;
         this.mul = mul;
         dayTime = 300/4; //TODO : changer cette valeur en la durée de la nuit/4
+        isDay = true;
         this.trump = null;
         ennemiGroup = new Group();
         workerGroup = new Group();
@@ -222,6 +224,8 @@ public class MexicanLogic implements Serializable {
     public void resetWaveTime(){elapsedTime = 0f;}
 
     public void updateWave(float delta, boolean isDay, AssetManager ass) {
+
+        setDay(isDay);
         if(!finishedLoading) finishLoading();
         elapsedTime += delta;
         // new wave every 45 seconds if day, every 25 seconds if night
@@ -249,7 +253,7 @@ public class MexicanLogic implements Serializable {
             moon.setVisible(false);
             this.trump = trump;
             float x = (float) (700 * Math.cos(dayTime/duration * Math.PI * 2) + 540 - (moon.getWidth() / 2));
-            float y = (float) (700 * Math.sin(dayTime/duration * Math.PI * 2) + 830);  //Playing with alpha is a bad idea
+            float y = (float) (700 * Math.sin(dayTime/duration * Math.PI * 2) + 830);
             trump.setPosition(x, y);
         }
         else {
@@ -258,7 +262,7 @@ public class MexicanLogic implements Serializable {
             this.trump = trump;
             float x = (float) (700 * Math.cos(-dayTime/duration * Math.PI * 2) + 540 - (moon.getWidth() / 2));
             float y = (float) (700 * Math.sin(-dayTime/duration * Math.PI * 2) + 830);
-            moon.setPosition(x, y);
+            moon.setPosition(1080-x, y);
         }
     }
 
@@ -283,6 +287,10 @@ public class MexicanLogic implements Serializable {
     public void setHeal(double heal) {
         this.heal = heal;
     }
+
+    public void setDay(boolean value) {isDay = value;}
+
+    public boolean isDay() {return isDay;}
 
 
     public double getBrickPower() {

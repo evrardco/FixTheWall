@@ -2,21 +2,12 @@ package com.fixthewall.game.actors;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.fixthewall.game.logic.GameLogic;
-
-
-import static java.lang.Math.PI;
-import static java.lang.Math.abs;
-import static java.lang.Math.cos;
-import static java.lang.Math.floorDiv;
-import static java.lang.Math.sin;
-import static java.lang.Math.toRadians;
 
 public class Sun extends Actor {
 
@@ -26,6 +17,13 @@ public class Sun extends Actor {
     private Rectangle bounds;
     private Boolean isTrump;
 
+
+    private TextureRegion currentFrame;
+    private Animation<TextureRegion> sunAnimation;
+    private static final int FRAME_COLS = 4, FRAME_ROWS = 4;
+    private float elapsedTime;
+    private TextureRegion[] sunFrames;
+
     public Sun (AssetManager ass) {
 
 
@@ -34,11 +32,23 @@ public class Sun extends Actor {
         textureSun = new TextureRegion(ass.get("Sun.png", Texture.class));
         textureTrump = new TextureRegion(ass.get("trump.png", Texture.class));
         texture = textureSun;
+
+        Texture sheet = ass.get("Frames/SheetFrameSun.png");
         isTrump = false;
-        this.setWidth(texture.getRegionWidth());
-        this.setHeight(texture.getRegionWidth());
+        this.setWidth(sheet.getWidth() / (float) FRAME_COLS);
+        this.setHeight(sheet.getHeight() / (float) FRAME_ROWS);
+        TextureRegion[][] tmp = TextureRegion.split(sheet, sheet.getWidth() / FRAME_COLS, sheet.getHeight() / FRAME_ROWS);
+        sunFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
         this.bounds = new Rectangle(getX(), getY(), getWidth(), getHeight());
         setVisible(true);
+        int index = 0;
+        for (int i = 0; i < FRAME_ROWS; i++) {
+            for (int j = 0; j < FRAME_COLS; j++) {
+                sunFrames[index++] = tmp[i][j];
+            }
+        }
+        elapsedTime = 0;
+        sunAnimation = new Animation<TextureRegion>(0.07f, sunFrames);
     }
 
     @Override
@@ -56,33 +66,22 @@ public class Sun extends Actor {
         */
         if (GameLogic.getSingleInstance().getTrumpTime() > 0)
         {
+            elapsedTime += delta;
+            texture = sunAnimation.getKeyFrame(elapsedTime, true);
             if (!isTrump) {
                 isTrump = true;
-                switchTexture();
             }
             GameLogic.getSingleInstance().setTrumpTime(GameLogic.getSingleInstance().getTrumpTime()-delta);
         }
         else {
             if (isTrump)
             {
-                switchTexture();
+                texture = textureSun;
+                elapsedTime = 0;
+                isTrump = false;
             }
-            isTrump = false;
 
         }
-    }
-
-    public void switchTexture() {
-        if (texture == textureSun)
-        {
-            texture = textureTrump;
-        }
-        else {
-            texture = textureSun;
-        }
-
-
-
     }
 
     @Override
