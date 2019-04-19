@@ -1,5 +1,6 @@
 package com.fixthewall.game.actors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -7,11 +8,16 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.actors.physics.Constants;
+import com.fixthewall.game.logic.GameLogic;
 
 public class Dollar extends Actor {
 
     private Texture texture;
     private Rectangle bounds;
+    private boolean available;
+    private float deltaSpeed;
+    private float prevAcc;
+    private float currentAcc;
     public static int visibleAmount = 0;
 
     private float velY;
@@ -20,7 +26,11 @@ public class Dollar extends Actor {
         texture = ass.get("dollard.png");
         setWidth(texture.getWidth() / 3f);
         setHeight(texture.getHeight());
+        available = GameLogic.getSingleInstance().isAccelerometerAvailable();
         reset();
+        deltaSpeed = 0f;
+        prevAcc = 0f;
+        currentAcc = 0f;
     }
 
     public void reset(){
@@ -41,7 +51,18 @@ public class Dollar extends Actor {
         if(!isVisible()) return;
 
         if (this.getY() > 150) {
-            this.velY += Constants.GRAVITY * delta;
+
+            if(available)
+            {
+                prevAcc = currentAcc;
+                currentAcc = Gdx.input.getAccelerometerY();
+                deltaSpeed += Math.abs(currentAcc - prevAcc);
+                this.velY += Constants.GRAVITY * delta*0.001-deltaSpeed*150*delta;
+            }
+            else
+            {
+                this.velY += Constants.GRAVITY * delta*0.1;
+            }
             this.setY(this.getY() + this.velY * delta);
         } else{
             this.setVisible(false);

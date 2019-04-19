@@ -1,6 +1,7 @@
 package com.fixthewall.game.logic;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Timer;
 import com.fixthewall.game.Helpers;
 import com.fixthewall.game.Perziztancinator;
@@ -14,6 +15,7 @@ public class GameLogic implements Serializable {
     private double health;
     private double maxHealth;
     private double bricks;
+    boolean available;
     private static GameLogic singleInstance = null;
     private double healingPower;
     private float trumpTime;
@@ -48,6 +50,7 @@ public class GameLogic implements Serializable {
         healingPower = 1;
         bricksPower = 1;
         score = 0.0;
+        available = Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer);
         highScore = 999999999999d; // TODO quand persistance sera faite changer la valeur
         trumpTime = 0.0f;
         timer = new Timer();
@@ -182,6 +185,8 @@ public class GameLogic implements Serializable {
     public double getHighScore() {
         return highScore;
     }
+
+    public boolean isAccelerometerAvailable() {return available;}
 
     public void setHighScore(double highScore) {
         this.highScore = highScore;
