@@ -67,7 +67,7 @@ public class Sun extends Actor {
         if (GameLogic.getSingleInstance().getTrumpTime() > 0)
         {
             elapsedTime += delta;
-            texture = sunAnimation.getKeyFrame(elapsedTime, true);
+            texture = sunAnimation.getKeyFrame(elapsedTime, false);
             if (!isTrump) {
                 isTrump = true;
             }
