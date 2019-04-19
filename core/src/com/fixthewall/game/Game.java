@@ -173,6 +173,7 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("Frames/SheetFrameDynamite.png", Texture.class);
         ass.load("Frames/SheetFrameWorker.png", Texture.class);
         ass.load("Frames/SheetFrameBaleze.png", Texture.class);
+        ass.load("Frames/SheetFrameBalezeHit.png", Texture.class);
         ass.load("Frames/SheetFrameCash.png", Texture.class);
         ass.load("Frames/SheetFrameSun.png", Texture.class);
 
