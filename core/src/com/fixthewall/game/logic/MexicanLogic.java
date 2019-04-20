@@ -111,7 +111,7 @@ public class MexicanLogic implements Serializable {
         this.heal = heal;
         this.brickPower = brickPower;
         this.mul = mul;
-        dayTime = 300/4; //TODO : changer cette valeur en la durée de la nuit/4
+        dayTime = 300f/4; //TODO : changer cette valeur en la durée de la nuit/4
         isDay = true;
         this.trump = null;
         ennemiGroup = new Group();
@@ -201,7 +201,8 @@ public class MexicanLogic implements Serializable {
                             && actor.isVisible()
                             && ((Dollar) dollar).getBounds().overlaps((((Ennemi) actor).getBounds()))) {
 
-                            ((Ennemi) actor).kill();
+                            //((Ennemi) actor).kill();
+                            ((Ennemi) actor).setPayed();
                             dollar.setVisible(false);
                     }
                 }

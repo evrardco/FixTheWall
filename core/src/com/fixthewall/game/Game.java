@@ -105,7 +105,7 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("nuages.png", Texture.class);
         ass.load("pioche.png", Texture.class);
 
-        ass.load("dollard.png", Texture.class);
+        ass.load("dollar.png", Texture.class);
         ass.load("Sun.png", Texture.class);
         ass.load("echelle.png", Texture.class);
         ass.load("trump.png", Texture.class);
@@ -176,6 +176,7 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("Frames/SheetFrameBalezeHit.png", Texture.class);
         ass.load("Frames/SheetFrameCash.png", Texture.class);
         ass.load("Frames/SheetFrameSun.png", Texture.class);
+        ass.load("Frames/SheetFrameDollar.png", Texture.class);
 
         // dossier font
         FreetypeFontLoader.FreeTypeFontLoaderParameter smallFont = new FreetypeFontLoader.FreeTypeFontLoaderParameter();

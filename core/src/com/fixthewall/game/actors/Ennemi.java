@@ -39,6 +39,8 @@ public class Ennemi extends Actor implements Serializable {
     private TextureRegion currentFrame;
     private float targetX;
     private float targetY;
+    private float spoonPointX;
+    private float spoonPointY;
     private float distance;
     private boolean isMegaEnnemi;
     private boolean fromLeft;
@@ -49,13 +51,20 @@ public class Ennemi extends Actor implements Serializable {
     private static final int FRAME_COLS = 4, FRAME_ROWS = 5;
     private static final int FRAME_COLS2 = 4, FRAME_ROWS2 = 2;
     private Animation<TextureRegion> ennemiAnimation;
+    private Animation<TextureRegion> ennemiAnimationCash;
     private Animation<TextureRegion> ennemiAnimationHit;
     // Variable for tracking elapsed time for the animation
     private float elapsedTime;
+    private float elapsedTimeCash;
     private float elapsedTimeHit;
     private TextureRegion[] ennemiFramesHit;
     private TextureRegion[] ennemiFramesWalk;
+    private TextureRegion[] ennemiFramesWalkCash;
     private boolean hidden;
+
+    private boolean isPayed;
+    private boolean payedIsSet;
+    private float durationCash;
 
     private Rectangle bounds;
 
@@ -79,6 +88,8 @@ public class Ennemi extends Actor implements Serializable {
 
         });
         */
+        this.isPayed = false;
+        this.payedIsSet = false;
         this.isDragged = false;
         this.addListener((new DragListener() {
             public void touchDragged (InputEvent event, float x, float y, int pointer) {
@@ -121,9 +132,13 @@ public class Ennemi extends Actor implements Serializable {
 
         //Set animation move
 
-        boolean tmp = fromLeft;
         this.setSide();
-        if(fromLeft != tmp) flip();
+        if(fromLeft){
+            flip();
+        }
+        else{
+            flipCash();
+        }
 
         this.setCoor();
         this.setTarget();
@@ -135,6 +150,7 @@ public class Ennemi extends Actor implements Serializable {
         float frame2Speed = randSpeed / 100f;
 
         this.addAction(Actions.moveTo(targetX, targetY, duration));
+        this.durationCash = duration;
         //
         //Set animation hit
         if (isMegaEnnemi) {
@@ -142,6 +158,7 @@ public class Ennemi extends Actor implements Serializable {
         }
 
         ennemiAnimation.setFrameDuration(frame1Speed);
+        ennemiAnimationCash.setFrameDuration(frame1Speed);
         ennemiAnimationHit.setFrameDuration(frame2Speed);
         setVisible(true);
     }
@@ -151,17 +168,26 @@ public class Ennemi extends Actor implements Serializable {
         if (!isDragged) {
             super.act(delta);
             if (!isVisible() && !hidden) return;
-
-            if (this.getX() == targetX && this.getY() == targetY) {
-                elapsedTimeHit += delta;
-                currentFrame = ennemiAnimationHit.getKeyFrame(elapsedTimeHit, true);
-                if (currentFrame == hitFrame && (previousFrame == null || previousFrame != currentFrame)) {
-                    this.hitTheWall();
+            if(isPayed){
+                if(!payedIsSet){
+                    setActionCash();
+                    payedIsSet = true;
                 }
-                previousFrame = currentFrame;
-            } else {
-                elapsedTime += delta;
-                currentFrame = ennemiAnimation.getKeyFrame(elapsedTime, true);
+                returnWithCash(delta);
+            }
+            else{
+                if (this.getX() == targetX && this.getY() == targetY) {
+                    elapsedTimeHit += delta;
+                    currentFrame = ennemiAnimationHit.getKeyFrame(elapsedTimeHit, true);
+                    if (currentFrame == hitFrame && (previousFrame == null || previousFrame != currentFrame)) {
+                        this.hitTheWall();
+                    }
+                    previousFrame = currentFrame;
+                }
+                else{
+                    elapsedTime += delta;
+                    currentFrame = ennemiAnimation.getKeyFrame(elapsedTime, true);
+                }
             }
         }
     }
@@ -188,18 +214,26 @@ public class Ennemi extends Actor implements Serializable {
         if (fromLeft) {
             if (fromSide) {// fromLeft && fromSide -> X = -(96+50) et Y = [0; 298]
                 this.setX(-(96f + 50f));
+                spoonPointX = this.getX();
                 this.setY((float) getRandom(299));
+                spoonPointY = this.getY();
             } else {// fromLeft && !fromSide -> X = [-(96+50); 492] et Y = -(128+50)
                 this.setX(-(96f + 50f) + getRandom(639));
+                spoonPointX = this.getX();
                 this.setY(-(128f + 50f));
+                spoonPointY = this.getY();
             }
         } else {
             if (fromSide) {// !fromLeft && fromSide -> X = 1080+50 et Y = [0; 298]
                 this.setX(1080f + 50f);
+                spoonPointX = this.getX();
                 this.setY((float) getRandom(299));
+                spoonPointY = this.getY();
             } else {// !fromLeft && !fromSide -> X = [493; 1080+50] et Y = -(128+50)
                 this.setX(493f + getRandom(638));
+                spoonPointX = this.getX();
                 this.setY(-(128f + 50f));
+                spoonPointY = this.getY();
             }
         }
     }
@@ -256,6 +290,28 @@ public class Ennemi extends Actor implements Serializable {
 
     }
 
+    public void setPayed(){
+        this.isPayed = true;
+    }
+
+    private void setActionCash(){
+        this.addAction(Actions.moveTo(spoonPointX, spoonPointY, durationCash));
+    }
+
+    private void returnWithCash(float delta){
+        if (this.getX() == spoonPointX && this.getY() == spoonPointY) {
+            //free
+            MexicanLogic.getSingleInstance().pool.free(this);
+            MexicanLogic.getSingleInstance().setEnnemiCount(
+                    MexicanLogic.getSingleInstance().getEnnemiToRemove()-1
+            );
+        }
+        else{
+            elapsedTimeCash += delta;
+            currentFrame = ennemiAnimationCash.getKeyFrame(elapsedTimeCash, true);
+        }
+    }
+
     private void setDistance() {
         distance = Math.abs(this.getX() - targetX) + Math.abs(this.getY() - targetY);
     }
@@ -274,6 +330,7 @@ public class Ennemi extends Actor implements Serializable {
 
     private void setupTexture() {
         Texture texture = ass.get("Frames/SheetFrameEnnemi.png");
+        Texture textureCash = ass.get("Frames/SheetFrameCash.png");
 
         // set hitbox for click listener
         this.setWidth(texture.getWidth() / (float) FRAME_COLS);
@@ -285,12 +342,18 @@ public class Ennemi extends Actor implements Serializable {
                 texture.getWidth() / FRAME_COLS,
                 texture.getHeight() / FRAME_ROWS);
 
+        TextureRegion[][] tmpCash = TextureRegion.split(textureCash,
+                textureCash.getWidth() / FRAME_COLS,
+                textureCash.getHeight() / FRAME_ROWS);
+
         ennemiFramesWalk = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+        ennemiFramesWalkCash = new TextureRegion[FRAME_COLS * FRAME_ROWS];
 
         int index = 0;
         for (int i = 0; i < FRAME_ROWS; i++) {
             for (int j = 0; j < FRAME_COLS; j++) {
-                ennemiFramesWalk[index++] = tmp[i][j];
+                ennemiFramesWalk[index] = tmp[i][j];
+                ennemiFramesWalkCash[index++] = tmpCash[i][j];
             }
         }
 
@@ -311,6 +374,7 @@ public class Ennemi extends Actor implements Serializable {
 
         hitFrame = ennemiFramesHit[3]; //Frame de frappe
         ennemiAnimation = new Animation<TextureRegion>(1.0f, ennemiFramesWalk);
+        ennemiAnimationCash = new Animation<TextureRegion>(1.0f, ennemiFramesWalkCash);
         ennemiAnimationHit = new Animation<TextureRegion>(1.0f, ennemiFramesHit);
     }
 
@@ -325,5 +389,10 @@ public class Ennemi extends Actor implements Serializable {
             ennemiFramesHit[i].flip(true, false);
         for (int i = 0; i < ennemiFramesWalk.length; i++)
             ennemiFramesWalk[i].flip(true, false);
+    }
+
+    public void flipCash(){
+        for (int i = 0; i < ennemiFramesWalkCash.length; i++)
+            ennemiFramesWalkCash[i].flip(true, false);
     }
 }
