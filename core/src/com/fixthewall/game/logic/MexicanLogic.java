@@ -166,6 +166,13 @@ public class MexicanLogic implements Serializable {
         );
     }
 
+    public void doBalezeDamage() {
+        double balezeDamage = (GameLogic.getSingleInstance().getHealth())/10.0 + damage*100;
+        GameLogic.getSingleInstance().setHealth(
+                GameLogic.getSingleInstance().getHealth() - balezeDamage
+        );
+    }
+
     public void doHeal() {
         GameLogic.getSingleInstance().setHealth(
                 GameLogic.getSingleInstance().getHealth() + heal

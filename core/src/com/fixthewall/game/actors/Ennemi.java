@@ -80,14 +80,9 @@ public class Ennemi extends Actor implements Serializable {
         this.fromLeft = false;
         position = new Vector2();
         this.reset();
-        /*this.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                    ((Ennemi) event.getListenerActor()).kill();
-            }
 
-        });
-        */
+        //bricksToutchEnable();
+
         this.isPayed = false;
         this.payedIsSet = false;
         this.isDragged = false;
@@ -376,6 +371,16 @@ public class Ennemi extends Actor implements Serializable {
         ennemiAnimation = new Animation<TextureRegion>(1.0f, ennemiFramesWalk);
         ennemiAnimationCash = new Animation<TextureRegion>(1.0f, ennemiFramesWalkCash);
         ennemiAnimationHit = new Animation<TextureRegion>(1.0f, ennemiFramesHit);
+    }
+
+    private void bricksToutchEnable(){
+        this.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ((Ennemi) event.getListenerActor()).kill();
+            }
+
+        });
     }
 
     /*

@@ -158,7 +158,7 @@ public class Dynamite extends Actor{
         isFalling = false;
         isExploding = true;
         //Brixplosion brixplosion = new Brixplosion(15, ass, this.getX(), this.getY(), 500.0f);
-        Explosion explosion = new Explosion(this.getX(), this.getY(), ass);
+        Explosion explosion = new Explosion(this.getX()-82f, this.getY()-48f, ass);// les "-" pour centrer l'explosion.
         //this.getParent().addActor(brixplosion);
         this.getParent().addActor(explosion);
         explosion.explode();

@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fixthewall.game.actors.Dynamite;
+import com.fixthewall.game.actors.EnnemiBaleze;
 import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.ui.BigMenuTable;
