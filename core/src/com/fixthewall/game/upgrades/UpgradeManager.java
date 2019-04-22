@@ -19,14 +19,14 @@ public class UpgradeManager implements Serializable {
     }
 
     public void init(AssetManager ass) {
-        allUpgrade[0] = new UpgradeBricks(0, 100);//Bricks++
-        allUpgrade[1] = new UpgradeHP(0, 2000);//HP++
-        allUpgrade[2] = new UpgradeLife(0, 10);//Life++
-        allUpgrade[3] = new WorkerUpgrade(0, 10, ass);
-        allUpgrade[4] = new WorkerLevelUpgrade(0, 10);
+        allUpgrade[0] = new UpgradeBricks(0, 50);//Bricks++
+        allUpgrade[1] = new UpgradeHP(0, 50);//HP++
+        allUpgrade[2] = new UpgradeLife(0, 500);//Life++
+        allUpgrade[3] = new WorkerUpgrade(0, 200, ass);
+        allUpgrade[4] = new WorkerLevelUpgrade(0, 500);
         allUpgrade[5] = new UpgradeCashRain(0, 50);//CashRain
-        allUpgrade[6] = new TrumpUpgrade(0, 10);
-        allUpgrade[7] = new NukeUpgrade(0, 0);
+        allUpgrade[6] = new TrumpUpgrade(0, 1000);
+        allUpgrade[7] = new NukeUpgrade(0, 10000000);
         update();
     }
 

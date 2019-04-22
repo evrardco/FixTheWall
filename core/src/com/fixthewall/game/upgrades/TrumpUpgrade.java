@@ -17,7 +17,7 @@ public class TrumpUpgrade extends AbstractUpgrade{
         @Override
         public void apply() {
             super.apply();
-            this.setCost(this.getLevel()*10+this.getCost()*Math.log(this.getCost()));
+            this.setCost(this.getLevel()*this.getCost()*Math.log(this.getCost()));
             GameLogic instance = GameLogic.getSingleInstance();
             instance.setTrumpTime(10+5*getLevel());
 

@@ -243,9 +243,18 @@ public class MexicanLogic implements Serializable {
             //else timeBetweenWavesNight *=  0.7f;
 
             waveNumber++;
-            // TODO utiliser les Pools ici
-            for (int i = 0; i < 1 + 2 * waveNumber; i++) {
-                ennemiGroup.addActor(pool.obtain());
+            if (waveNumber < 10) {   //PHASE 1
+                for (int i = 0; i < 1 + waveNumber; i++) {
+                    ennemiGroup.addActor(pool.obtain());
+                }
+            } else if (waveNumber < 20) { //PHASE 2
+                for (int i = 0; i < 1 + waveNumber + (waveNumber-10) * 5; i++) {
+                    ennemiGroup.addActor(pool.obtain());
+                }
+            } else if (waveNumber < 30) { //PHASE 3
+                for (int i = 0; i <  waveNumber* 10; i++) {
+                    ennemiGroup.addActor(pool.obtain());
+                }
             }
         }
     }
@@ -261,15 +270,15 @@ public class MexicanLogic implements Serializable {
             moon.setVisible(false);
             this.trump = trump;
             float x = (float) (700 * Math.cos(dayTime/duration * Math.PI * 2) + 540 - (moon.getWidth() / 2));
-            float y = (float) (700 * Math.sin(dayTime/duration * Math.PI * 2) + 830);
+            float y = (float) (700 * Math.sin(dayTime/duration * Math.PI * 2) + 900);
             trump.setPosition(x, y);
         }
         else {
             trump.setVisible(false);
             moon.setVisible(true);
             this.trump = trump;
-            float x = (float) (700 * Math.cos(-dayTime/duration * Math.PI * 2) + 540 - (moon.getWidth() / 2));
-            float y = (float) (700 * Math.sin(-dayTime/duration * Math.PI * 2) + 830);
+            float x = (float) (700 * Math.cos(-dayTime/duration * Math.PI * 2) + 540+ (moon.getWidth() / 2));
+            float y = (float) (700 * Math.sin(-dayTime/duration * Math.PI * 2) + 900);
             moon.setPosition(1080-x, y);
         }
     }
