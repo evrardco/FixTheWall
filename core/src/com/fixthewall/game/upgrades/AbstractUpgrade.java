@@ -92,6 +92,11 @@ public abstract class AbstractUpgrade implements Serializable {
 
     }
 
+    public void reset(int level, double cost){
+        this.setCost(cost);
+        this.setLevel(level);
+    }
+
     public int getLevel() {
         return level;
     }

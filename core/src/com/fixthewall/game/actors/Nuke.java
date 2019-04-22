@@ -154,13 +154,13 @@ public class Nuke extends Actor {
 
     private void resetUpgrades(){
         AbstractUpgrade[] allUpgrade = UpgradeManager.getSingleInstance().getAllUpgrade();
-        allUpgrade[0] = new UpgradeBricks(0, 100);//Bricks++
-        allUpgrade[2] = new UpgradeLife(0, 10);//Life++
-        allUpgrade[3] = new WorkerUpgrade(0, 10, ass);
-        allUpgrade[4] = new WorkerLevelUpgrade(0, 10);
-        allUpgrade[5] = new UpgradeCashRain(0, 50);//CashRain
-        allUpgrade[6] = new TrumpUpgrade(0, 10);
-        allUpgrade[7] = new NukeUpgrade(0, 0);
+        allUpgrade[0].reset(0, 100);//Bricks++
+        allUpgrade[2].reset(0 , 10);
+        allUpgrade[3].reset(0, 10);
+        allUpgrade[4].reset(0, 10);
+        allUpgrade[5].reset(0, 50);//CashRain
+        allUpgrade[6].reset(0, 10);
+        allUpgrade[7].reset(0, 0);
         UpgradeManager.getSingleInstance().update();
     }
 
