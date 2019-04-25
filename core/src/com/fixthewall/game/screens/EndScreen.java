@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -26,13 +27,14 @@ public class EndScreen implements Screen {
     private final Game game;
     private Stage stage;
 
-    public EndScreen(final Game game, Nuages nuages) {
+    public EndScreen(final Game game, Nuages nuages, Group dayNightCycleGroup, Group dayNightBackground) {
         this.game = game;
         stage = new Stage(game.viewport);
 
-        Texture textureFond = game.ass.get("fondWall.png");
-        Image imgFond = new Image(textureFond);
-        stage.addActor(imgFond);
+        dayNightBackground.getChildren().get(1).getActions().removeIndex(0);
+        stage.addActor(dayNightBackground);
+
+        stage.addActor(dayNightCycleGroup);
 
         Wall wall = new Wall(game.ass);
         stage.addActor(wall);
