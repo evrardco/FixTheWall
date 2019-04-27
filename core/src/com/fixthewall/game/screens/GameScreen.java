@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.fixthewall.game.Perziztancinator;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Moon;
@@ -241,6 +240,7 @@ public class GameScreen implements Screen {
         delta*=20;
         MexicanLogic.getSingleInstance().setDayNightCycle(trump, moon, backgroundNight);//persistance
         GameLogic.getSingleInstance().updateTotalTime(delta);
+
         if (GameLogic.getSingleInstance().isPaused()) {
             stage.draw();
             return;
