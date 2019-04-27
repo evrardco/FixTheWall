@@ -44,7 +44,7 @@ public class Game extends com.badlogic.gdx.Game {
         loadAssets();
         //We see whether we must load the saved game.
         if(!Perziztancinator.isNewGame()) Perziztancinator.load();
-        if(true || Perziztancinator.isNewGame() || Perziztancinator.isCorrupt() ){
+        if(Perziztancinator.isNewGame() || Perziztancinator.isCorrupt() ){
             UpgradeManager.getSingleInstance().init(ass);
             GameLogic.getSingleInstance().init();
             MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, this.ass);

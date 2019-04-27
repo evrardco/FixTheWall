@@ -2,6 +2,7 @@ package com.fixthewall.game.logic;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.fixthewall.game.actors.Dollar;
@@ -39,11 +40,26 @@ public class MexicanLogic implements Serializable {
     private double brickPower;
     private double mul;
 
+    public Vector2 getMoonPos() {
+        return moonPos;
+    }
+
+    public Vector2 getSunPos() {
+        return sunPos;
+    }
+
+    public float getNightAlpha() {
+        return nightAlpha;
+    }
+
     private float elapsedTime;
     private float waveNumber;
 
     private double dayTime;
     private boolean isDay;
+    private Vector2 moonPos;
+    private Vector2 sunPos;
+    private float nightAlpha;
 
     public int getEnnemiCount() {
         return ennemiCount;
@@ -90,6 +106,7 @@ public class MexicanLogic implements Serializable {
         instance.dollarRecycler = new DollarRecycler(128);
         instance.finishedLoading = false;
 
+
     }
 
     private void finishLoading(){
@@ -128,7 +145,12 @@ public class MexicanLogic implements Serializable {
         this.timeBetweenWavesDay = 45f;
         this.timeBetweenWavesDay = 25f;
     }
+    public void setDayNightCycle(Sun sun, Moon moon, Actor background){
+        this.nightAlpha = background.getColor().a;
+        this.sunPos = new Vector2(sun.getX(), sun.getY());
+        this.moonPos = new Vector2(moon.getX(), moon.getY());
 
+    }
     public void launchNuke(){
         Nuke nuke = new Nuke(ass);
         this.dayNightCycleGroup.addActor(nuke);

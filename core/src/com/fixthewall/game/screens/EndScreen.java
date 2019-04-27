@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.fixthewall.game.Perziztancinator;
 import com.fixthewall.game.actors.Nuages;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
@@ -65,6 +66,7 @@ public class EndScreen implements Screen {
                 MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);
                 dispose();
                 game.setScreen(new GameScreen(game, null));
+                Perziztancinator.getSingleInstance().setGameLoaded(false);
             }
         });
 

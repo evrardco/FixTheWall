@@ -25,6 +25,7 @@ public class GameLogic implements Serializable {
     private double highScore;
     private boolean isPaused;
     private boolean isTimeSlowed;
+    private float totalTime;
     private transient Timer timer;
 
     public Timer getTimer() {
@@ -43,6 +44,7 @@ public class GameLogic implements Serializable {
     private GameLogic(){}
 
     public void init(){
+        this.totalTime = 0f;
         this.maxHealth = 100;
         health = maxHealth;
         bricks = 0;
@@ -93,7 +95,12 @@ public class GameLogic implements Serializable {
         else
             this.health = health;
     }
-
+    public void updateTotalTime(float delta){
+        this.totalTime += delta;
+    }
+    public float getTotalTime(){
+        return totalTime;
+    }
     public double getMaxHealth() {
         return maxHealth;
     }
