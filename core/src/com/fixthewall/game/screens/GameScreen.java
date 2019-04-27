@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -75,14 +76,13 @@ public class GameScreen implements Screen {
                 batch.setColor(color.r, color.g, color.b, parentAlpha);
             }
         };
-        backgroundNight.addAction(Actions.alpha(0.0f)); //we begin during the day
+        backgroundNight.setColor(backgroundNight.getColor().r, backgroundNight.getColor().g, backgroundNight.getColor().b, 0); //we begin during the day
         backgroundNight.addAction(Actions.forever(
                 Actions.sequence(
                         Actions.fadeIn(DAY_NIGHT_CYCLE_LEN / 2f),
                         Actions.fadeOut(DAY_NIGHT_CYCLE_LEN / 2f)
                 )
         ));
-        backgroundNight.getActions();
 
         if (nuages == null)
             this.nuages = new Nuages(game.ass);
@@ -243,22 +243,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta) {
-        delta = 20*delta;
+//        delta = 10*delta;
 
         if (GameLogic.getSingleInstance().isPaused()) {
             stage.draw();
             return;
         }
-        Array<Action> actions = backgroundNight.getActions(); //FIX DEGUEU DE L'ACTION ALPHA
-        if(actions.size < 1 || backgroundNight.getColor().a == 1.0f){
-            backgroundNight.addAction(Actions.alpha(0.0f)); //we begin during the day
-            backgroundNight.addAction(Actions.forever(
-                    Actions.sequence(
-                            Actions.fadeIn(DAY_NIGHT_CYCLE_LEN / 2f),
-                            Actions.fadeOut(DAY_NIGHT_CYCLE_LEN / 2f)
-                    )
-            ));
-        }
+
         if (GameLogic.getSingleInstance().isTimeSlowed())
             delta /= GameLogic.SLOW_FACTOR;
 
