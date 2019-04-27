@@ -105,7 +105,7 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("imgPauseFond.png", Texture.class);
         ass.load("nuages.png", Texture.class);
         ass.load("pioche.png", Texture.class);
-
+        ass.load("laser.png", Texture.class);
         ass.load("dollar.png", Texture.class);
         ass.load("Sun.png", Texture.class);
         ass.load("echelle.png", Texture.class);

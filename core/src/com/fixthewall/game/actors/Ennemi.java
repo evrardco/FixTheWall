@@ -276,7 +276,7 @@ public class Ennemi extends Actor implements Serializable {
         if(hidden) return;
         Brixplosion explosion = new Brixplosion(32, ass, getX(), getY(), 0f);
         explosion.setPosition(getX(), getY());
-        getParent().addActor(explosion);
+        MexicanLogic.getSingleInstance().getBrixplosionGroup().addActor(explosion);
         setVisible(false);
         MexicanLogic.getSingleInstance().pool.free(this);
         MexicanLogic.getSingleInstance().setEnnemiCount(

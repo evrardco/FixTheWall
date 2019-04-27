@@ -9,6 +9,7 @@ import com.fixthewall.game.actors.Dollar;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.EnnemiBaleze;
+import com.fixthewall.game.actors.Laser;
 import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Nuke;
 import com.fixthewall.game.actors.Sun;
@@ -25,15 +26,14 @@ public class MexicanLogic implements Serializable {
 
     private transient Group ennemiGroup;
     private transient Group workerGroup;
+
+    private transient Group laserGroup;
+    private transient Group brixplosionGroup;
     private transient Sun trump;
     private transient DollarRecycler dollarRecycler;
     public transient EnnemiPool pool;
 
-
-
     private transient Group dayNightCycleGroup;
-
-
 
     private double damage;
     private double heal;
@@ -98,6 +98,8 @@ public class MexicanLogic implements Serializable {
         instance.trump = null;
         instance.ennemiGroup = new Group();
         instance.workerGroup = new Group();
+        instance.laserGroup = new Group();
+        instance.brixplosionGroup = new Group();
         instance.dayNightCycleGroup = new Group();
 
         instance.ennemiToRemove = 0;
@@ -134,6 +136,8 @@ public class MexicanLogic implements Serializable {
         this.trump = null;
         ennemiGroup = new Group();
         workerGroup = new Group();
+        laserGroup = new Group();
+        brixplosionGroup = new Group();
         dayNightCycleGroup = new Group();
 
         ennemiToRemove = 0;
@@ -208,7 +212,7 @@ public class MexicanLogic implements Serializable {
         );
     }
 
-    public void updateCashRain(Group dollarGroup, AssetManager ass) {
+    public void updateCashRain(Group dollarGroup) {
         if (ennemiToRemove > 0) {
             for(int i = 0; i < UpgradeManager.getSingleInstance().getAllUpgrade()[2].getLevel() * 2 + 3; i++) {
                 Dollar dol = dollarRecycler.getOne(ass);
@@ -219,20 +223,16 @@ public class MexicanLogic implements Serializable {
             ennemiToRemove = 0;
         }
         // Pour les performances on regarde juste les collisions si les dollar sont sur la partie
-        // basse de l'écran. Environ 600 pixels comme le mur commence à 300 et les dollars
-        // spawnent avec une variation en y de 200 pixel + 100 pixels pour être sûr
+        // basse de l'écran. Environ 600 pixels comme le mur commence à 300 + 300 pixels pour être sûr
         if(Dollar.visibleAmount == 0) return;
 
-        if (dollarGroup.hasChildren() && dollarGroup.getChildren().get(0).getY() <= 600) {
+        if (dollarGroup.hasChildren()) {
             for (Actor dollar : dollarGroup.getChildren()) {
-                if(!dollar.isVisible()) continue;
-                for (Actor actor : ennemiGroup.getChildren()) {
-                    if (actor instanceof Ennemi
-                            && actor.isVisible()
-                            && ((Dollar) dollar).getBounds().overlaps((((Ennemi) actor).getBounds()))) {
-
-                            //((Ennemi) actor).kill();
-                            ((Ennemi) actor).setPayed();
+                if (!dollar.isVisible()) continue;
+                if (dollar.getY() >= 600 || dollar.getY() <= 0) continue;
+                for (Ennemi ennemi : pool.getShown()) {
+                    if (((Dollar) dollar).getBounds().overlaps(((ennemi.getBounds())))) {
+                            ennemi.setPayed();
                             dollar.setVisible(false);
                     }
                 }
@@ -242,11 +242,9 @@ public class MexicanLogic implements Serializable {
 
     public void updateDynamite(Dynamite dynamite) {
         if (dynamite.hasExploded()) {
-            for (Actor actor : ennemiGroup.getChildren()) {
-                if(actor instanceof Ennemi) {
-                    if (actor.isVisible() && dynamite.getExplosionRadius().overlaps(((Ennemi) actor).getBounds())) {
-                        ((Ennemi) actor).kill();
-                    }
+            for (Ennemi ennemi : pool.getShown()) {
+                if (dynamite.getExplosionRadius().overlaps((ennemi.getBounds()))) {
+                    ennemi.kill();
                 }
             }
         }
@@ -254,7 +252,7 @@ public class MexicanLogic implements Serializable {
 
     public void resetWaveTime(){elapsedTime = 0f;}
 
-    public void updateWave(float delta, boolean isDay, AssetManager ass) {
+    public void updateWave(float delta, boolean isDay) {
 
         setDay(isDay);
         if(!finishedLoading) finishLoading();
@@ -313,14 +311,20 @@ public class MexicanLogic implements Serializable {
         return trump.getBounds().overlaps(ennemiBounds);
     }
 
-
-
     public Group getWorkerGroup() {
         return workerGroup;
     }
 
     public Group getEnnemiGroup() {
         return ennemiGroup;
+    }
+
+    public Group getLaserGroup() {
+        return laserGroup;
+    }
+
+    public Group getBrixplosionGroup() {
+        return brixplosionGroup;
     }
 
     public double getHeal() {
@@ -334,7 +338,6 @@ public class MexicanLogic implements Serializable {
     public void setDay(boolean value) {isDay = value;}
 
     public boolean isDay() {return isDay;}
-
 
     public double getBrickPower() {
         return brickPower;

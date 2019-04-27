@@ -113,6 +113,8 @@ public class GameScreen implements Screen {
 
         Group ennemiGroup = MexicanLogic.getSingleInstance().getEnnemiGroup();
         Group workerGroup = MexicanLogic.getSingleInstance().getWorkerGroup();
+        Group laserGroup = MexicanLogic.getSingleInstance().getLaserGroup();
+        Group brixplosionGroup = MexicanLogic.getSingleInstance().getBrixplosionGroup();
         dollarGroup = new Group();
         dollarGroup.getChildren().ensureCapacity(256);
         Group hammerGroup = new Group();
@@ -222,6 +224,8 @@ public class GameScreen implements Screen {
         stage.addActor(dynamiteGroup);
         stage.addActor(ennemiGroup);
         stage.addActor(workerGroup);
+        stage.addActor(laserGroup);
+        stage.addActor(brixplosionGroup);
         stage.addActor(dollarGroup);
         stage.addActor(pause);
 
@@ -260,13 +264,16 @@ public class GameScreen implements Screen {
         MexicanLogic.getSingleInstance().updateDynamite(dynamite);
 
         // CASH RAIN
-        MexicanLogic.getSingleInstance().updateCashRain(dollarGroup, game.ass);
+        MexicanLogic.getSingleInstance().updateCashRain(dollarGroup);
 
         // TRUMP HEAD
-        MexicanLogic.getSingleInstance().updateTrumpHead(trump, moon, delta, DAY_NIGHT_CYCLE_LEN );
+        MexicanLogic.getSingleInstance().updateTrumpHead(trump, moon, delta, DAY_NIGHT_CYCLE_LEN);
+
+        // LASERS
+//        MexicanLogic.getSingleInstance().updateLaser(delta);
 
         // ENNEMI WAVES
-        MexicanLogic.getSingleInstance().updateWave(delta, (backgroundNight.getColor().a <= 0.5f), game.ass);
+        MexicanLogic.getSingleInstance().updateWave(delta, (backgroundNight.getColor().a <= 0.5f));
 
         stage.act(delta);
 

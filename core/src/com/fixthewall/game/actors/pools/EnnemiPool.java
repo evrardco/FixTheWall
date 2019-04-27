@@ -56,4 +56,8 @@ public class EnnemiPool {
     private Ennemi createObject(){
         return new Ennemi(ass);
     }
+
+    public Array<Ennemi> getShown() {
+        return shown;
+    }
 }
