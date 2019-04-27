@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -22,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.fixthewall.game.Perziztancinator;
 import com.fixthewall.game.actors.Dynamite;
-import com.fixthewall.game.actors.EnnemiBaleze;
 import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.ui.BigMenuTable;
@@ -77,20 +75,12 @@ public class GameScreen implements Screen {
                 batch.setColor(color.r, color.g, color.b, parentAlpha);
             }
         };
-        backgroundNight.setColor(
-                backgroundNight.getColor().r,
-                backgroundNight.getColor().g,
-                backgroundNight.getColor().b,
-                0.0f
-        );
+
         moon = new Moon(game.ass);
         trump = new Sun(game.ass);
 
         setupNightCycle();
 
-
-
-        backgroundNight.getActions();
         if (nuages == null)
             this.nuages = new Nuages(game.ass);
         else
@@ -248,9 +238,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta) {
-        delta*=11.025;
+//        delta*=20;
         MexicanLogic.getSingleInstance().setDayNightCycle(trump, moon, backgroundNight);//persistance
-//        delta = 10*delta;
 
         if (GameLogic.getSingleInstance().isPaused()) {
             stage.draw();
@@ -293,30 +282,47 @@ public class GameScreen implements Screen {
         float baseAlpha = 0.0f;
         float cycleOffset = 0.0f;
         float goalAlpha = 1.0f;
-        if(Perziztancinator.getSingleInstance().isGameLoaded()){
+        if (Perziztancinator.getSingleInstance().isGameLoaded()) {
             Vector2 sunPos = MexicanLogic.getSingleInstance().getSunPos();
             Vector2 moonPos = MexicanLogic.getSingleInstance().getMoonPos();
             baseAlpha = MexicanLogic.getSingleInstance().getNightAlpha();
 
-            cycleOffset = GameLogic.getSingleInstance().getTotalTime() % (DAY_NIGHT_CYCLE_LEN);
-            if(sunPos != null)moon.setPosition(moonPos.x, moonPos.y);
-            if(sunPos != null)trump.setPosition(sunPos.x, sunPos.y);
-            if(cycleOffset > DAY_NIGHT_CYCLE_LEN/2)
+            cycleOffset = GameLogic.getSingleInstance().getTotalTime() % DAY_NIGHT_CYCLE_LEN;
+            if (sunPos != null) moon.setPosition(moonPos.x, moonPos.y);
+            if (sunPos != null) trump.setPosition(sunPos.x, sunPos.y);
+            if (cycleOffset > DAY_NIGHT_CYCLE_LEN / 2f)
                 goalAlpha = 0.0f;
 
-
         }
-        backgroundNight.addAction(Actions.sequence(
-                Actions.alpha(baseAlpha),
-                Actions.alpha(goalAlpha, Math.abs(cycleOffset - DAY_NIGHT_CYCLE_LEN/2)),
-                Actions.alpha(0.0f), //we begin during the day
-                Actions.forever(
-                        Actions.sequence(
-                                Actions.fadeIn(DAY_NIGHT_CYCLE_LEN / 2f),
-                                Actions.fadeOut(DAY_NIGHT_CYCLE_LEN / 2f)
-                        )
-                )
-        ));
+
+        backgroundNight.setColor(
+                backgroundNight.getColor().r,
+                backgroundNight.getColor().g,
+                backgroundNight.getColor().b,
+                baseAlpha
+        );
+
+        if (goalAlpha == 0f) {
+            backgroundNight.addAction(Actions.sequence(
+                    Actions.alpha(goalAlpha, Math.abs(cycleOffset - DAY_NIGHT_CYCLE_LEN / 2f)),
+                    Actions.forever(
+                            Actions.sequence(
+                                    Actions.fadeIn(DAY_NIGHT_CYCLE_LEN / 2f),
+                                    Actions.fadeOut(DAY_NIGHT_CYCLE_LEN / 2f)
+                            )
+                    )
+            ));
+        } else {
+            backgroundNight.addAction(Actions.sequence(
+                    Actions.alpha(goalAlpha, Math.abs(cycleOffset - DAY_NIGHT_CYCLE_LEN / 2f)),
+                    Actions.forever(
+                            Actions.sequence(
+                                    Actions.fadeOut(DAY_NIGHT_CYCLE_LEN / 2f),
+                                    Actions.fadeIn(DAY_NIGHT_CYCLE_LEN / 2f)
+                            )
+                    )
+            ));
+        }
     }
 
     @Override
