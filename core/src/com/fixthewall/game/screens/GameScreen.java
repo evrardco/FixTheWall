@@ -237,7 +237,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta) {
-        delta*=20;
+//        delta*=20;
         MexicanLogic.getSingleInstance().setDayNightCycle(trump, moon, backgroundNight);//persistance
         GameLogic.getSingleInstance().updateTotalTime(delta);
 
