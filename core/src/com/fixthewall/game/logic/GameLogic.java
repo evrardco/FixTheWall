@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class GameLogic implements Serializable {
 
-    public static transient final float SLOW_FACTOR = 2;
+    public static transient final float SLOW_FACTOR = 4;
 
     private double health;
     private double maxHealth;
@@ -45,7 +45,7 @@ public class GameLogic implements Serializable {
     public void init(){
         this.maxHealth = 100;
         health = maxHealth;
-        bricks = 10e9;
+        bricks = 0;
         hammerLevel = 0;// 0 correspond au premier indice de l'array d'images de marteaux.
         healingPower = 1;
         bricksPower = 1;

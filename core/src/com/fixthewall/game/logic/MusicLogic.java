@@ -14,17 +14,17 @@ public class MusicLogic {
         sizePlaylist=6;
         playlist = new Music[sizePlaylist];
         playlist[0] = ass.get("music/song1.mp3");
-        playlist[0].setVolume(0.6f);
+        playlist[0].setVolume(0.25f);
         playlist[1] = ass.get("music/song2.mp3");
-        playlist[1].setVolume(0.35f);
+        playlist[1].setVolume(0.105f);
         playlist[2] = ass.get("music/song3.mp3");
-        playlist[2].setVolume(0.6f);
+        playlist[2].setVolume(0.15f);
         playlist[3] = ass.get("music/song4.mp3");
-        playlist[3].setVolume(0.6f);
+        playlist[3].setVolume(0.2f);
         playlist[4] = ass.get("music/song5.mp3");
-        playlist[4].setVolume(0.5f);
+        playlist[4].setVolume(0.2f);
         playlist[5] = ass.get("music/song6.mp3");
-        playlist[5].setVolume(0.55f);
+        playlist[5].setVolume(0.25f);
         inPlaying = null;
     }
 
