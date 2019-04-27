@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.EnnemiBaleze;
 import com.fixthewall.game.actors.Moon;
@@ -75,10 +77,11 @@ public class GameScreen implements Screen {
         backgroundNight.addAction(Actions.alpha(0.0f)); //we begin during the day
         backgroundNight.addAction(Actions.forever(
                 Actions.sequence(
-                        Actions.alpha(1.0f, DAY_NIGHT_CYCLE_LEN / 2f),
-                        Actions.alpha(0.0f, DAY_NIGHT_CYCLE_LEN / 2f)
+                        Actions.fadeIn(DAY_NIGHT_CYCLE_LEN / 2f),
+                        Actions.fadeOut(DAY_NIGHT_CYCLE_LEN / 2f)
                 )
         ));
+        backgroundNight.getActions();
 
         if (nuages == null)
             this.nuages = new Nuages(game.ass);
@@ -237,12 +240,22 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta) {
+        delta = 20*delta;
 
         if (GameLogic.getSingleInstance().isPaused()) {
             stage.draw();
             return;
         }
-
+        Array<Action> actions = backgroundNight.getActions(); //FIX DEGUEU DE L'ACTION ALPHA
+        if(actions.size < 1 || backgroundNight.getColor().a == 1.0f){
+            backgroundNight.addAction(Actions.alpha(0.0f)); //we begin during the day
+            backgroundNight.addAction(Actions.forever(
+                    Actions.sequence(
+                            Actions.fadeIn(DAY_NIGHT_CYCLE_LEN / 2f),
+                            Actions.fadeOut(DAY_NIGHT_CYCLE_LEN / 2f)
+                    )
+            ));
+        }
         if (GameLogic.getSingleInstance().isTimeSlowed())
             delta /= GameLogic.SLOW_FACTOR;
 
