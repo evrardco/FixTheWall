@@ -273,8 +273,8 @@ public class GameScreen implements Screen {
         stage.draw();
 
         if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
-            //dispose();
-            //game.setScreen(new EndScreen(game, nuages, dayNightCycleGroup, dayNightBackground));
+            dispose();
+            game.setScreen(new EndScreen(game, nuages, dayNightCycleGroup, dayNightBackground));
         }
     }
 

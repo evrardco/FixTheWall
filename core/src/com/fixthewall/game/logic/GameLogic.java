@@ -11,11 +11,12 @@ import java.io.Serializable;
 public class GameLogic implements Serializable {
 
     public static transient final float SLOW_FACTOR = 4;
+    public static transient final float SAVE_INTERVAL = 60f;
 
     private double health;
     private double maxHealth;
     private double bricks;
-    boolean available;
+    private boolean available;
     private static GameLogic singleInstance = null;
     private double healingPower;
     private float trumpTime;
@@ -36,7 +37,7 @@ public class GameLogic implements Serializable {
         this.timer = timer;
     }
 
-    public static GameLogic getSingleInstance(){
+    public static GameLogic getSingleInstance() {
         if(singleInstance == null) singleInstance = new GameLogic();
         return singleInstance;
     }
@@ -53,7 +54,7 @@ public class GameLogic implements Serializable {
         bricksPower = 1;
         score = 0.0;
         available = Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer);
-        highScore = 999999999999d; // TODO quand persistance sera faite changer la valeur
+        highScore = 0d;
         trumpTime = 0.0f;
         timer = new Timer();
         isPaused = false;
@@ -61,11 +62,11 @@ public class GameLogic implements Serializable {
 
         Timer.Task saveTask = new Timer.Task(){
             public void run(){
-                Perziztancinator.getSingleInstance().save();
+                Perziztancinator.save();
                 Gdx.app.log("GAMELOGIC", "Saving game...");
             }
         };
-        timer.scheduleTask(saveTask, 0.0f, 1.0f, -1 );
+        timer.scheduleTask(saveTask, 0.0f, SAVE_INTERVAL, -1 );
     }
 
     public double getHealth() {
@@ -87,6 +88,7 @@ public class GameLogic implements Serializable {
     public void setHealingPower(double healingPower) {
         this.healingPower = healingPower;
     }
+
     public void setHealth(double health) {
         if (health < 0)
             this.health = 0;
@@ -95,12 +97,15 @@ public class GameLogic implements Serializable {
         else
             this.health = health;
     }
+
     public void updateTotalTime(float delta){
         this.totalTime += delta;
     }
+
     public float getTotalTime(){
         return totalTime;
     }
+
     public double getMaxHealth() {
         return maxHealth;
     }
@@ -131,6 +136,8 @@ public class GameLogic implements Serializable {
 
     public void setScore(double score) {
         this.score = score;
+        if (this.score > this.highScore)
+            this.highScore = this.score;
     }
 
     public double getScore() {
@@ -175,12 +182,6 @@ public class GameLogic implements Serializable {
         return hammerLevel;
     }
 
-    public void increaseHammerLevel(){
-        if(0<=hammerLevel && hammerLevel<=6){
-            hammerLevel++;
-        }
-    }
-
     public boolean isTimeSlowed() {
         return isTimeSlowed;
     }
@@ -193,11 +194,11 @@ public class GameLogic implements Serializable {
         return highScore;
     }
 
-    public boolean isAccelerometerAvailable() {return available;}
-
     public void setHighScore(double highScore) {
         this.highScore = highScore;
     }
+
+    public boolean isAccelerometerAvailable() {return available;}
 
     public String getHighScoreString() {
         return Helpers.formatBigNumbers(getHighScore());
@@ -216,7 +217,7 @@ public class GameLogic implements Serializable {
                 Gdx.app.log("GAMELOGIC", "Saving game...");
             }
         };
-        timer.scheduleTask(saveTask, 0.0f, 1.0f, -1 );
+        timer.scheduleTask(saveTask, 0.0f, SAVE_INTERVAL, -1 );
     }
 
 }

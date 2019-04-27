@@ -30,8 +30,6 @@ public class Game extends com.badlogic.gdx.Game {
 
 	public MusicLogic playlist;
 
-
-
 	@Override
 	public void create () {
         ass = new AssetManager();
@@ -60,19 +58,22 @@ public class Game extends com.badlogic.gdx.Game {
 
         }
 
-
-
-
-
-
 		viewport = new FitViewport(GAME_WIDTH, GAME_HEIGHT);
 		setScreen(new LoadingScreen(this));
 
 	}
+
 	@Override
 	public void dispose () {
 		ass.dispose();
 	}
+
+    @Override
+    public void pause() {
+        super.pause();
+        Perziztancinator.save();
+        Gdx.app.log("GAMELOGIC", "Saving game...");
+    }
 
     /**
      * @pre: VIP assets only!!! ಠ_ಠ

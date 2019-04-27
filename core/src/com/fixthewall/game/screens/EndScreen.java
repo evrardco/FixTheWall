@@ -61,7 +61,9 @@ public class EndScreen implements Screen {
         restartButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                double highScore = GameLogic.getSingleInstance().getHighScore();
                 GameLogic.getSingleInstance().init();
+                GameLogic.getSingleInstance().setHighScore(highScore);
                 UpgradeManager.getSingleInstance().init(game.ass);
                 MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);
                 dispose();
