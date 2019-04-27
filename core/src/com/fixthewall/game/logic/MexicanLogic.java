@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.fixthewall.game.actors.Dollar;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.actors.EnnemiBaleze;
 import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Nuke;
 import com.fixthewall.game.actors.Sun;
@@ -254,6 +255,9 @@ public class MexicanLogic implements Serializable {
             } else if (waveNumber < 30) { //PHASE 3
                 for (int i = 0; i <  waveNumber* 10; i++) {
                     ennemiGroup.addActor(pool.obtain());
+                }
+                for(int i = 30; i<=waveNumber; i++){
+                    ennemiGroup.addActor(new EnnemiBaleze(ass));
                 }
             }
         }

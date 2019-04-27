@@ -100,9 +100,7 @@ public class Dynamite extends Actor{
             }
             if (countdown <= 0) {
                 GameLogic.getSingleInstance().reduceHealth(GameLogic.getSingleInstance().getHealth() * 0.5);
-                countdown = DETONATION_TIME;
-                visible = false;
-                setTouchable(Touchable.disabled);
+                this.explode();
             }
         } else {
             velY += Constants.GRAVITY * delta;

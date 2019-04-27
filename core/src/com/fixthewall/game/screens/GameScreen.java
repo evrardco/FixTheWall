@@ -52,7 +52,8 @@ public class GameScreen implements Screen {
     private Group dollarGroup;
     private Image backgroundNight;
     private Dynamite dynamite;
-    private Group dynamiteGroup;
+    private Group dayNightCycleGroup;
+    private Group dayNightBackground;
     private Sun trump;
     private Moon moon;
     private Nuages nuages;
@@ -90,10 +91,13 @@ public class GameScreen implements Screen {
 
         Wall wall = new Wall(game.ass);
         dynamite = new Dynamite(game.ass);
-        dynamiteGroup = new Group();
+        Group dynamiteGroup = new Group();
         dynamiteGroup.addActor(dynamite);
         hammer = new Hammer(game.ass);
-        Group dayNightCycleGroup = MexicanLogic.getSingleInstance().getDayNightCycleGroup();
+        dayNightCycleGroup = MexicanLogic.getSingleInstance().getDayNightCycleGroup();
+        dayNightBackground = new Group();
+        dayNightBackground.addActor(backgroundDay);
+        dayNightBackground.addActor(backgroundNight);
         moon = new Moon(game.ass);
         trump = new Sun(game.ass);
         dayNightCycleGroup.addActor(moon);
@@ -217,8 +221,7 @@ public class GameScreen implements Screen {
 
 
         //Add all the things to runescape (add a deadman mode)
-        stage.addActor(backgroundDay);
-        stage.addActor(backgroundNight);
+        stage.addActor(dayNightBackground);
         stage.addActor(dayNightCycleGroup);
         stage.addActor(this.nuages);
         stage.addActor(wall);
@@ -284,7 +287,7 @@ public class GameScreen implements Screen {
 
         if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
             dispose();
-            game.setScreen(new EndScreen(game, nuages));
+            game.setScreen(new EndScreen(game, nuages, dayNightCycleGroup, dayNightBackground));
         }
     }
 
