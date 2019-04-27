@@ -238,9 +238,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta) {
-//        delta*=20;
+        delta*=20;
         MexicanLogic.getSingleInstance().setDayNightCycle(trump, moon, backgroundNight);//persistance
-
+        GameLogic.getSingleInstance().updateTotalTime(delta);
         if (GameLogic.getSingleInstance().isPaused()) {
             stage.draw();
             return;
@@ -273,8 +273,8 @@ public class GameScreen implements Screen {
         stage.draw();
 
         if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
-            dispose();
-            game.setScreen(new EndScreen(game, nuages, dayNightCycleGroup, dayNightBackground));
+            //dispose();
+            //game.setScreen(new EndScreen(game, nuages, dayNightCycleGroup, dayNightBackground));
         }
     }
 
@@ -304,7 +304,7 @@ public class GameScreen implements Screen {
 
         if (goalAlpha == 0f) {
             backgroundNight.addAction(Actions.sequence(
-                    Actions.alpha(goalAlpha, Math.abs(cycleOffset - DAY_NIGHT_CYCLE_LEN / 2f)),
+                    Actions.alpha(goalAlpha, Math.abs(cycleOffset - DAY_NIGHT_CYCLE_LEN)),
                     Actions.forever(
                             Actions.sequence(
                                     Actions.fadeIn(DAY_NIGHT_CYCLE_LEN / 2f),
