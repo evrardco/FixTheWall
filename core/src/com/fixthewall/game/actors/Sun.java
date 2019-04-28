@@ -93,13 +93,14 @@ public class Sun extends Actor {
     private void shootLasers() {
         if (MexicanLogic.getSingleInstance().getPool().getShown().size < 1)
             return;
-        final int target = (int) Helpers.getRandom(MexicanLogic.getSingleInstance().getPool().getShown().size);
+
+        int target = (int) Helpers.getRandom(MexicanLogic.getSingleInstance().getPool().getShown().size);
         Ennemi targetEnnemi = MexicanLogic.getSingleInstance().getPool().getShown().get(target);
         float targetX = targetEnnemi.getX() + targetEnnemi.getWidth() / 2f;
         float targetY = targetEnnemi.getY() + targetEnnemi.getHeight() / 2f;
 
-        final Laser laserLeft = new Laser(ass, getX() + getWidth() / 4f + 35, getY() + getHeight() / 4f - 5, targetX, targetY);
-        final Laser laserRight = new Laser(ass, getX() + getWidth() / 2f + 35, getY() + getHeight() / 4f - 5, targetX, targetY);
+        Laser laserLeft = new Laser(ass, getX() + getWidth() / 4f + 35, getY() + getHeight() / 2f + 5, targetX, targetY);
+        Laser laserRight = new Laser(ass, getX() + getWidth() / 2f + 35, getY() + getHeight() / 2f + 5, targetX, targetY);
 
         MexicanLogic.getSingleInstance().getLaserGroup().addActor(laserLeft);
         MexicanLogic.getSingleInstance().getLaserGroup().addActor(laserRight);
@@ -110,8 +111,7 @@ public class Sun extends Actor {
         this.setY(1400f);
     }
 
-    public Rectangle getBounds()
-    {
+    public Rectangle getBounds() {
         return bounds.setPosition(getX(), getY());
     }
 

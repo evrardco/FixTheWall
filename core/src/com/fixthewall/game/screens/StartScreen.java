@@ -19,14 +19,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.fixthewall.game.Perziztancinator;
 import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Nuages;
 import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.ui.MenuTable;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
+import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.logic.MexicanLogic;
 import com.fixthewall.game.logic.MusicLogic;
+import com.fixthewall.game.upgrades.UpgradeManager;
 
 
 public class StartScreen implements Screen {
@@ -111,6 +114,27 @@ public class StartScreen implements Screen {
             }
         });
         settingsTable.addEntry(volumeButton);
+
+        final ImageButton.ImageButtonStyle deleteSaveButtonStyle = new ImageButton.ImageButtonStyle();
+        deleteSaveButtonStyle.up = new TextureRegionDrawable(game.ass.get("ui/texture_button_deletesave.png", Texture.class));
+        deleteSaveButtonStyle.down = new TextureRegionDrawable(game.ass.get("ui/texture_button_deletesave_down.png", Texture.class));
+
+        ImageButton deleteSaveButton = new ImageButton(deleteSaveButtonStyle);
+
+        deleteSaveButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Perziztancinator.delete();
+                double highScore = GameLogic.getSingleInstance().getHighScore();
+                GameLogic.getSingleInstance().init();
+                GameLogic.getSingleInstance().setHighScore(highScore);
+                UpgradeManager.getSingleInstance().init(game.ass);
+                MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);
+                Perziztancinator.getSingleInstance().setGameLoaded(false);
+            }
+        });
+
+        settingsTable.addEntry(deleteSaveButton);
 
         settingsButton.addListener(new ClickListener() {
             @Override

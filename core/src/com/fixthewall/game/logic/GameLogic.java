@@ -24,8 +24,8 @@ public class GameLogic implements Serializable {
     private int hammerLevel;
     private double score;
     private double highScore;
-    private boolean isPaused;
-    private boolean isTimeSlowed;
+    transient private boolean isPaused;
+    transient private boolean isTimeSlowed;
     private float totalTime;
     private transient Timer timer;
 
@@ -48,7 +48,7 @@ public class GameLogic implements Serializable {
         this.totalTime = 0f;
         this.maxHealth = 100;
         health = maxHealth;
-        bricks = 1000000000000d;
+        bricks = 0;
         hammerLevel = 0;// 0 correspond au premier indice de l'array d'images de marteaux.
         healingPower = 1;
         bricksPower = 1;

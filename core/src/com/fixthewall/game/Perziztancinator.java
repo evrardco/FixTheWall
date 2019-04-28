@@ -36,14 +36,19 @@ public class Perziztancinator implements Serializable {
             instance.gameLoaded = true;
             in.close();
             fileIn.close();
+            Gdx.app.log("Perziztancinator","Serialized data loaded.");
         } catch (IOException i) {
             i.printStackTrace();
             return;
         } catch (ClassNotFoundException c) {
-            System.out.println("Employee class not found");
             c.printStackTrace();
             return;
         }
+    }
+
+    public static void delete() {
+        Gdx.files.local(SAVE_FILE_NAME).delete();
+        Gdx.app.log("Perziztancinator","Serialized data deleted.");
     }
 
     public static boolean isNewGame(){

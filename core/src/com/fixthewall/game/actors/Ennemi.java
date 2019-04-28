@@ -120,6 +120,8 @@ public class Ennemi extends Actor implements Serializable {
 
 
         this.bounds = new Rectangle(getX(), getY(), getWidth(), getHeight());
+
+        currentFrame = ennemiAnimation.getKeyFrame(elapsedTime, true);
     }
 
 
@@ -184,6 +186,8 @@ public class Ennemi extends Actor implements Serializable {
                     currentFrame = ennemiAnimation.getKeyFrame(elapsedTime, true);
                 }
             }
+        } else {
+            currentFrame = ennemiAnimation.getKeyFrame(elapsedTime, true);
         }
     }
 
