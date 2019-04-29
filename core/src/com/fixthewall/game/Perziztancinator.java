@@ -33,16 +33,22 @@ public class Perziztancinator implements Serializable {
             InputStream fileIn = Gdx.files.local(SAVE_FILE_NAME).read();
             ObjectInputStream in = new ObjectInputStream(fileIn);
             instance = (Perziztancinator) in.readObject();
+            instance.gameLoaded = true;
             in.close();
             fileIn.close();
+            Gdx.app.log("Perziztancinator","Serialized data loaded.");
         } catch (IOException i) {
             i.printStackTrace();
             return;
         } catch (ClassNotFoundException c) {
-            System.out.println("Employee class not found");
             c.printStackTrace();
             return;
         }
+    }
+
+    public static void delete() {
+        Gdx.files.local(SAVE_FILE_NAME).delete();
+        Gdx.app.log("Perziztancinator","Serialized data deleted.");
     }
 
     public static boolean isNewGame(){
@@ -58,10 +64,18 @@ public class Perziztancinator implements Serializable {
 
     private transient static Perziztancinator instance;
 
+    public boolean isGameLoaded() {
+        return gameLoaded;
+    }
+
+    public void setGameLoaded(boolean gameLoaded) {
+        this.gameLoaded = gameLoaded;
+    }
 
     private GameLogic logic;
     private MexicanLogic badLogic;
     private UpgradeManager upgManager;
+    private boolean gameLoaded;
 
     public GameLogic getLogic() {
         return logic;

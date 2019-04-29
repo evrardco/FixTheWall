@@ -11,6 +11,9 @@ public class Wall extends Actor {
 
     // TODO voir pour potentiellement remplacer ça par une TextureRegion
     private Texture[] textures;
+    private int textureIndex;
+    private int textureIndexLock;
+    private boolean textureLocked;
 
     public Wall(AssetManager ass) {
         textures = new Texture[6];
@@ -25,15 +28,35 @@ public class Wall extends Actor {
         setHeight(textures[0].getHeight());
         setBounds(getX(), getY(), getWidth(), getHeight());
         setPosition(0, 300);
+
+        textureIndex = 0;
+        textureIndexLock = 0;
+        textureLocked = false;
+    }
+
+    @Override
+    public void act(float delta) {
+        if (textureLocked) {
+            textureIndex = textureIndexLock;
+        } else {
+            GameLogic gameLogic = GameLogic.getSingleInstance();
+            float healthRatio = (float) (gameLogic.getHealth() / gameLogic.getMaxHealth());
+            textureIndex = MathUtils.ceil(healthRatio * (textures.length - 1));
+        }
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        GameLogic gameLogic = GameLogic.getSingleInstance();
-        float healthRatio = (float) (gameLogic.getHealth() / gameLogic.getMaxHealth());
-        int index = MathUtils.ceil(healthRatio * (textures.length - 1));
+        batch.draw(textures[textureIndex], getX(), getY());
+    }
 
-        batch.draw(textures[index], getX(), getY());
+    public void lockTexture(int textureIndex) {
+        textureLocked = true;
+        this.textureIndexLock = textureIndex;
+    }
+
+    public void unlockTexture() {
+        textureLocked = false;
     }
 
 }

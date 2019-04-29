@@ -30,8 +30,6 @@ public class Game extends com.badlogic.gdx.Game {
 
 	public MusicLogic playlist;
 
-
-
 	@Override
 	public void create () {
         ass = new AssetManager();
@@ -44,7 +42,7 @@ public class Game extends com.badlogic.gdx.Game {
         loadAssets();
         //We see whether we must load the saved game.
         if(!Perziztancinator.isNewGame()) Perziztancinator.load();
-        if(true || Perziztancinator.isNewGame() || Perziztancinator.isCorrupt() ){
+        if(Perziztancinator.isNewGame() || Perziztancinator.isCorrupt() ){
             UpgradeManager.getSingleInstance().init(ass);
             GameLogic.getSingleInstance().init();
             MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, this.ass);
@@ -60,19 +58,22 @@ public class Game extends com.badlogic.gdx.Game {
 
         }
 
-
-
-
-
-
 		viewport = new FitViewport(GAME_WIDTH, GAME_HEIGHT);
 		setScreen(new LoadingScreen(this));
 
 	}
+
 	@Override
 	public void dispose () {
 		ass.dispose();
 	}
+
+    @Override
+    public void pause() {
+        super.pause();
+        Perziztancinator.save();
+        Gdx.app.log("GAMELOGIC", "Saving game...");
+    }
 
     /**
      * @pre: VIP assets only!!! ಠ_ಠ
@@ -104,7 +105,7 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("imgPauseFond.png", Texture.class);
         ass.load("nuages.png", Texture.class);
         ass.load("pioche.png", Texture.class);
-
+        ass.load("laser.png", Texture.class);
         ass.load("dollar.png", Texture.class);
         ass.load("Sun.png", Texture.class);
         ass.load("echelle.png", Texture.class);
@@ -150,6 +151,8 @@ public class Game extends com.badlogic.gdx.Game {
         ass.load("ui/texture_progressbar.png", Texture.class);
         ass.load("ui/texture_button_play.png", Texture.class);
         ass.load("ui/texture_button_play_down.png", Texture.class);
+        ass.load("ui/texture_button_deletesave.png", Texture.class);
+        ass.load("ui/texture_button_deletesave_down.png", Texture.class);
 
         // dossier wallStates
         ass.load("wallStates/theWall.png", Texture.class);
@@ -209,5 +212,13 @@ public class Game extends com.badlogic.gdx.Game {
         titleFont.fontParameters.borderColor = Color.WHITE;
         titleFont.fontParameters.borderWidth = 10;
         ass.load("Western_outline.ttf", BitmapFont.class, titleFont);
+
+        FreetypeFontLoader.FreeTypeFontLoaderParameter titleFontCheatMode = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        titleFontCheatMode.fontFileName = "font/gomarice_nandaka_western.ttf";
+        titleFontCheatMode.fontParameters.size = 100;
+        titleFontCheatMode.fontParameters.color = Color.RED;
+        titleFontCheatMode.fontParameters.borderColor = Color.WHITE;
+        titleFontCheatMode.fontParameters.borderWidth = 10;
+        ass.load("Western_outline_red.ttf", BitmapFont.class, titleFontCheatMode);
     }
 }

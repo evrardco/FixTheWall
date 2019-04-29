@@ -16,7 +16,6 @@ import com.fixthewall.game.logic.GameLogic;
 public class Dollar extends Actor {
 
     private final AssetManager ass;
-    private Texture texture;
     private static final int FRAME_COLS = 4, FRAME_ROWS = 3;
     private TextureRegion[] framesDollar;
     private Animation<TextureRegion> dollarAnimation;
@@ -65,19 +64,17 @@ public class Dollar extends Actor {
 
         if (this.getY() > 150) {
 
-            if(available)
-            {
+            if(available) {
                 prevAcc = currentAcc;
                 currentAcc = Gdx.input.getAccelerometerY();
                 deltaSpeed += Math.abs(currentAcc - prevAcc);
                 this.velY += Constants.GRAVITY * delta*0.00001-deltaSpeed*50*delta;//Parfait comme vitesse !
             }
-            else
-            {
+            else {
                 this.velY += Constants.GRAVITY * delta*0.0001;
             }
             this.setY(this.getY() + this.velY * delta);
-        } else{
+        } else {
             this.setVisible(false);
             this.setX(10000.0f);
             this.setY(10000.0f);

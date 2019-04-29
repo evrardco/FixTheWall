@@ -25,7 +25,11 @@ public class MenuTable extends Table {
     public void addEntry(Actor entry) {
         setHeight(entry.getHeight() + padding * 2);
         setWidth(getWidth() + entry.getWidth() + padding * 2);
-        add(entry).pad(padding);
+        if (getChildren().size < 1)
+            add(entry);
+        else
+            add(entry).pad(padding);
+
     }
 
     public void removeEntry(int index) {

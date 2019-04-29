@@ -5,18 +5,18 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Timer;
 import com.fixthewall.game.Helpers;
 import com.fixthewall.game.Perziztancinator;
-import com.fixthewall.game.upgrades.UpgradeManager;
 
 import java.io.Serializable;
 
 public class GameLogic implements Serializable {
 
     public static transient final float SLOW_FACTOR = 4;
+    public static transient final float SAVE_INTERVAL = 60f;
 
     private double health;
     private double maxHealth;
     private double bricks;
-    boolean available;
+    private boolean available;
     private static GameLogic singleInstance = null;
     private double healingPower;
     private float trumpTime;
@@ -24,9 +24,12 @@ public class GameLogic implements Serializable {
     private int hammerLevel;
     private double score;
     private double highScore;
-    private boolean isPaused;
-    private boolean isTimeSlowed;
+    transient private boolean isPaused;
+    transient private boolean isTimeSlowed;
+    private float totalTime;
     private transient Timer timer;
+    private boolean cheatMode;
+    private double backupBricks; // before cheatmode
 
     public Timer getTimer() {
         return timer;
@@ -44,27 +47,30 @@ public class GameLogic implements Serializable {
     private GameLogic(){}
 
     public void init(){
+        this.totalTime = 0f;
         this.maxHealth = 100;
         health = maxHealth;
-        bricks = 0.0;
+        bricks = 0;
+        cheatMode = false;
         hammerLevel = 0;// 0 correspond au premier indice de l'array d'images de marteaux.
         healingPower = 1;
         bricksPower = 1;
         score = 0.0;
         available = Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer);
-        highScore = 999999999999d; // TODO quand persistance sera faite changer la valeur
+        highScore = 0d;
         trumpTime = 0.0f;
         timer = new Timer();
         isPaused = false;
         isTimeSlowed = false;
+        backupBricks = 0;
 
         Timer.Task saveTask = new Timer.Task(){
             public void run(){
-                Perziztancinator.getSingleInstance().save();
+                Perziztancinator.save();
                 Gdx.app.log("GAMELOGIC", "Saving game...");
             }
         };
-        timer.scheduleTask(saveTask, 0.0f, 1.0f, -1 );
+        timer.scheduleTask(saveTask, 0.0f, SAVE_INTERVAL, -1 );
     }
 
     public double getHealth() {
@@ -86,6 +92,7 @@ public class GameLogic implements Serializable {
     public void setHealingPower(double healingPower) {
         this.healingPower = healingPower;
     }
+
     public void setHealth(double health) {
         if (health < 0)
             this.health = 0;
@@ -93,6 +100,14 @@ public class GameLogic implements Serializable {
             this.health = getMaxHealth();
         else
             this.health = health;
+    }
+
+    public void updateTotalTime(float delta){
+        this.totalTime += delta;
+    }
+
+    public float getTotalTime(){
+        return totalTime;
     }
 
     public double getMaxHealth() {
@@ -125,6 +140,8 @@ public class GameLogic implements Serializable {
 
     public void setScore(double score) {
         this.score = score;
+        if (this.score > this.highScore)
+            this.highScore = this.score;
     }
 
     public double getScore() {
@@ -169,12 +186,6 @@ public class GameLogic implements Serializable {
         return hammerLevel;
     }
 
-    public void increaseHammerLevel(){
-        if(0<=hammerLevel && hammerLevel<=6){
-            hammerLevel++;
-        }
-    }
-
     public boolean isTimeSlowed() {
         return isTimeSlowed;
     }
@@ -187,14 +198,27 @@ public class GameLogic implements Serializable {
         return highScore;
     }
 
-    public boolean isAccelerometerAvailable() {return available;}
-
     public void setHighScore(double highScore) {
         this.highScore = highScore;
     }
 
+    public boolean isAccelerometerAvailable() {return available;}
+
     public String getHighScoreString() {
         return Helpers.formatBigNumbers(getHighScore());
+    }
+
+    public boolean isCheatMode() {
+        return cheatMode;
+    }
+
+    public void setCheatMode(boolean cheatMode) {
+        this.cheatMode = cheatMode;
+        if (isCheatMode()) {
+            backupBricks = getBricks();
+            setBricks(Double.MAX_VALUE);
+        } else
+            setBricks(backupBricks);
     }
 
     /**
@@ -210,7 +234,7 @@ public class GameLogic implements Serializable {
                 Gdx.app.log("GAMELOGIC", "Saving game...");
             }
         };
-        timer.scheduleTask(saveTask, 0.0f, 1.0f, -1 );
+        timer.scheduleTask(saveTask, 0.0f, SAVE_INTERVAL, -1 );
     }
 
     public void nukeReset(){

@@ -99,7 +99,7 @@ public class Dynamite extends Actor{
                     countdownLabel.setStyle(redStyle);
             }
             if (countdown <= 0) {
-                GameLogic.getSingleInstance().reduceHealth(GameLogic.getSingleInstance().getHealth() * 0.5);
+                GameLogic.getSingleInstance().reduceHealth(GameLogic.getSingleInstance().getMaxHealth() * 0.25);
                 this.explode();
             }
         } else {

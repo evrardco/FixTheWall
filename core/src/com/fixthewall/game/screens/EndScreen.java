@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.fixthewall.game.Perziztancinator;
 import com.fixthewall.game.actors.Nuages;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
@@ -60,11 +61,14 @@ public class EndScreen implements Screen {
         restartButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                double highScore = GameLogic.getSingleInstance().getHighScore();
                 GameLogic.getSingleInstance().init();
+                GameLogic.getSingleInstance().setHighScore(highScore);
                 UpgradeManager.getSingleInstance().init(game.ass);
                 MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);
                 dispose();
                 game.setScreen(new GameScreen(game, null));
+                Perziztancinator.getSingleInstance().setGameLoaded(false);
             }
         });
 

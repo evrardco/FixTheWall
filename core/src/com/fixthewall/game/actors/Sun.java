@@ -6,39 +6,40 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.fixthewall.game.Helpers;
 import com.fixthewall.game.logic.GameLogic;
+import com.fixthewall.game.logic.MexicanLogic;
 
 public class Sun extends Actor {
 
-    private TextureRegion texture;
-    private TextureRegion textureTrump;
     private TextureRegion textureSun;
     private Rectangle bounds;
     private Boolean isTrump;
 
-
+    private AssetManager ass;
     private TextureRegion currentFrame;
     private Animation<TextureRegion> sunAnimation;
     private static final int FRAME_COLS = 4, FRAME_ROWS = 4;
     private float elapsedTime;
-    private TextureRegion[] sunFrames;
+    private float elapsedTimeLaser;
 
     public Sun (AssetManager ass) {
-
+        this.ass = ass;
 
         //background's    0.5<alpha<1 -> night time
         //set position
         textureSun = new TextureRegion(ass.get("Sun.png", Texture.class));
-        textureTrump = new TextureRegion(ass.get("trump.png", Texture.class));
-        texture = textureSun;
+        currentFrame = textureSun;
 
         Texture sheet = ass.get("Frames/SheetFrameSun.png");
         isTrump = false;
         this.setWidth(sheet.getWidth() / (float) FRAME_COLS);
         this.setHeight(sheet.getHeight() / (float) FRAME_ROWS);
         TextureRegion[][] tmp = TextureRegion.split(sheet, sheet.getWidth() / FRAME_COLS, sheet.getHeight() / FRAME_ROWS);
-        sunFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+        TextureRegion[] sunFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
         this.bounds = new Rectangle(getX(), getY(), getWidth(), getHeight());
         setVisible(true);
         int index = 0;
@@ -48,6 +49,7 @@ public class Sun extends Actor {
             }
         }
         elapsedTime = 0;
+        elapsedTimeLaser = 0;
         sunAnimation = new Animation<TextureRegion>(0.07f, sunFrames);
     }
 
@@ -64,38 +66,52 @@ public class Sun extends Actor {
         float y = center.y + radius * (float)sin(alpha + pi2);
         this.setPosition(x, y);
         */
-        if (GameLogic.getSingleInstance().getTrumpTime() > 0)
-        {
+        if (GameLogic.getSingleInstance().getTrumpTime() > 0) {
             elapsedTime += delta;
-            texture = sunAnimation.getKeyFrame(elapsedTime, false);
+            elapsedTimeLaser += delta;
+            currentFrame = sunAnimation.getKeyFrame(elapsedTime, false);
             if (!isTrump) {
                 isTrump = true;
             }
             GameLogic.getSingleInstance().setTrumpTime(GameLogic.getSingleInstance().getTrumpTime()-delta);
-        }
-        else {
-            if (isTrump)
-            {
-                texture = textureSun;
-                elapsedTime = 0;
-                isTrump = false;
+            if (elapsedTimeLaser >= 1f) {
+                shootLasers();
+                elapsedTimeLaser = 0;
             }
-
+        } else if (isTrump) {
+            currentFrame = textureSun;
+            elapsedTime = 0;
+            isTrump = false;
         }
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(texture, this.getX(), this.getY());
+        batch.draw(currentFrame, this.getX(), this.getY());
     }
 
-    private void setCoor(){
+    private void shootLasers() {
+        if (MexicanLogic.getSingleInstance().getPool().getShown().size < 1)
+            return;
+
+        int target = (int) Helpers.getRandom(MexicanLogic.getSingleInstance().getPool().getShown().size);
+        Ennemi targetEnnemi = MexicanLogic.getSingleInstance().getPool().getShown().get(target);
+        float targetX = targetEnnemi.getX() + targetEnnemi.getWidth() / 2f;
+        float targetY = targetEnnemi.getY() + targetEnnemi.getHeight() / 2f;
+
+        Laser laserLeft = new Laser(ass, getX() + getWidth() / 4f + 35, getY() + getHeight() / 2f + 5, targetX, targetY);
+        Laser laserRight = new Laser(ass, getX() + getWidth() / 2f + 35, getY() + getHeight() / 2f + 5, targetX, targetY);
+
+        MexicanLogic.getSingleInstance().getLaserGroup().addActor(laserLeft);
+        MexicanLogic.getSingleInstance().getLaserGroup().addActor(laserRight);
+    }
+
+    private void setCoor() {
         this.setX(900);
         this.setY(1400f);
     }
 
-    public Rectangle getBounds()
-    {
+    public Rectangle getBounds() {
         return bounds.setPosition(getX(), getY());
     }
 

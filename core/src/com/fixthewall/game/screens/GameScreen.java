@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
+import com.fixthewall.game.Perziztancinator;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Sun;
@@ -49,6 +49,7 @@ public class GameScreen implements Screen {
     private Label bricksLabel;
     private Label scoreLabel;
     private Group dollarGroup;
+    private Group nukeExplosionGroup;
     private Image backgroundNight;
     private Dynamite dynamite;
     private Group dayNightCycleGroup;
@@ -74,14 +75,11 @@ public class GameScreen implements Screen {
                 batch.setColor(color.r, color.g, color.b, parentAlpha);
             }
         };
-        backgroundNight.addAction(Actions.alpha(0.0f)); //we begin during the day
-        backgroundNight.addAction(Actions.forever(
-                Actions.sequence(
-                        Actions.fadeIn(DAY_NIGHT_CYCLE_LEN / 2f),
-                        Actions.fadeOut(DAY_NIGHT_CYCLE_LEN / 2f)
-                )
-        ));
-        backgroundNight.getActions();
+
+        moon = new Moon(game.ass);
+        trump = new Sun(game.ass);
+
+        setupNightCycle();
 
         if (nuages == null)
             this.nuages = new Nuages(game.ass);
@@ -97,10 +95,9 @@ public class GameScreen implements Screen {
         dayNightBackground = new Group();
         dayNightBackground.addActor(backgroundDay);
         dayNightBackground.addActor(backgroundNight);
-        moon = new Moon(game.ass);
-        trump = new Sun(game.ass);
         dayNightCycleGroup.addActor(moon);
         dayNightCycleGroup.addActor(trump);
+        nukeExplosionGroup = MexicanLogic.getSingleInstance().getNukeExplosionGroup();
 
         pause = new Image(game.ass.get("imgPause.png", Texture.class));
         pause.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.95f - pause.getHeight() / 2f);
@@ -118,6 +115,8 @@ public class GameScreen implements Screen {
 
         Group ennemiGroup = MexicanLogic.getSingleInstance().getEnnemiGroup();
         Group workerGroup = MexicanLogic.getSingleInstance().getWorkerGroup();
+        Group laserGroup = MexicanLogic.getSingleInstance().getLaserGroup();
+        Group brixplosionGroup = MexicanLogic.getSingleInstance().getBrixplosionGroup();
         dollarGroup = new Group();
         dollarGroup.getChildren().ensureCapacity(256);
         Group hammerGroup = new Group();
@@ -227,9 +226,12 @@ public class GameScreen implements Screen {
         stage.addActor(dynamiteGroup);
         stage.addActor(ennemiGroup);
         stage.addActor(workerGroup);
+        stage.addActor(laserGroup);
+        stage.addActor(brixplosionGroup);
         stage.addActor(dollarGroup);
-        stage.addActor(pause);
+        stage.addActor(nukeExplosionGroup);
 
+        stage.addActor(pause);
         stage.addActor(upgradeButton);
         stage.addActor(bricksLabel);
         stage.addActor(scoreLabel);
@@ -242,22 +244,15 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta) {
-        //delta = 20*delta;
+//        delta*=20;
+        MexicanLogic.getSingleInstance().setDayNightCycle(trump, moon, backgroundNight);//persistance
+        GameLogic.getSingleInstance().updateTotalTime(delta);
 
         if (GameLogic.getSingleInstance().isPaused()) {
             stage.draw();
             return;
         }
-        Array<Action> actions = backgroundNight.getActions(); //FIX DEGUEU DE L'ACTION ALPHA
-        if(actions.size < 1 || backgroundNight.getColor().a == 1.0f){
-            backgroundNight.addAction(Actions.alpha(0.0f)); //we begin during the day
-            backgroundNight.addAction(Actions.forever(
-                    Actions.sequence(
-                            Actions.fadeIn(DAY_NIGHT_CYCLE_LEN / 2f),
-                            Actions.fadeOut(DAY_NIGHT_CYCLE_LEN / 2f)
-                    )
-            ));
-        }
+
         if (GameLogic.getSingleInstance().isTimeSlowed())
             delta /= GameLogic.SLOW_FACTOR;
 
@@ -272,13 +267,16 @@ public class GameScreen implements Screen {
         MexicanLogic.getSingleInstance().updateDynamite(dynamite);
 
         // CASH RAIN
-        MexicanLogic.getSingleInstance().updateCashRain(dollarGroup, game.ass);
+        MexicanLogic.getSingleInstance().updateCashRain(dollarGroup);
 
         // TRUMP HEAD
-        MexicanLogic.getSingleInstance().updateTrumpHead(trump, moon, delta, DAY_NIGHT_CYCLE_LEN );
+        MexicanLogic.getSingleInstance().updateTrumpHead(trump, moon, delta, DAY_NIGHT_CYCLE_LEN);
+
+        // LASERS
+//        MexicanLogic.getSingleInstance().updateLaser(delta);
 
         // ENNEMI WAVES
-        MexicanLogic.getSingleInstance().updateWave(delta, (backgroundNight.getColor().a <= 0.5f), game.ass);
+        MexicanLogic.getSingleInstance().updateWave(delta, (backgroundNight.getColor().a <= 0.5f));
 
         stage.act(delta);
 
@@ -287,6 +285,53 @@ public class GameScreen implements Screen {
         if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
             dispose();
             game.setScreen(new EndScreen(game, nuages, dayNightCycleGroup, dayNightBackground));
+        }
+    }
+
+    private void setupNightCycle(){
+        float baseAlpha = 0.0f;
+        float cycleOffset = 0.0f;
+        float goalAlpha = 1.0f;
+        if (Perziztancinator.getSingleInstance().isGameLoaded()) {
+            Vector2 sunPos = MexicanLogic.getSingleInstance().getSunPos();
+            Vector2 moonPos = MexicanLogic.getSingleInstance().getMoonPos();
+            baseAlpha = MexicanLogic.getSingleInstance().getNightAlpha();
+
+            cycleOffset = GameLogic.getSingleInstance().getTotalTime() % DAY_NIGHT_CYCLE_LEN;
+            if (sunPos != null) moon.setPosition(moonPos.x, moonPos.y);
+            if (sunPos != null) trump.setPosition(sunPos.x, sunPos.y);
+            if (cycleOffset > DAY_NIGHT_CYCLE_LEN / 2f)
+                goalAlpha = 0.0f;
+
+        }
+
+        backgroundNight.setColor(
+                backgroundNight.getColor().r,
+                backgroundNight.getColor().g,
+                backgroundNight.getColor().b,
+                baseAlpha
+        );
+
+        if (goalAlpha == 0f) {
+            backgroundNight.addAction(Actions.sequence(
+                    Actions.alpha(goalAlpha, Math.abs(cycleOffset - DAY_NIGHT_CYCLE_LEN)),
+                    Actions.forever(
+                            Actions.sequence(
+                                    Actions.fadeIn(DAY_NIGHT_CYCLE_LEN / 2f),
+                                    Actions.fadeOut(DAY_NIGHT_CYCLE_LEN / 2f)
+                            )
+                    )
+            ));
+        } else {
+            backgroundNight.addAction(Actions.sequence(
+                    Actions.alpha(goalAlpha, Math.abs(cycleOffset - DAY_NIGHT_CYCLE_LEN / 2f)),
+                    Actions.forever(
+                            Actions.sequence(
+                                    Actions.fadeOut(DAY_NIGHT_CYCLE_LEN / 2f),
+                                    Actions.fadeIn(DAY_NIGHT_CYCLE_LEN / 2f)
+                            )
+                    )
+            ));
         }
     }
 
