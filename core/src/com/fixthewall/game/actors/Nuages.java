@@ -12,7 +12,7 @@ public class Nuages extends Actor {
 
     private TextureRegion texture;
     private static final float TARGET = -3200f;
-    private static final float TIME = 160f;
+    private static final float TIME = 250f;
 
     public Nuages (AssetManager ass){
         //set position

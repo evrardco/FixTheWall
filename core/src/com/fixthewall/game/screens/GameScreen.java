@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.fixthewall.game.actors.Dynamite;
-import com.fixthewall.game.actors.EnnemiBaleze;
 import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.ui.BigMenuTable;
@@ -214,10 +213,10 @@ public class GameScreen implements Screen {
         //
 
         bricksLabel = new Label("Bricks: " + GameLogic.getSingleInstance().getBricksString(), new Label.LabelStyle(fontOutline, null));
-        bricksLabel.setPosition(game.viewport.getWorldWidth() * 0.05f, game.viewport.getWorldHeight() * 0.81f);
+        bricksLabel.setPosition(game.viewport.getWorldWidth() * 0.05f, game.viewport.getWorldHeight() * 0.835f);
 
         scoreLabel = new Label("Score: " + GameLogic.getSingleInstance().getScoreString(), new Label.LabelStyle(fontOutline, null));
-        scoreLabel.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.76f);
+        scoreLabel.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.79f);
 
 
         //Add all the things to runescape (add a deadman mode)
@@ -243,7 +242,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta) {
-        delta = 20*delta;
+        //delta = 20*delta;
 
         if (GameLogic.getSingleInstance().isPaused()) {
             stage.draw();

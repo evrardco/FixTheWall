@@ -73,12 +73,9 @@ public class UpgradeButton extends Table {
 
         this.add(new Label(upgrade.getName()+":", style)).expand().top().left().padLeft(30).padTop(30);
         this.add(level).align(Align.right).padRight(50).expand().uniform().row();
-        this.left().add(new Label(upgrade.getDesc(), style));
-        //this.add(button).padBottom(10);
+        this.add(new Label(upgrade.getDesc(), style)).align(Align.left).padLeft(30);
         this.add(button).align(Align.right).padRight(10);
         this.row();
-        //this.right().top().add(level).padBottom(5);
-        //this.add(button).pad(5);
         this.add().expand().fill();
         this.add(cost).align(Align.right).padBottom(10).padRight(50);
         this.setTouchable(Touchable.enabled);

@@ -7,7 +7,7 @@ public class UpgradeCashRain extends AbstractUpgrade {
     public UpgradeCashRain(int level, double cost) {
         super(level, cost);
         this.setName("Cashrain");
-        this.setDesc("Pay mexicans and see what\nhappens !");
+        this.setDesc("Pay invaders and see what\nhappens !");
         this.setType(AbstractUpgrade.TYPE_OTHER);
     }
 
@@ -15,7 +15,7 @@ public class UpgradeCashRain extends AbstractUpgrade {
     public void apply() {
         super.apply();
         MexicanLogic.getSingleInstance().setEnnemiToRemove(this.getLevel()*3);
-        this.setCost(this.getCost()*2+1000);
+        this.setCost(this.getCost()*3+this.getCost()/2.0);
         this.setLevel(this.getLevel()+1);
     }
 }

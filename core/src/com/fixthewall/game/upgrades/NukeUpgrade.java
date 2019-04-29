@@ -19,11 +19,9 @@ public class NukeUpgrade extends AbstractUpgrade{
     }
     @Override
     public void apply(){
-
         this.setCost(GameLogic.getSingleInstance().getBricks()+this.getCost());
-
-
     }
+
     @Override
     public ClickListener getListener(){
         return  new ClickListener(){
@@ -32,6 +30,7 @@ public class NukeUpgrade extends AbstractUpgrade{
 
                 GameLogic Instance = GameLogic.getSingleInstance();
                 if(Instance.getBricks() >= UpgradeManager.getSingleInstance().getAllUpgrade()[7].getCost()) {
+                    level++;
                     GameLogic.getSingleInstance().setBricks(GameLogic.getSingleInstance().getBricks()
                             - UpgradeManager.getSingleInstance().getAllUpgrade()[7].getCost());
                     MexicanLogic.getSingleInstance().launchNuke();

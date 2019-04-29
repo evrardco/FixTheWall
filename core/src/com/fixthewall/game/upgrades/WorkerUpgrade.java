@@ -6,9 +6,8 @@ import com.fixthewall.game.logic.MexicanLogic;
 
 public class WorkerUpgrade extends AbstractUpgrade {
 
-    private AssetManager ass;
 
-    public WorkerUpgrade(int level, double cost, AssetManager ass) {
+    public WorkerUpgrade(int level, double cost) {
         super(level, cost);
         this.setName("Worker");
         this.setDesc("Give an invader a \"better\" life\nby giving him a job to\nhelp fix your wall.");
@@ -19,7 +18,7 @@ public class WorkerUpgrade extends AbstractUpgrade {
     @Override
     public void apply() {
         super.apply();
-        this.setCost(this.getCost()*5);
+        this.setCost(this.getCost()*5+this.getCost()/1.5);
         MexicanLogic.getSingleInstance().addWorker();
     }
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Timer;
 import com.fixthewall.game.Helpers;
 import com.fixthewall.game.Perziztancinator;
+import com.fixthewall.game.upgrades.UpgradeManager;
 
 import java.io.Serializable;
 
@@ -45,7 +46,7 @@ public class GameLogic implements Serializable {
     public void init(){
         this.maxHealth = 100;
         health = maxHealth;
-        bricks = 0;
+        bricks = 0.0;
         hammerLevel = 0;// 0 correspond au premier indice de l'array d'images de marteaux.
         healingPower = 1;
         bricksPower = 1;
@@ -210,6 +211,11 @@ public class GameLogic implements Serializable {
             }
         };
         timer.scheduleTask(saveTask, 0.0f, 1.0f, -1 );
+    }
+
+    public void nukeReset(){
+        maxHealth = 100;
+        health = 1.0;
     }
 
 }

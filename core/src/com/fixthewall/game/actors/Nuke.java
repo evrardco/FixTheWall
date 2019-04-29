@@ -128,7 +128,6 @@ public class Nuke extends Actor {
                    this.getY() + descendingImage.getHeight()/2f- flame.getHeight()
         );
         flame.setVisible(true);
-
         blinder.setVisible(true);
 
         this.setVisible(false);
@@ -138,29 +137,22 @@ public class Nuke extends Actor {
         Group workerGroup = MexicanLogic.getSingleInstance().getWorkerGroup();
         Group ennemiGroup = MexicanLogic.getSingleInstance().getEnnemiGroup();
 
-
         ennemiGroup.clearChildren();
         workerGroup.clearChildren();
         MexicanLogic.getSingleInstance().getPool().clear();
-
-        GameLogic.getSingleInstance().setHealth(1f);
         MexicanLogic.getSingleInstance().resetWaveTime();
-
-        GameLogic.getSingleInstance().setBricks(0);
-
+        //Reset GameLogic's stat
+        GameLogic.getSingleInstance().nukeReset();
+        //Reset Upgrades
         resetUpgrades();
 
     }
 
     private void resetUpgrades(){
         AbstractUpgrade[] allUpgrade = UpgradeManager.getSingleInstance().getAllUpgrade();
-        allUpgrade[0].reset(0, 100);//Bricks++
-        allUpgrade[2].reset(0 , 10);
-        allUpgrade[3].reset(0, 10);
-        allUpgrade[4].reset(0, 10);
-        allUpgrade[5].reset(0, 50);//CashRain
-        allUpgrade[6].reset(0, 10);
-        allUpgrade[7].reset(0, 0);
+        allUpgrade[2].reset(0 , 500);
+        allUpgrade[3].reset(0, 200);
+        allUpgrade[4].reset(0, 500);
         UpgradeManager.getSingleInstance().update();
     }
 

@@ -14,7 +14,7 @@ public class WorkerLevelUpgrade extends AbstractUpgrade {
     @Override
     public void apply() {
         super.apply();
-        this.setCost(this.getCost() + this.getCost() * 10);
+        this.setCost(this.getCost()*5.0 + this.getCost()/2.0);
         MexicanLogic.getSingleInstance().setHeal(MexicanLogic.getSingleInstance().getHeal() + 1);
         MexicanLogic.getSingleInstance().setBrickPower(MexicanLogic.getSingleInstance().getBrickPower() + 1);
     }
