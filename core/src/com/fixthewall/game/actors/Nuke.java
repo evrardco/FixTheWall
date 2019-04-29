@@ -57,8 +57,8 @@ public class Nuke extends Actor {
         flame.setTouchable(Touchable.disabled);
         blinder.setVisible(false);
         flame.setVisible(false);
-        MexicanLogic.getSingleInstance().getEnnemiGroup().getParent().addActor(blinder);
-        MexicanLogic.getSingleInstance().getEnnemiGroup().getParent().addActor(flame);
+        MexicanLogic.getSingleInstance().getNukeExplosionGroup().addActor(blinder);
+        MexicanLogic.getSingleInstance().getNukeExplosionGroup().addActor(flame);
 
     }
 

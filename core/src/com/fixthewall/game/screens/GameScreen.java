@@ -49,6 +49,7 @@ public class GameScreen implements Screen {
     private Label bricksLabel;
     private Label scoreLabel;
     private Group dollarGroup;
+    private Group nukeExplosionGroup;
     private Image backgroundNight;
     private Dynamite dynamite;
     private Group dayNightCycleGroup;
@@ -96,6 +97,7 @@ public class GameScreen implements Screen {
         dayNightBackground.addActor(backgroundNight);
         dayNightCycleGroup.addActor(moon);
         dayNightCycleGroup.addActor(trump);
+        nukeExplosionGroup = MexicanLogic.getSingleInstance().getNukeExplosionGroup();
 
         pause = new Image(game.ass.get("imgPause.png", Texture.class));
         pause.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.95f - pause.getHeight() / 2f);
@@ -227,8 +229,9 @@ public class GameScreen implements Screen {
         stage.addActor(laserGroup);
         stage.addActor(brixplosionGroup);
         stage.addActor(dollarGroup);
-        stage.addActor(pause);
+        stage.addActor(nukeExplosionGroup);
 
+        stage.addActor(pause);
         stage.addActor(upgradeButton);
         stage.addActor(bricksLabel);
         stage.addActor(scoreLabel);

@@ -29,6 +29,7 @@ public class MexicanLogic implements Serializable {
 
     private transient Group laserGroup;
     private transient Group brixplosionGroup;
+    private transient Group nukeExplosionGroup;
     private transient Sun trump;
     private transient DollarRecycler dollarRecycler;
     public transient EnnemiPool pool;
@@ -99,6 +100,7 @@ public class MexicanLogic implements Serializable {
         instance.ennemiGroup = new Group();
         instance.workerGroup = new Group();
         instance.laserGroup = new Group();
+        instance.nukeExplosionGroup = new Group();
         instance.brixplosionGroup = new Group();
         instance.dayNightCycleGroup = new Group();
 
@@ -137,6 +139,7 @@ public class MexicanLogic implements Serializable {
         ennemiGroup = new Group();
         workerGroup = new Group();
         laserGroup = new Group();
+        nukeExplosionGroup = new Group();
         brixplosionGroup = new Group();
         dayNightCycleGroup = new Group();
 
@@ -321,6 +324,10 @@ public class MexicanLogic implements Serializable {
 
     public Group getLaserGroup() {
         return laserGroup;
+    }
+
+    public Group getNukeExplosionGroup() {
+        return nukeExplosionGroup;
     }
 
     public Group getBrixplosionGroup() {
