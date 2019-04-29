@@ -18,7 +18,7 @@ public class WorkerUpgrade extends AbstractUpgrade {
     @Override
     public void apply() {
         super.apply();
-        this.setCost(this.getCost()*5+this.getCost()/1.5);
+        this.setCost(this.getCost()*2.2+this.getLevel()*this.getCost()/50.0);
         MexicanLogic.getSingleInstance().addWorker();
     }
 }

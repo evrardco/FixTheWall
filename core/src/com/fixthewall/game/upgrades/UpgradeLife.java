@@ -14,7 +14,7 @@ public class UpgradeLife extends AbstractUpgrade {
     @Override
     public void apply() {
         super.apply();
-        this.setCost(this.getLevel()*10+this.getCost()*Math.log(this.getCost()));
+        this.setCost(this.getCost()*2.3+this.getLevel()*this.getCost()/80.0);
         GameLogic instance = GameLogic.getSingleInstance();
         double increased = instance.getMaxHealth();
         instance.setMaxHealth(instance.getMaxHealth() + increased);

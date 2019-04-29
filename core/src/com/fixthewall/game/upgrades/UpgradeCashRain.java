@@ -15,7 +15,6 @@ public class UpgradeCashRain extends AbstractUpgrade {
     public void apply() {
         super.apply();
         MexicanLogic.getSingleInstance().setEnnemiToRemove(this.getLevel()*3);
-        this.setCost(this.getCost()*3+this.getCost()/2.0);
-        this.setLevel(this.getLevel()+1);
+        this.setCost(this.getCost()*2.5+this.getLevel()*this.getCost()/80.0);
     }
 }

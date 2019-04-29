@@ -13,7 +13,7 @@ public class UpgradeBricks extends AbstractUpgrade {
     public void apply() {
         super.apply();
         GameLogic.getSingleInstance().setBricksPower(GameLogic.getSingleInstance().getBricksPower()*2);
-        this.setCost(this.getCost()*6+this.getCost()/2.0);
+        this.setCost(this.getCost()*2.0+this.getLevel()*this.getCost()/110.0);
         UpgradeManager.getSingleInstance().increaseLevelUpgradeHammer();
     }
 }

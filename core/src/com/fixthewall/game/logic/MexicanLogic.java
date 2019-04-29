@@ -217,7 +217,9 @@ public class MexicanLogic implements Serializable {
 
     public void updateCashRain(Group dollarGroup) {
         if (ennemiToRemove > 0) {
-            for(int i = 0; i < UpgradeManager.getSingleInstance().getAllUpgrade()[2].getLevel() * 2 + 3; i++) {
+            double nbreDollar = UpgradeManager.getSingleInstance().getAllUpgrade()[5].getLevel() * 1.1;
+            if(nbreDollar<4) nbreDollar = 4;
+            for(int i = 0; i < nbreDollar; i++) {
                 Dollar dol = dollarRecycler.getOne(ass);
                 if(!dollarRecycler.isRecycling())
                     dollarGroup.addActor(dol);
