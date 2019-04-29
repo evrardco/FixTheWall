@@ -12,7 +12,7 @@ public class NukeUpgrade extends AbstractUpgrade{
     public NukeUpgrade(int level, double cost) {
         super(level, cost);
         this.setName("Nuke them all !");
-        this.setDesc("War... War never changes.\nResets everything but \nthe hammer's healing power !");
+        this.setDesc("War... War never changes.\nResets green upgrades !");
         this.setType(AbstractUpgrade.TYPE_OTHER);
         this.setCost(GameLogic.getSingleInstance().getBricks());
         this.launchedCount = 0;
