@@ -28,6 +28,8 @@ public class GameLogic implements Serializable {
     transient private boolean isTimeSlowed;
     private float totalTime;
     private transient Timer timer;
+    private boolean cheatMode;
+    private double backupBricks; // before cheatmode
 
     public Timer getTimer() {
         return timer;
@@ -48,6 +50,7 @@ public class GameLogic implements Serializable {
         this.totalTime = 0f;
         this.maxHealth = 100;
         health = maxHealth;
+        cheatMode = false;
         bricks = 0;
         hammerLevel = 0;// 0 correspond au premier indice de l'array d'images de marteaux.
         healingPower = 1;
@@ -59,6 +62,7 @@ public class GameLogic implements Serializable {
         timer = new Timer();
         isPaused = false;
         isTimeSlowed = false;
+        backupBricks = 0;
 
         Timer.Task saveTask = new Timer.Task(){
             public void run(){
@@ -202,6 +206,19 @@ public class GameLogic implements Serializable {
 
     public String getHighScoreString() {
         return Helpers.formatBigNumbers(getHighScore());
+    }
+
+    public boolean isCheatMode() {
+        return cheatMode;
+    }
+
+    public void setCheatMode(boolean cheatMode) {
+        this.cheatMode = cheatMode;
+        if (isCheatMode()) {
+            backupBricks = getBricks();
+            setBricks(Double.MAX_VALUE);
+        } else
+            setBricks(backupBricks);
     }
 
     /**

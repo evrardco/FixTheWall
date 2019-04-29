@@ -212,5 +212,13 @@ public class Game extends com.badlogic.gdx.Game {
         titleFont.fontParameters.borderColor = Color.WHITE;
         titleFont.fontParameters.borderWidth = 10;
         ass.load("Western_outline.ttf", BitmapFont.class, titleFont);
+
+        FreetypeFontLoader.FreeTypeFontLoaderParameter titleFontCheatMode = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        titleFontCheatMode.fontFileName = "font/gomarice_nandaka_western.ttf";
+        titleFontCheatMode.fontParameters.size = 100;
+        titleFontCheatMode.fontParameters.color = Color.RED;
+        titleFontCheatMode.fontParameters.borderColor = Color.WHITE;
+        titleFontCheatMode.fontParameters.borderWidth = 10;
+        ass.load("Western_outline_red.ttf", BitmapFont.class, titleFontCheatMode);
     }
 }
