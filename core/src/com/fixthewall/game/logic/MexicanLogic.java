@@ -197,7 +197,7 @@ public class MexicanLogic implements Serializable {
     }
 
     public void doBalezeDamage() {
-        double balezeDamage = (GameLogic.getSingleInstance().getHealth())/10.0 + damage*100;
+        double balezeDamage = (GameLogic.getSingleInstance().getMaxHealth())/5.0 + damage*100;
         GameLogic.getSingleInstance().setHealth(
                 GameLogic.getSingleInstance().getHealth() - balezeDamage
         );
@@ -269,19 +269,21 @@ public class MexicanLogic implements Serializable {
             //else timeBetweenWavesNight *=  0.7f;
 
             waveNumber++;
-            if (waveNumber < 10) {   //PHASE 1
+            if(waveNumber < 10) {   //PHASE 1
                 for (int i = 0; i < 1 + waveNumber; i++) {
                     ennemiGroup.addActor(pool.obtain());
                 }
-            } else if (waveNumber < 20) { //PHASE 2
-                for (int i = 0; i < 1 + waveNumber + (waveNumber-10) * 5; i++) {
+            }
+            else if (waveNumber < 20) { //PHASE 2
+                for (int i = 0; i < 1 + waveNumber + (waveNumber-10) * 3; i++) {
                     ennemiGroup.addActor(pool.obtain());
                 }
-            } else if (waveNumber < 30) { //PHASE 3
+            }
+            else{ //(waveNumber >=20) { //PHASE 3
                 for (int i = 0; i <  waveNumber* 10; i++) {
                     ennemiGroup.addActor(pool.obtain());
                 }
-                for(int i = 30; i<=waveNumber; i++){
+                for(int j = 20; j<=waveNumber; j++){
                     ennemiGroup.addActor(new EnnemiBaleze(ass));
                 }
             }
