@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -58,6 +59,8 @@ public class GameScreen implements Screen {
     private Moon moon;
     private Nuages nuages;
 
+    private boolean speedyMode;
+
     private LinkedList<PopupLabel> popupLabels;
 
     public static final transient int DAY_NIGHT_CYCLE_LEN = 300; //10 minutes
@@ -65,6 +68,7 @@ public class GameScreen implements Screen {
     public GameScreen(final Game game, Nuages nuages) {
         this.game = game;
         stage = new Stage(game.viewport);
+        speedyMode = false;
 
         Image backgroundDay = new Image(game.ass.get("fondWall.png", Texture.class));
         backgroundNight = new Image(game.ass.get("fondWall-nuit.png", Texture.class)){
@@ -217,6 +221,17 @@ public class GameScreen implements Screen {
         scoreLabel = new Label("Score: " + GameLogic.getSingleInstance().getScoreString(), new Label.LabelStyle(fontOutline, null));
         scoreLabel.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.79f);
 
+        final ImageButton.ImageButtonStyle speedButtonStyle = new ImageButton.ImageButtonStyle();
+        speedButtonStyle.up = new TextureRegionDrawable(game.ass.get("ui/texture_button_speedymode.png", Texture.class));
+        speedButtonStyle.down = new TextureRegionDrawable(game.ass.get("ui/texture_button_speedymode_down.png", Texture.class));
+        ImageButton speedButton = new ImageButton(speedButtonStyle);
+        speedButton.setPosition(0.95f * stage.getWidth() - speedButton.getWidth(), 0.85f * stage.getHeight() - speedButton.getHeight());
+        speedButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                speedyMode = !speedyMode;
+            }
+        });
 
         //Add all the things to runescape (add a deadman mode)
         stage.addActor(dayNightBackground);
@@ -231,6 +246,8 @@ public class GameScreen implements Screen {
         stage.addActor(dollarGroup);
         stage.addActor(nukeExplosionGroup);
 
+        if (GameLogic.getSingleInstance().isCheatMode())
+            stage.addActor(speedButton);
         stage.addActor(pause);
         stage.addActor(upgradeButton);
         stage.addActor(bricksLabel);
@@ -244,7 +261,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta) {
-//        delta*=20;
+        if (speedyMode)
+            delta *= 10;
+
+        if (GameLogic.getSingleInstance().isCheatMode())
+            GameLogic.getSingleInstance().setBricks(Double.MAX_VALUE);
+
         MexicanLogic.getSingleInstance().setDayNightCycle(trump, moon, backgroundNight);//persistance
         GameLogic.getSingleInstance().updateTotalTime(delta);
 
