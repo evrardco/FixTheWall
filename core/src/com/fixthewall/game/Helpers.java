@@ -30,14 +30,14 @@ public class Helpers {
     }
 
     /**
-     * Retourne un entier aléatoire entre 0 et max-1
+     * Retourne un double aléatoire entre 0 et max-1
      */
     public static double getRandom(int max){
         return Math.random() * max;
     }
 
     /**
-     * Retourne un entier aléatoire entre min et max-1
+     * Retourne un double aléatoire entre min et max-1
      */
     public static double getRandom(int min, int max){
         return Math.random() * (max - min) + min;

@@ -21,6 +21,7 @@ public class Worker extends Actor {
     private TextureRegion previousFrame;
     private final float hitSpeed = 0.1f;
     private float elapsedTime;
+    private float timeOffset; // used to make game loaded with save look more natural (make workers not synchronized)
 
     public Worker(AssetManager ass) {
         Texture texture = ass.get("Frames/SheetFrameWorker.png");
@@ -39,13 +40,20 @@ public class Worker extends Actor {
         }
         animation = new Animation<TextureRegion>(hitSpeed, frames);
         hitFrame = frames[3]; //Frame de frappe
+        currentFrame = animation.getKeyFrame(elapsedTime, true);
         elapsedTime = 0;
 
         setPosition((float) Helpers.getRandom((int) (Game.GAME_WIDTH - tmp[0][0].getRegionWidth())), WALL_TOP - 18f);
+
+        timeOffset = (float) Helpers.getRandom(1);
     }
 
     @Override
     public void act(float delta) {
+        if (timeOffset > 0) {
+            timeOffset -= delta;
+            return;
+        }
         super.act(delta);
         elapsedTime += delta;
         currentFrame = animation.getKeyFrame(elapsedTime, true);
