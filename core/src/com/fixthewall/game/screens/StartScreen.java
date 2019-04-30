@@ -124,8 +124,10 @@ public class StartScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 Perziztancinator.delete();
                 double highScore = GameLogic.getSingleInstance().getHighScore();
+                boolean isCheatMode = GameLogic.getSingleInstance().isCheatMode();
                 GameLogic.getSingleInstance().init();
                 GameLogic.getSingleInstance().setHighScore(highScore);
+                GameLogic.getSingleInstance().setCheatMode(isCheatMode);
                 UpgradeManager.getSingleInstance().init(game.ass);
                 MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);
                 Perziztancinator.getSingleInstance().setGameLoaded(false);

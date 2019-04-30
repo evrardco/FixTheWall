@@ -24,12 +24,14 @@ public class Dollar extends Actor {
 
     private Rectangle bounds;
     private boolean available;
-    private float deltaSpeed;
-    private float prevAcc;
-    private float currentAcc;
+    private float deltaSpeedY;
+    private float prevAccY;
+    private float currentAccY;
+    private float currentAccX;
     public static int visibleAmount = 0;
 
     private float velY;
+    private float velX;
 
     public Dollar(final AssetManager ass) {
         this.ass = ass;
@@ -37,9 +39,6 @@ public class Dollar extends Actor {
 
         available = GameLogic.getSingleInstance().isAccelerometerAvailable();
         reset();
-        deltaSpeed = 0f;
-        prevAcc = 0f;
-        currentAcc = 0f;
     }
 
     public void reset(){
@@ -49,8 +48,14 @@ public class Dollar extends Actor {
         bounds = new Rectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight());
 
         velY = 0f;
+        velX = 0f;
         setVisible(true);
         visibleAmount++;
+
+        deltaSpeedY = 0f;
+        prevAccY = 0f;
+        currentAccY = 0f;
+        currentAccX = 0f;
     }
 
 
@@ -65,15 +70,26 @@ public class Dollar extends Actor {
         if (this.getY() > 150) {
 
             if(available) {
-                prevAcc = currentAcc;
-                currentAcc = Gdx.input.getAccelerometerY();
-                deltaSpeed += Math.abs(currentAcc - prevAcc);
-                this.velY += Constants.GRAVITY * delta*0.00001-deltaSpeed*50*delta;//Parfait comme vitesse !
-            }
-            else {
-                this.velY += Constants.GRAVITY * delta*0.0001;
+                prevAccY = currentAccY;
+                currentAccY = Gdx.input.getAccelerometerY();
+                deltaSpeedY += Math.abs(currentAccY - prevAccY);
+                if (deltaSpeedY <= 1)
+                    velY -= 1;
+                else
+                    this.velY -= deltaSpeedY;
+
+                currentAccX = Gdx.input.getAccelerometerX();
+                if (currentAccX >= 10)
+                    currentAccX = 10;
+                else if (currentAccX <= -10)
+                    currentAccX = -10;
+                this.velX -= currentAccX;
+
+            } else {
+                this.velY += Constants.GRAVITY * delta;
             }
             this.setY(this.getY() + this.velY * delta);
+            this.setX(this.getX() + this.velX * delta);
         } else {
             this.setVisible(false);
             this.setX(10000.0f);

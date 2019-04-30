@@ -294,9 +294,6 @@ public class GameScreen implements Screen {
         // TRUMP HEAD
         MexicanLogic.getSingleInstance().updateTrumpHead(trump, moon, delta, DAY_NIGHT_CYCLE_LEN);
 
-        // LASERS
-//        MexicanLogic.getSingleInstance().updateLaser(delta);
-
         // ENNEMI WAVES
         MexicanLogic.getSingleInstance().updateWave(delta, (backgroundNight.getColor().a <= 0.5f));
 
