@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import com.fixthewall.game.Helpers;
 import com.fixthewall.game.actors.anim.Brixplosion;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.logic.MexicanLogic;
@@ -63,6 +64,8 @@ public class Ennemi extends Actor implements Serializable {
     private boolean isPayed;
     private boolean payedIsSet;
     private float durationCash;
+
+    private float timeOffset;
 
     private Rectangle bounds;
 
@@ -117,6 +120,8 @@ public class Ennemi extends Actor implements Serializable {
         this.bounds = new Rectangle(getX(), getY(), getWidth(), getHeight());
 
         currentFrame = ennemiAnimation.getKeyFrame(elapsedTime, true);
+
+        timeOffset = (float) Helpers.getRandom(1);
     }
 
 
@@ -157,6 +162,10 @@ public class Ennemi extends Actor implements Serializable {
 
     @Override
     public void act(float delta) {
+        if (timeOffset > 0) {
+            timeOffset -= delta;
+            return;
+        }
         if (!isDragged) {
             super.act(delta);
             if (!isVisible() && !hidden) return;

@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Pool;
+import com.fixthewall.game.Helpers;
 import com.fixthewall.game.actors.anim.Brixplosion;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.logic.MexicanLogic;
@@ -52,6 +53,7 @@ public class EnnemiBaleze extends Actor implements Serializable {
     private TextureRegion[] ennemiBalezeFramesWalk;
 
     private boolean hidden;
+    private float timeOffset;
 
     public EnnemiBaleze(final AssetManager ass) {
 
@@ -63,6 +65,8 @@ public class EnnemiBaleze extends Actor implements Serializable {
         this.fromLeft = false;
         this.reset();
         //bricksToutchEnable();
+
+        timeOffset = (float) Helpers.getRandom(1);
     }
 
 
@@ -95,6 +99,10 @@ public class EnnemiBaleze extends Actor implements Serializable {
 
     @Override
     public void act(float delta) {
+        if (timeOffset > 0) {
+            timeOffset -= delta;
+            return;
+        }
         super.act(delta);
         if (!isVisible() && !hidden) return;
 
