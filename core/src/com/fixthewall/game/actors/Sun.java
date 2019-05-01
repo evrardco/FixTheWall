@@ -91,11 +91,11 @@ public class Sun extends Actor {
     }
 
     private void shootLasers() {
-        if (MexicanLogic.getSingleInstance().getPool().getShown().size < 1)
+        if (MexicanLogic.getSingleInstance().getEnnemiPool().getShown().size < 1)
             return;
 
-        int target = (int) Helpers.getRandom(MexicanLogic.getSingleInstance().getPool().getShown().size);
-        Ennemi targetEnnemi = MexicanLogic.getSingleInstance().getPool().getShown().get(target);
+        int target = (int) Helpers.getRandom(MexicanLogic.getSingleInstance().getEnnemiPool().getShown().size);
+        Ennemi targetEnnemi = MexicanLogic.getSingleInstance().getEnnemiPool().getShown().get(target);
         float targetX = targetEnnemi.getX() + targetEnnemi.getWidth() / 2f;
         float targetY = targetEnnemi.getY() + targetEnnemi.getHeight() / 2f;
 

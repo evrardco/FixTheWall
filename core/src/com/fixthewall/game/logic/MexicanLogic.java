@@ -2,18 +2,17 @@ package com.fixthewall.game.logic;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.fixthewall.game.actors.Dollar;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.actors.EnnemiBaleze;
-import com.fixthewall.game.actors.Laser;
 import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Nuke;
 import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.Worker;
+import com.fixthewall.game.actors.pools.EnnemiBalezePool;
 import com.fixthewall.game.actors.pools.EnnemiPool;
 import com.fixthewall.game.actors.recyclers.DollarRecycler;
 import com.fixthewall.game.upgrades.UpgradeManager;
@@ -32,7 +31,8 @@ public class MexicanLogic implements Serializable {
     private transient Group nukeExplosionGroup;
     private transient Sun trump;
     private transient DollarRecycler dollarRecycler;
-    public transient EnnemiPool pool;
+    public transient EnnemiPool ennemiPool;
+    public transient EnnemiBalezePool ennemiBalezePool;
 
     private transient Group dayNightCycleGroup;
 
@@ -59,8 +59,12 @@ public class MexicanLogic implements Serializable {
 
     private MexicanLogic() {}
 
-    public EnnemiPool getPool() {
-        return pool;
+    public EnnemiPool getEnnemiPool() {
+        return ennemiPool;
+    }
+
+    public EnnemiBalezePool getEnnemiBalezePool() {
+        return ennemiBalezePool;
     }
 
     /**
@@ -78,7 +82,8 @@ public class MexicanLogic implements Serializable {
 
         instance.ennemiToRemove = 0;
         instance.ass = ass;
-        instance.pool = new EnnemiPool(ass);
+        instance.ennemiPool = new EnnemiPool(ass);
+        instance.ennemiBalezePool = new EnnemiBalezePool(ass);
         instance.dollarRecycler = new DollarRecycler(128);
         instance.finishedLoading = false;
     }
@@ -89,14 +94,14 @@ public class MexicanLogic implements Serializable {
             addWorker();
         }
         for(int i = 0; i < ennemiCount; i++ ){
-            Ennemi ennemi = pool.obtain();
+            Ennemi ennemi = ennemiPool.obtain();
             ennemi.getActions().removeRange(0, ennemi.getActions().size - 1);
             ennemi.setPosition(ennemi.getTargetX(), ennemi.getTargetY());
             ennemiGroup.addActor(ennemi);
             ennemiCount--; // ceux ajoutés ici sont compris dans ennemiCount donc il ne faut pas les compter un autre fois
         }
         for(int i = 0; i < ennemiBalezeCount; i++ ){
-            EnnemiBaleze ennemiBaleze = new EnnemiBaleze(ass);
+            EnnemiBaleze ennemiBaleze = ennemiBalezePool.obtain();
             ennemiBaleze.getActions().removeRange(0, ennemiBaleze.getActions().size - 1);
             ennemiBaleze.setPosition(ennemiBaleze.getTargetX(), ennemiBaleze.getTargetY());
             ennemiGroup.addActor(ennemiBaleze);
@@ -122,7 +127,8 @@ public class MexicanLogic implements Serializable {
 
         ennemiToRemove = 0;
         this.ass = ass;
-        pool = new EnnemiPool(ass);
+        ennemiPool = new EnnemiPool(ass);
+        ennemiBalezePool = new EnnemiBalezePool(ass);
         dollarRecycler = new DollarRecycler(128);
         this.ennemiCount = 0;
         this.ennemiBalezeCount = 0;
@@ -207,7 +213,7 @@ public class MexicanLogic implements Serializable {
             for (Actor dollar : dollarGroup.getChildren()) {
                 if (!dollar.isVisible()) continue;
                 if (dollar.getY() >= 600 || dollar.getY() <= 0) continue;
-                for (Ennemi ennemi : pool.getShown()) {
+                for (Ennemi ennemi : ennemiPool.getShown()) {
                     if (((Dollar) dollar).getBounds().overlaps(((ennemi.getBounds())))) {
                             ennemi.setPayed();
                             dollar.setVisible(false);
@@ -219,7 +225,7 @@ public class MexicanLogic implements Serializable {
 
     public void updateDynamite(Dynamite dynamite) {
         if (dynamite.hasExploded()) {
-            for (Ennemi ennemi : pool.getShown()) {
+            for (Ennemi ennemi : ennemiPool.getShown()) {
                 if (dynamite.getExplosionRadius().overlaps((ennemi.getBounds()))) {
                     ennemi.kill();
                 }
@@ -242,20 +248,20 @@ public class MexicanLogic implements Serializable {
             waveNumber++;
             if(waveNumber < 10) {   //PHASE 1
                 for (int i = 0; i < 1 + waveNumber; i++) {
-                    ennemiGroup.addActor(pool.obtain());
+                    ennemiGroup.addActor(ennemiPool.obtain());
                 }
             }
             else if (waveNumber < 20) { //PHASE 2
                 for (int i = 0; i < 1 + waveNumber + (waveNumber-10) * 3; i++) {
-                    ennemiGroup.addActor(pool.obtain());
+                    ennemiGroup.addActor(ennemiPool.obtain());
                 }
             }
             else{ //(waveNumber >=20) { //PHASE 3
                 for (int i = 0; i <  waveNumber* 10; i++) {
-                    ennemiGroup.addActor(pool.obtain());
+                    ennemiGroup.addActor(ennemiPool.obtain());
                 }
                 for(int j = 20; j <= waveNumber; j++){
-                    ennemiGroup.addActor(new EnnemiBaleze(ass));
+                    ennemiGroup.addActor(ennemiBalezePool.obtain());
                 }
             }
         }

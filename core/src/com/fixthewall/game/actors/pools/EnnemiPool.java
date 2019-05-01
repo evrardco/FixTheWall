@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.Array;
 import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.logic.MexicanLogic;
 
 public class EnnemiPool {
     public static final int MAX_ENNEMI_ON_SCREEN = 100;
@@ -51,6 +52,7 @@ public class EnnemiPool {
     public void clear(){
         hidden = new Array<Ennemi>(MAX_ENNEMI_ON_SCREEN);
         shown = new Array<Ennemi>(MAX_ENNEMI_ON_SCREEN);
+        MexicanLogic.getSingleInstance().setEnnemiCount(0);
     }
 
     private Ennemi createObject(){

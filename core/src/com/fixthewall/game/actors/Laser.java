@@ -48,7 +48,7 @@ public class Laser extends Actor {
     public void act(float delta) {
         super.act(delta);
         if (getY() >= 600 || getY() <= 0) return;
-        for (Ennemi ennemi : MexicanLogic.getSingleInstance().getPool().getShown()) {
+        for (Ennemi ennemi : MexicanLogic.getSingleInstance().getEnnemiPool().getShown()) {
             if (ennemi.getBounds().overlaps(getBounds())) {
                 ennemi.kill();
                 remove();

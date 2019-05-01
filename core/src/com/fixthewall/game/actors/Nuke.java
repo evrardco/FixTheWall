@@ -139,7 +139,8 @@ public class Nuke extends Actor {
 
         ennemiGroup.clearChildren();
         workerGroup.clearChildren();
-        MexicanLogic.getSingleInstance().getPool().clear();
+        MexicanLogic.getSingleInstance().getEnnemiPool().clear();
+        MexicanLogic.getSingleInstance().getEnnemiBalezePool().clear();
         MexicanLogic.getSingleInstance().resetWaveTime();
         //Reset GameLogic's stat
         GameLogic.getSingleInstance().nukeReset();
