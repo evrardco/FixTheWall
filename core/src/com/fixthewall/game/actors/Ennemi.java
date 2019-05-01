@@ -104,8 +104,7 @@ public class Ennemi extends Actor implements Serializable {
             }
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 
-                if(MexicanLogic.getSingleInstance().checkTrumpCollision(getBounds()))
-                {
+                if(MexicanLogic.getSingleInstance().checkTrumpCollision(getBounds())) {
                     kill();
                 }
                 else {

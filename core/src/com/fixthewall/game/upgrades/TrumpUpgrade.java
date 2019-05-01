@@ -29,7 +29,7 @@ public class TrumpUpgrade extends AbstractUpgrade{
             @Override
             public  void clicked(InputEvent event, float x, float y){
                 GameLogic Instance = GameLogic.getSingleInstance();
-                if(Instance.getBricks() >= cost && MexicanLogic.getSingleInstance().isDay()) {
+                if(Instance.getBricks() >= cost && GameLogic.getSingleInstance().isDay()) {
                     GameLogic.getSingleInstance().setBricks(GameLogic.getSingleInstance().getBricks() - cost);
                     level++;
                     applied = true;

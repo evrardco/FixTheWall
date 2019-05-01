@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fixthewall.game.Perziztancinator;
+import com.fixthewall.game.actors.DayNightBackground;
+import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Nuages;
 import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.ui.MenuTable;
@@ -43,10 +45,12 @@ public class StartScreen implements Screen {
         game.playlist.runPlaylist();
         //
 
-        Texture textureFond = game.ass.get("fondWall.png");
-        Image imgFond = new Image(textureFond);
         stage = new Stage(game.viewport);
 
+        DayNightBackground background = new DayNightBackground(game.ass);
+        final Sun sun = new Sun(game.ass);
+        final Moon moon = new Moon(game.ass);
+        MexicanLogic.getSingleInstance().updateTrumpHead(sun, moon);
         final Nuages nuages = new Nuages(game.ass);
 
         //setup Button
@@ -131,6 +135,7 @@ public class StartScreen implements Screen {
                 UpgradeManager.getSingleInstance().init(game.ass);
                 MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);
                 Perziztancinator.getSingleInstance().setGameLoaded(false);
+                MexicanLogic.getSingleInstance().updateTrumpHead(sun, moon);
             }
         });
 
@@ -179,11 +184,9 @@ public class StartScreen implements Screen {
             }
         });
 
-        Sun sun = new Sun(game.ass);
-        sun.setPosition(364.6121f, 1599.9999f); // valeurs identiques que quand la partie débute (trouvé avec le debugger oui c'est moche)
-
-        stage.addActor(imgFond);
+        stage.addActor(background);
         stage.addActor(sun);
+        stage.addActor(moon);
         stage.addActor(nuages);
         Wall wall = new Wall(game.ass);
         wall.lockTexture(5);

@@ -12,6 +12,7 @@ public class GameLogic implements Serializable {
 
     public static transient final float SLOW_FACTOR = 4;
     public static transient final float SAVE_INTERVAL = 60f;
+    public static transient final int DAY_NIGHT_CYCLE_LEN = 300; // 10 minutes
 
     private double health;
     private double maxHealth;
@@ -26,10 +27,10 @@ public class GameLogic implements Serializable {
     private double highScore;
     transient private boolean isPaused;
     transient private boolean isTimeSlowed;
-    private float totalTime;
     private transient Timer timer;
     private boolean cheatMode;
     private double backupBricks; // before cheatmode
+    private double dayNightTime;
 
     public Timer getTimer() {
         return timer;
@@ -47,7 +48,6 @@ public class GameLogic implements Serializable {
     private GameLogic(){}
 
     public void init(){
-        this.totalTime = 0f;
         this.maxHealth = 100;
         health = maxHealth;
         bricks = 0;
@@ -63,6 +63,7 @@ public class GameLogic implements Serializable {
         isPaused = false;
         isTimeSlowed = false;
         backupBricks = 0;
+        dayNightTime = DAY_NIGHT_CYCLE_LEN / 4f;
 
         Timer.Task saveTask = new Timer.Task(){
             public void run(){
@@ -100,14 +101,6 @@ public class GameLogic implements Serializable {
             this.health = getMaxHealth();
         else
             this.health = health;
-    }
-
-    public void updateTotalTime(float delta){
-        this.totalTime += delta;
-    }
-
-    public float getTotalTime(){
-        return totalTime;
     }
 
     public double getMaxHealth() {
@@ -208,8 +201,20 @@ public class GameLogic implements Serializable {
         return Helpers.formatBigNumbers(getHighScore());
     }
 
+    public double getDayNightTime() {
+        return dayNightTime;
+    }
+
+    public void setDayNightTime(double dayNightTime) {
+        this.dayNightTime = dayNightTime;
+    }
+
     public boolean isCheatMode() {
         return cheatMode;
+    }
+
+    public boolean isDay() {
+        return dayNightTime <= DAY_NIGHT_CYCLE_LEN / 2f;
     }
 
     public void setCheatMode(boolean cheatMode) {

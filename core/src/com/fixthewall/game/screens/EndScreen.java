@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fixthewall.game.Perziztancinator;
+import com.fixthewall.game.actors.DayNightBackground;
 import com.fixthewall.game.actors.Nuages;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
@@ -28,11 +29,11 @@ public class EndScreen implements Screen {
     private final Game game;
     private Stage stage;
 
-    public EndScreen(final Game game, Nuages nuages, Group dayNightCycleGroup, Group dayNightBackground) {
+    public EndScreen(final Game game, Nuages nuages, Group dayNightCycleGroup) {
         this.game = game;
         stage = new Stage(game.viewport);
 
-        dayNightBackground.getChildren().get(1).getActions().removeIndex(0);
+        DayNightBackground dayNightBackground = new DayNightBackground(game.ass);
         stage.addActor(dayNightBackground);
 
         stage.addActor(dayNightCycleGroup);

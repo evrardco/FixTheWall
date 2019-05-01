@@ -41,26 +41,8 @@ public class MexicanLogic implements Serializable {
     private double brickPower;
     private double mul;
 
-    public Vector2 getMoonPos() {
-        return moonPos;
-    }
-
-    public Vector2 getSunPos() {
-        return sunPos;
-    }
-
-    public float getNightAlpha() {
-        return nightAlpha;
-    }
-
     private float elapsedTime;
     private float waveNumber;
-
-    private double dayTime;
-    private boolean isDay;
-    private Vector2 moonPos;
-    private Vector2 sunPos;
-    private float nightAlpha;
 
     public int getEnnemiCount() {
         return ennemiCount;
@@ -133,8 +115,6 @@ public class MexicanLogic implements Serializable {
         this.heal = heal;
         this.brickPower = brickPower;
         this.mul = mul;
-        dayTime = 300f/4; //TODO : changer cette valeur en la durée de la nuit/4
-        isDay = true;
         this.trump = null;
         ennemiGroup = new Group();
         workerGroup = new Group();
@@ -152,12 +132,7 @@ public class MexicanLogic implements Serializable {
         this.timeBetweenWavesDay = 45f;
         this.timeBetweenWavesDay = 25f;
     }
-    public void setDayNightCycle(Sun sun, Moon moon, Actor background){
-        this.nightAlpha = background.getColor().a;
-        this.sunPos = new Vector2(sun.getX(), sun.getY());
-        this.moonPos = new Vector2(moon.getX(), moon.getY());
 
-    }
     public void launchNuke(){
         Nuke nuke = new Nuke(ass);
         this.dayNightCycleGroup.addActor(nuke);
@@ -170,6 +145,7 @@ public class MexicanLogic implements Serializable {
     public void setDayNightCycleGroup(Group dayNightCycleGroup) {
         this.dayNightCycleGroup = dayNightCycleGroup;
     }
+
     public double getDamage() {
         return damage;
     }
@@ -257,9 +233,10 @@ public class MexicanLogic implements Serializable {
 
     public void resetWaveTime(){elapsedTime = 0f;}
 
-    public void updateWave(float delta, boolean isDay) {
+    public void updateWave(float delta) {
 
-        setDay(isDay);
+        boolean isDay = GameLogic.getSingleInstance().isDay();
+
         if(!finishedLoading) finishLoading();
         elapsedTime += delta;
         // new wave every 45 seconds if day, every 25 seconds if night
@@ -290,13 +267,11 @@ public class MexicanLogic implements Serializable {
         }
     }
 
-    public void updateTrumpHead(Sun trump, Moon moon, float delta, float duration) {
+    public void updateTrumpHead(Sun trump, Moon moon) {
+        int duration = GameLogic.DAY_NIGHT_CYCLE_LEN;
 
-        dayTime = dayTime + delta;
-        if (dayTime > duration) {
-            dayTime = 0f;
-        }
-        if (dayTime < duration/2 ) {
+        double dayTime = GameLogic.getSingleInstance().getDayNightTime();
+        if (dayTime < duration / 2f) {
             trump.setVisible(true);
             moon.setVisible(false);
             this.trump = trump;
@@ -345,10 +320,6 @@ public class MexicanLogic implements Serializable {
     public void setHeal(double heal) {
         this.heal = heal;
     }
-
-    public void setDay(boolean value) {isDay = value;}
-
-    public boolean isDay() {return isDay;}
 
     public double getBrickPower() {
         return brickPower;

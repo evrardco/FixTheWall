@@ -5,13 +5,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
@@ -19,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.fixthewall.game.Perziztancinator;
+import com.fixthewall.game.actors.DayNightBackground;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Sun;
@@ -51,10 +48,8 @@ public class GameScreen implements Screen {
     private Label scoreLabel;
     private Group dollarGroup;
     private Group nukeExplosionGroup;
-    private Image backgroundNight;
     private Dynamite dynamite;
     private Group dayNightCycleGroup;
-    private Group dayNightBackground;
     private Sun trump;
     private Moon moon;
     private Nuages nuages;
@@ -63,27 +58,15 @@ public class GameScreen implements Screen {
 
     private LinkedList<PopupLabel> popupLabels;
 
-    public static final transient int DAY_NIGHT_CYCLE_LEN = 300; //10 minutes
-
     public GameScreen(final Game game, Nuages nuages) {
         this.game = game;
         stage = new Stage(game.viewport);
         speedyMode = false;
 
-        Image backgroundDay = new Image(game.ass.get("fondWall.png", Texture.class));
-        backgroundNight = new Image(game.ass.get("fondWall-nuit.png", Texture.class)){
-            @Override
-            public void draw(Batch batch, float parentAlpha) {
-                Color color = getColor();
-                super.draw(batch, parentAlpha);
-                batch.setColor(color.r, color.g, color.b, parentAlpha);
-            }
-        };
+        DayNightBackground background = new DayNightBackground(game.ass);
 
         moon = new Moon(game.ass);
         trump = new Sun(game.ass);
-
-        setupNightCycle();
 
         if (nuages == null)
             this.nuages = new Nuages(game.ass);
@@ -96,9 +79,6 @@ public class GameScreen implements Screen {
         dynamiteGroup.addActor(dynamite);
         hammer = new Hammer(game.ass);
         dayNightCycleGroup = MexicanLogic.getSingleInstance().getDayNightCycleGroup();
-        dayNightBackground = new Group();
-        dayNightBackground.addActor(backgroundDay);
-        dayNightBackground.addActor(backgroundNight);
         dayNightCycleGroup.addActor(moon);
         dayNightCycleGroup.addActor(trump);
         nukeExplosionGroup = MexicanLogic.getSingleInstance().getNukeExplosionGroup();
@@ -234,7 +214,7 @@ public class GameScreen implements Screen {
         });
 
         //Add all the things to runescape (add a deadman mode)
-        stage.addActor(dayNightBackground);
+        stage.addActor(background);
         stage.addActor(dayNightCycleGroup);
         stage.addActor(this.nuages);
         stage.addActor(wall);
@@ -264,11 +244,11 @@ public class GameScreen implements Screen {
         if (speedyMode)
             delta *= 10;
 
+        double dayNightTime = (GameLogic.getSingleInstance().getDayNightTime() + delta) % GameLogic.DAY_NIGHT_CYCLE_LEN;
+        GameLogic.getSingleInstance().setDayNightTime(dayNightTime);
+
         if (GameLogic.getSingleInstance().isCheatMode())
             GameLogic.getSingleInstance().setBricks(Double.MAX_VALUE);
-
-        MexicanLogic.getSingleInstance().setDayNightCycle(trump, moon, backgroundNight);//persistance
-        GameLogic.getSingleInstance().updateTotalTime(delta);
 
         if (GameLogic.getSingleInstance().isPaused()) {
             stage.draw();
@@ -292,10 +272,10 @@ public class GameScreen implements Screen {
         MexicanLogic.getSingleInstance().updateCashRain(dollarGroup);
 
         // TRUMP HEAD
-        MexicanLogic.getSingleInstance().updateTrumpHead(trump, moon, delta, DAY_NIGHT_CYCLE_LEN);
+        MexicanLogic.getSingleInstance().updateTrumpHead(trump, moon);
 
         // ENNEMI WAVES
-        MexicanLogic.getSingleInstance().updateWave(delta, (backgroundNight.getColor().a <= 0.5f));
+        MexicanLogic.getSingleInstance().updateWave(delta);
 
         stage.act(delta);
 
@@ -303,54 +283,7 @@ public class GameScreen implements Screen {
 
         if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
             dispose();
-            game.setScreen(new EndScreen(game, nuages, dayNightCycleGroup, dayNightBackground));
-        }
-    }
-
-    private void setupNightCycle(){
-        float baseAlpha = 0.0f;
-        float cycleOffset = 0.0f;
-        float goalAlpha = 1.0f;
-        if (Perziztancinator.getSingleInstance().isGameLoaded()) {
-            Vector2 sunPos = MexicanLogic.getSingleInstance().getSunPos();
-            Vector2 moonPos = MexicanLogic.getSingleInstance().getMoonPos();
-            baseAlpha = MexicanLogic.getSingleInstance().getNightAlpha();
-
-            cycleOffset = GameLogic.getSingleInstance().getTotalTime() % DAY_NIGHT_CYCLE_LEN;
-            if (sunPos != null) moon.setPosition(moonPos.x, moonPos.y);
-            if (sunPos != null) trump.setPosition(sunPos.x, sunPos.y);
-            if (cycleOffset > DAY_NIGHT_CYCLE_LEN / 2f)
-                goalAlpha = 0.0f;
-
-        }
-
-        backgroundNight.setColor(
-                backgroundNight.getColor().r,
-                backgroundNight.getColor().g,
-                backgroundNight.getColor().b,
-                baseAlpha
-        );
-
-        if (goalAlpha == 0f) {
-            backgroundNight.addAction(Actions.sequence(
-                    Actions.alpha(goalAlpha, Math.abs(cycleOffset - DAY_NIGHT_CYCLE_LEN)),
-                    Actions.forever(
-                            Actions.sequence(
-                                    Actions.fadeIn(DAY_NIGHT_CYCLE_LEN / 2f),
-                                    Actions.fadeOut(DAY_NIGHT_CYCLE_LEN / 2f)
-                            )
-                    )
-            ));
-        } else {
-            backgroundNight.addAction(Actions.sequence(
-                    Actions.alpha(goalAlpha, Math.abs(cycleOffset - DAY_NIGHT_CYCLE_LEN / 2f)),
-                    Actions.forever(
-                            Actions.sequence(
-                                    Actions.fadeOut(DAY_NIGHT_CYCLE_LEN / 2f),
-                                    Actions.fadeIn(DAY_NIGHT_CYCLE_LEN / 2f)
-                            )
-                    )
-            ));
+            game.setScreen(new EndScreen(game, nuages, dayNightCycleGroup));
         }
     }
 
