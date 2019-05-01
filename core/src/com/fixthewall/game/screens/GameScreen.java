@@ -105,9 +105,6 @@ public class GameScreen implements Screen {
         dollarGroup.getChildren().ensureCapacity(256);
         Group hammerGroup = new Group();
         hammer = new Hammer(game.ass);
-        for(int i=0; i < 2; i++)
-            ennemiGroup.addActor(MexicanLogic.getSingleInstance().pool.obtain());
-
 
         //Initializing upgrade menu
         final BigMenuTable menuUpgrade = new BigMenuTable(game.ass, "Upgrades", true, false);

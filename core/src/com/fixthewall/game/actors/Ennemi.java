@@ -1,6 +1,5 @@
 package com.fixthewall.game.actors;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -13,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-import com.badlogic.gdx.utils.Pool;
 import com.fixthewall.game.actors.anim.Brixplosion;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.logic.MexicanLogic;
@@ -71,9 +69,7 @@ public class Ennemi extends Actor implements Serializable {
 
     public Ennemi(final AssetManager ass) {
 
-        MexicanLogic.getSingleInstance().setEnnemiCount(
-                MexicanLogic.getSingleInstance().getEnnemiToRemove()+1
-        );
+        MexicanLogic.getSingleInstance().setEnnemiCount(MexicanLogic.getSingleInstance().getEnnemiCount() + 1);
 
         this.ass = ass;
         this.setupTexture();
@@ -283,9 +279,8 @@ public class Ennemi extends Actor implements Serializable {
         setVisible(false);
         MexicanLogic.getSingleInstance().pool.free(this);
         MexicanLogic.getSingleInstance().setEnnemiCount(
-                MexicanLogic.getSingleInstance().getEnnemiToRemove()-1
+                MexicanLogic.getSingleInstance().getEnnemiCount() - 1
         );
-
     }
 
     public void setPayed(){
@@ -391,6 +386,13 @@ public class Ennemi extends Actor implements Serializable {
     @post: texture have been switched according to dir
      */
 
+    public float getTargetX() {
+        return targetX;
+    }
+
+    public float getTargetY() {
+        return targetY;
+    }
 
     public void flip(){
         for (int i = 0; i < ennemiFramesHit.length; i++)

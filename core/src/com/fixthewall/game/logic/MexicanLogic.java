@@ -44,23 +44,13 @@ public class MexicanLogic implements Serializable {
     private float elapsedTime;
     private float waveNumber;
 
-    public int getEnnemiCount() {
-        return ennemiCount;
-    }
-
-    public void setEnnemiCount(int ennemiCount) {
-        this.ennemiCount = ennemiCount;
-    }
-
     private int ennemiToRemove;
+    private int ennemiBalezeCount;
     private int ennemiCount;
 
 
     private static MexicanLogic singleInstance = null;
     private boolean finishedLoading;
-
-    private float timeBetweenWavesDay;
-    private float timeBetweenWavesNight;
 
     public static MexicanLogic getSingleInstance() {
         if(singleInstance == null) singleInstance = new MexicanLogic();
@@ -91,25 +81,32 @@ public class MexicanLogic implements Serializable {
         instance.pool = new EnnemiPool(ass);
         instance.dollarRecycler = new DollarRecycler(128);
         instance.finishedLoading = false;
-
-
     }
 
-    private void finishLoading(){
-
+    private void finishLoading() {
         int numWorker = UpgradeManager.getSingleInstance().getAllUpgrade()[3].getLevel();
         for(int i = 0; i < numWorker; i++){
             addWorker();
         }
         for(int i = 0; i < ennemiCount; i++ ){
-            ennemiGroup.addActor(pool.obtain());
+            Ennemi ennemi = pool.obtain();
+            ennemi.getActions().removeRange(0, ennemi.getActions().size - 1);
+            ennemi.setPosition(ennemi.getTargetX(), ennemi.getTargetY());
+            ennemiGroup.addActor(ennemi);
+            ennemiCount--; // ceux ajoutés ici sont compris dans ennemiCount donc il ne faut pas les compter un autre fois
+        }
+        for(int i = 0; i < ennemiBalezeCount; i++ ){
+            EnnemiBaleze ennemiBaleze = new EnnemiBaleze(ass);
+            ennemiBaleze.getActions().removeRange(0, ennemiBaleze.getActions().size - 1);
+            ennemiBaleze.setPosition(ennemiBaleze.getTargetX(), ennemiBaleze.getTargetY());
+            ennemiGroup.addActor(ennemiBaleze);
+            ennemiBalezeCount--; // ceux ajoutés ici sont compris dans ennemiBalezeCount donc il ne faut pas les compter un autre fois
+            // sinon la boucle ne se termine jamais
         }
         this.finishedLoading = true;
-
     }
 
     public void init(double damage, double heal, double brickPower, double mul, AssetManager ass) {
-
         this.waveNumber = 0;
         this.damage = damage;
         this.heal = heal;
@@ -128,9 +125,8 @@ public class MexicanLogic implements Serializable {
         pool = new EnnemiPool(ass);
         dollarRecycler = new DollarRecycler(128);
         this.ennemiCount = 0;
+        this.ennemiBalezeCount = 0;
         this.finishedLoading = true;
-        this.timeBetweenWavesDay = 45f;
-        this.timeBetweenWavesDay = 25f;
     }
 
     public void launchNuke(){
@@ -240,10 +236,8 @@ public class MexicanLogic implements Serializable {
         if(!finishedLoading) finishLoading();
         elapsedTime += delta;
         // new wave every 45 seconds if day, every 25 seconds if night
-        if ((elapsedTime >= 45f && isDay) || (elapsedTime >= 25f && !isDay)) {
+        if ((elapsedTime >= 45f && isDay) || (elapsedTime >= 25f && !isDay) || waveNumber == 0) {
             elapsedTime = 0f;
-            //if(isDay) timeBetweenWavesDay *=  0.9f;
-            //else timeBetweenWavesNight *=  0.7f;
 
             waveNumber++;
             if(waveNumber < 10) {   //PHASE 1
@@ -260,7 +254,7 @@ public class MexicanLogic implements Serializable {
                 for (int i = 0; i <  waveNumber* 10; i++) {
                     ennemiGroup.addActor(pool.obtain());
                 }
-                for(int j = 20; j<=waveNumber; j++){
+                for(int j = 20; j <= waveNumber; j++){
                     ennemiGroup.addActor(new EnnemiBaleze(ass));
                 }
             }
@@ -335,5 +329,22 @@ public class MexicanLogic implements Serializable {
 
     public int getEnnemiToRemove() {
         return ennemiToRemove;
+    }
+
+    public int getEnnemiCount() {
+        return ennemiCount;
+    }
+
+    public void setEnnemiCount(int ennemiCount) {
+        this.ennemiCount = ennemiCount;
+    }
+
+
+    public int getEnnemiBalezeCount() {
+        return ennemiBalezeCount;
+    }
+
+    public void setEnnemiBalezeCount(int ennemiBalezeCount) {
+        this.ennemiBalezeCount = ennemiBalezeCount;
     }
 }

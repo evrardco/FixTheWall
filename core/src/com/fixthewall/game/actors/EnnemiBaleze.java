@@ -55,9 +55,7 @@ public class EnnemiBaleze extends Actor implements Serializable {
 
     public EnnemiBaleze(final AssetManager ass) {
 
-        MexicanLogic.getSingleInstance().setEnnemiCount(
-                MexicanLogic.getSingleInstance().getEnnemiToRemove()+1
-        );
+        MexicanLogic.getSingleInstance().setEnnemiBalezeCount(MexicanLogic.getSingleInstance().getEnnemiBalezeCount() + 1);
 
         this.ass = ass;
         setTouchable(Touchable.disabled); // click through
@@ -192,10 +190,9 @@ public class EnnemiBaleze extends Actor implements Serializable {
         MexicanLogic.getSingleInstance().getBrixplosionGroup().addActor(explosion);
         setVisible(false);
         //MexicanLogic.getSingleInstance().pool.free(this); TODO si nécessaire
-        MexicanLogic.getSingleInstance().setEnnemiCount(
-                MexicanLogic.getSingleInstance().getEnnemiToRemove()-1
+        MexicanLogic.getSingleInstance().setEnnemiBalezeCount(
+                MexicanLogic.getSingleInstance().getEnnemiBalezeCount() - 1
         );
-
     }
 
     private void setDistance() {
@@ -258,6 +255,13 @@ public class EnnemiBaleze extends Actor implements Serializable {
         });
     }
 
+    public float getTargetX() {
+        return targetX;
+    }
+
+    public float getTargetY() {
+        return targetY;
+    }
 
     public void flip(){
         for (int i = 0; i < ennemiBalezeFramesHit.length; i++)
