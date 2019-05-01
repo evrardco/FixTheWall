@@ -27,6 +27,7 @@ public class Sun extends Actor {
     private float elapsedTime;
     private float elapsedTimeLaser;
     private float timeBetweenShots;
+    private boolean isTrumpDisabled;
 
     public Sun (AssetManager ass) {
         this.ass = ass;
@@ -54,6 +55,8 @@ public class Sun extends Actor {
         timeBetweenShots = 10f - 0.25f * UpgradeManager.getSingleInstance().getAllUpgrade()[6].getLevel();
         if (timeBetweenShots < 0.5f)
             timeBetweenShots = 0.5f;
+
+        isTrumpDisabled = false;
     }
 
     @Override
@@ -62,7 +65,7 @@ public class Sun extends Actor {
         if (!GameLogic.getSingleInstance().isDay())
             GameLogic.getSingleInstance().setTrumpTime(0);
 
-        if (GameLogic.getSingleInstance().getTrumpTime() > 0) {
+        if (!isTrumpDisabled && GameLogic.getSingleInstance().getTrumpTime() > 0) {
             elapsedTime += delta;
             elapsedTimeLaser += delta;
             currentFrame = sunAnimation.getKeyFrame(elapsedTime, false);
@@ -115,5 +118,7 @@ public class Sun extends Actor {
         return bounds.setPosition(getX(), getY());
     }
 
-
+    public void setTrumpDisabled(boolean trumpDisabled) {
+        isTrumpDisabled = trumpDisabled;
+    }
 }

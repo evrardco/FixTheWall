@@ -5,11 +5,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -17,9 +17,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fixthewall.game.Perziztancinator;
 import com.fixthewall.game.actors.DayNightBackground;
+import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.actors.EnnemiBaleze;
 import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Nuages;
 import com.fixthewall.game.actors.Sun;
+import com.fixthewall.game.actors.Worker;
+import com.fixthewall.game.actors.pools.EnnemiBalezePool;
+import com.fixthewall.game.actors.pools.EnnemiPool;
 import com.fixthewall.game.actors.ui.MenuTable;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
@@ -34,11 +39,17 @@ public class StartScreen implements Screen {
     private Stage stage;
     private Game game;
 
+    private Group ennemiGroup;
+    private Group workerGroup;
+
     private int titleClicks; // to enable cheat
 
     public StartScreen(final Game game){
         this.game = game;
         titleClicks = 0;
+
+        loadSave();
+        MexicanLogic.getSingleInstance().setDisabledNPCs(true);
 
         //music
         game.playlist = new MusicLogic(game.ass);
@@ -47,8 +58,12 @@ public class StartScreen implements Screen {
 
         stage = new Stage(game.viewport);
 
+        workerGroup = MexicanLogic.getSingleInstance().getWorkerGroup();
+        ennemiGroup = MexicanLogic.getSingleInstance().getEnnemiGroup();
+
         DayNightBackground background = new DayNightBackground(game.ass);
         final Sun sun = new Sun(game.ass);
+        sun.setTrumpDisabled(true);
         final Moon moon = new Moon(game.ass);
         MexicanLogic.getSingleInstance().updateTrumpHead(sun, moon);
         final Nuages nuages = new Nuages(game.ass);
@@ -136,6 +151,12 @@ public class StartScreen implements Screen {
                 MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);
                 Perziztancinator.getSingleInstance().setGameLoaded(false);
                 MexicanLogic.getSingleInstance().updateTrumpHead(sun, moon);
+                ennemiGroup.remove();
+                ennemiGroup = MexicanLogic.getSingleInstance().getEnnemiGroup();
+                stage.addActor(ennemiGroup);
+                workerGroup.remove();
+                workerGroup = MexicanLogic.getSingleInstance().getWorkerGroup();
+                stage.addActor(workerGroup);
             }
         });
 
@@ -191,6 +212,8 @@ public class StartScreen implements Screen {
         Wall wall = new Wall(game.ass);
         wall.lockTexture(5);
         stage.addActor(wall);
+        stage.addActor(ennemiGroup);
+        stage.addActor(workerGroup);
         stage.addActor(containerTitle);
         //add button to the scene
         stage.addActor(playButton);
@@ -198,6 +221,23 @@ public class StartScreen implements Screen {
         stage.addActor(settingsButton);
         //necessaire pour rendre le bouton clickable
         Gdx.input.setInputProcessor(stage);
+    }
+
+    public void loadSave() {
+        //We see whether we must load the saved game.
+        if (!Perziztancinator.isNewGame()) Perziztancinator.load();
+        if (Perziztancinator.isNewGame() || Perziztancinator.isCorrupt()) {
+            UpgradeManager.getSingleInstance().init(game.ass);
+            GameLogic.getSingleInstance().init();
+            MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);
+            Perziztancinator.getSingleInstance().init();
+            Gdx.app.log("Game", "Done new game.");
+        } else {
+            UpgradeManager.getSingleInstance().init(Perziztancinator.getSingleInstance().getUpgManager());
+            GameLogic.getSingleInstance().init(Perziztancinator.getSingleInstance().getLogic());
+            MexicanLogic.init(Perziztancinator.getSingleInstance().getBadLogic(), game.ass);
+            Gdx.app.log("Game", "Done loading.");
+        }
     }
 
     @Override

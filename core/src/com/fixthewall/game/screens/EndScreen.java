@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fixthewall.game.Perziztancinator;
 import com.fixthewall.game.actors.DayNightBackground;
+import com.fixthewall.game.actors.Ennemi;
+import com.fixthewall.game.actors.EnnemiBaleze;
 import com.fixthewall.game.actors.Nuages;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
@@ -29,7 +32,7 @@ public class EndScreen implements Screen {
     private final Game game;
     private Stage stage;
 
-    public EndScreen(final Game game, Nuages nuages, Group dayNightCycleGroup) {
+    public EndScreen(final Game game, Nuages nuages, Group dayNightCycleGroup, Group ennemiGroup) {
         this.game = game;
         stage = new Stage(game.viewport);
 
@@ -40,6 +43,10 @@ public class EndScreen implements Screen {
 
         Wall wall = new Wall(game.ass);
         stage.addActor(wall);
+
+        MexicanLogic.getSingleInstance().setDisabledNPCs(true);
+
+        stage.addActor(ennemiGroup);
 
         stage.addActor(nuages);
 

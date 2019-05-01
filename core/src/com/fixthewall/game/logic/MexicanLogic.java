@@ -50,7 +50,6 @@ public class MexicanLogic implements Serializable {
 
 
     private static MexicanLogic singleInstance = null;
-    private boolean finishedLoading;
 
     public static MexicanLogic getSingleInstance() {
         if(singleInstance == null) singleInstance = new MexicanLogic();
@@ -85,10 +84,11 @@ public class MexicanLogic implements Serializable {
         instance.ennemiPool = new EnnemiPool(ass);
         instance.ennemiBalezePool = new EnnemiBalezePool(ass);
         instance.dollarRecycler = new DollarRecycler(128);
-        instance.finishedLoading = false;
+
+        instance.finishLoading();
     }
 
-    private void finishLoading() {
+    public void finishLoading() {
         int numWorker = UpgradeManager.getSingleInstance().getAllUpgrade()[3].getLevel();
         for(int i = 0; i < numWorker; i++){
             addWorker();
@@ -108,7 +108,6 @@ public class MexicanLogic implements Serializable {
             ennemiBalezeCount--; // ceux ajoutés ici sont compris dans ennemiBalezeCount donc il ne faut pas les compter un autre fois
             // sinon la boucle ne se termine jamais
         }
-        this.finishedLoading = true;
     }
 
     public void init(double damage, double heal, double brickPower, double mul, AssetManager ass) {
@@ -132,7 +131,6 @@ public class MexicanLogic implements Serializable {
         dollarRecycler = new DollarRecycler(128);
         this.ennemiCount = 0;
         this.ennemiBalezeCount = 0;
-        this.finishedLoading = true;
     }
 
     public void launchNuke(){
@@ -239,7 +237,6 @@ public class MexicanLogic implements Serializable {
 
         boolean isDay = GameLogic.getSingleInstance().isDay();
 
-        if(!finishedLoading) finishLoading();
         elapsedTime += delta;
         // new wave every 45 seconds if day, every 25 seconds if night
         if ((elapsedTime >= 45f && isDay) || (elapsedTime >= 25f && !isDay) || waveNumber == 0) {
@@ -352,5 +349,18 @@ public class MexicanLogic implements Serializable {
 
     public void setEnnemiBalezeCount(int ennemiBalezeCount) {
         this.ennemiBalezeCount = ennemiBalezeCount;
+    }
+
+    public void setDisabledNPCs(boolean disabled) {
+        for (Actor actor : ennemiGroup.getChildren()) {
+            if (actor instanceof Ennemi)
+                ((Ennemi) actor).setDisabled(disabled);
+            else if (actor instanceof EnnemiBaleze)
+                ((EnnemiBaleze) actor).setDisabled(disabled);
+        }
+        for (Actor actor : workerGroup.getChildren()) {
+            if (actor instanceof Worker)
+                ((Worker) actor).setDisabled(disabled);
+        }
     }
 }

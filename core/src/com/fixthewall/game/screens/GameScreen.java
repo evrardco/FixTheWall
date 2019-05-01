@@ -48,6 +48,7 @@ public class GameScreen implements Screen {
     private Label scoreLabel;
     private Group dollarGroup;
     private Group nukeExplosionGroup;
+    private Group ennemiGroup;
     private Dynamite dynamite;
     private Group dayNightCycleGroup;
     private Sun trump;
@@ -62,6 +63,8 @@ public class GameScreen implements Screen {
         this.game = game;
         stage = new Stage(game.viewport);
         speedyMode = false;
+
+        MexicanLogic.getSingleInstance().setDisabledNPCs(false);
 
         DayNightBackground background = new DayNightBackground(game.ass);
 
@@ -97,7 +100,7 @@ public class GameScreen implements Screen {
         });
         pauseFond.setVisible(false);
 
-        Group ennemiGroup = MexicanLogic.getSingleInstance().getEnnemiGroup();
+        ennemiGroup = MexicanLogic.getSingleInstance().getEnnemiGroup();
         Group workerGroup = MexicanLogic.getSingleInstance().getWorkerGroup();
         Group laserGroup = MexicanLogic.getSingleInstance().getLaserGroup();
         Group brixplosionGroup = MexicanLogic.getSingleInstance().getBrixplosionGroup();
@@ -280,7 +283,7 @@ public class GameScreen implements Screen {
 
         if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
             dispose();
-            game.setScreen(new EndScreen(game, nuages, dayNightCycleGroup));
+            game.setScreen(new EndScreen(game, nuages, dayNightCycleGroup, ennemiGroup));
         }
     }
 

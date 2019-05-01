@@ -55,6 +55,8 @@ public class EnnemiBaleze extends Actor implements Serializable {
     private boolean hidden;
     private float timeOffset;
 
+    private boolean disabled;
+
     public EnnemiBaleze(final AssetManager ass) {
 
         MexicanLogic.getSingleInstance().setEnnemiBalezeCount(MexicanLogic.getSingleInstance().getEnnemiBalezeCount() + 1);
@@ -67,6 +69,8 @@ public class EnnemiBaleze extends Actor implements Serializable {
         //bricksToutchEnable();
 
         timeOffset = (float) Helpers.getRandom(1);
+
+        disabled = false;
     }
 
 
@@ -99,6 +103,8 @@ public class EnnemiBaleze extends Actor implements Serializable {
 
     @Override
     public void act(float delta) {
+        if (disabled)
+            return;
         if (timeOffset > 0) {
             timeOffset -= delta;
             return;
@@ -201,6 +207,10 @@ public class EnnemiBaleze extends Actor implements Serializable {
         MexicanLogic.getSingleInstance().setEnnemiBalezeCount(
                 MexicanLogic.getSingleInstance().getEnnemiBalezeCount() - 1
         );
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
     private void setDistance() {

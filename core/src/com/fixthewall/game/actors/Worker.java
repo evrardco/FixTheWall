@@ -22,6 +22,7 @@ public class Worker extends Actor {
     private final float hitSpeed = 0.1f;
     private float elapsedTime;
     private float timeOffset; // used to make game loaded with save look more natural (make workers not synchronized)
+    private boolean disabled;
 
     public Worker(AssetManager ass) {
         Texture texture = ass.get("Frames/SheetFrameWorker.png");
@@ -46,10 +47,14 @@ public class Worker extends Actor {
         setPosition((float) Helpers.getRandom((int) (Game.GAME_WIDTH - tmp[0][0].getRegionWidth())), WALL_TOP - 18f);
 
         timeOffset = (float) Helpers.getRandom(1);
+
+        disabled = false;
     }
 
     @Override
     public void act(float delta) {
+        if (disabled)
+            return;
         if (timeOffset > 0) {
             timeOffset -= delta;
             return;
@@ -69,5 +74,9 @@ public class Worker extends Actor {
 
     public void fixTheWall() {
         MexicanLogic.getSingleInstance().doHeal();
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 }

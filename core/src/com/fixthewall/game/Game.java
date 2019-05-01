@@ -40,23 +40,6 @@ public class Game extends com.badlogic.gdx.Game {
 
         loadVIPAssets();
         loadAssets();
-        //We see whether we must load the saved game.
-        if(!Perziztancinator.isNewGame()) Perziztancinator.load();
-        if(Perziztancinator.isNewGame() || Perziztancinator.isCorrupt() ){
-            UpgradeManager.getSingleInstance().init(ass);
-            GameLogic.getSingleInstance().init();
-            MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, this.ass);
-            Perziztancinator.getSingleInstance().init();
-            Gdx.app.log("Game", "Done new game.");
-
-
-        }else {
-            UpgradeManager.getSingleInstance().init(Perziztancinator.getSingleInstance().getUpgManager());
-            GameLogic.getSingleInstance().init(Perziztancinator.getSingleInstance().getLogic());
-            MexicanLogic.init(Perziztancinator.getSingleInstance().getBadLogic(), this.ass);
-            Gdx.app.log("Game", "Done loading.");
-
-        }
 
 		viewport = new FitViewport(GAME_WIDTH, GAME_HEIGHT);
 		setScreen(new LoadingScreen(this));

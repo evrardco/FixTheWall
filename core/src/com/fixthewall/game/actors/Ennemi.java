@@ -67,6 +67,8 @@ public class Ennemi extends Actor implements Serializable {
 
     private float timeOffset;
 
+    private boolean disabled;
+
     private Rectangle bounds;
 
 
@@ -79,6 +81,8 @@ public class Ennemi extends Actor implements Serializable {
         this.fromLeft = false;
         position = new Vector2();
         this.reset();
+
+        disabled = false;
 
         //bricksToutchEnable();
 
@@ -162,6 +166,8 @@ public class Ennemi extends Actor implements Serializable {
 
     @Override
     public void act(float delta) {
+        if (disabled)
+            return;
         if (timeOffset > 0) {
             timeOffset -= delta;
             return;
@@ -388,6 +394,10 @@ public class Ennemi extends Actor implements Serializable {
             }
 
         });
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
     /*
