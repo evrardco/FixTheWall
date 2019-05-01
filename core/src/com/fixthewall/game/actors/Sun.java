@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.fixthewall.game.Helpers;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.logic.MexicanLogic;
+import com.fixthewall.game.upgrades.UpgradeManager;
 
 public class Sun extends Actor {
 
@@ -25,12 +26,11 @@ public class Sun extends Actor {
     private static final int FRAME_COLS = 4, FRAME_ROWS = 4;
     private float elapsedTime;
     private float elapsedTimeLaser;
+    private float timeBetweenShots;
 
     public Sun (AssetManager ass) {
         this.ass = ass;
 
-        //background's    0.5<alpha<1 -> night time
-        //set position
         textureSun = new TextureRegion(ass.get("Sun.png", Texture.class));
         currentFrame = textureSun;
 
@@ -51,21 +51,17 @@ public class Sun extends Actor {
         elapsedTime = 0;
         elapsedTimeLaser = 0;
         sunAnimation = new Animation<TextureRegion>(0.07f, sunFrames);
+        timeBetweenShots = 10f - 0.25f * UpgradeManager.getSingleInstance().getAllUpgrade()[6].getLevel();
+        if (timeBetweenShots < 0.5f)
+            timeBetweenShots = 0.5f;
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
-        /*
-        float a = background.getColor().a;
-        float diff = abs(prevBackgroundAlpha - a)*(float)PI;
-        prevBackgroundAlpha = a;
-        alpha += diff;
-        float pi2 = (float)PI/2;
-        float x = center.x + radius * (float)cos(alpha + pi2);
-        float y = center.y + radius * (float)sin(alpha + pi2);
-        this.setPosition(x, y);
-        */
+        if (!GameLogic.getSingleInstance().isDay())
+            GameLogic.getSingleInstance().setTrumpTime(0);
+
         if (GameLogic.getSingleInstance().getTrumpTime() > 0) {
             elapsedTime += delta;
             elapsedTimeLaser += delta;
@@ -73,8 +69,12 @@ public class Sun extends Actor {
             if (!isTrump) {
                 isTrump = true;
             }
-            GameLogic.getSingleInstance().setTrumpTime(GameLogic.getSingleInstance().getTrumpTime()-delta);
-            if (elapsedTimeLaser >= 1f) {
+            GameLogic.getSingleInstance().setTrumpTime(GameLogic.getSingleInstance().getTrumpTime() - delta);
+
+            timeBetweenShots = 10f - 0.25f * UpgradeManager.getSingleInstance().getAllUpgrade()[6].getLevel();
+            if (timeBetweenShots < 0.5f)
+                timeBetweenShots = 0.5f;
+            if (elapsedTimeLaser >= timeBetweenShots) {
                 shootLasers();
                 elapsedTimeLaser = 0;
             }
