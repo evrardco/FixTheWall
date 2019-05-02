@@ -200,7 +200,7 @@ public class EnnemiBaleze extends Actor implements Serializable {
         explosion.setPosition(getX(), getY());
         MexicanLogic.getSingleInstance().getBrixplosionGroup().addActor(explosion);
         setVisible(false);
-        MexicanLogic.getSingleInstance().ennemiBalezePool.free(this);
+        MexicanLogic.getSingleInstance().getEnnemiBalezePool().free(this);
         MexicanLogic.getSingleInstance().setEnnemiBalezeCount(
                 MexicanLogic.getSingleInstance().getEnnemiBalezeCount() - 1
         );

@@ -288,7 +288,7 @@ public class Ennemi extends Actor implements Serializable {
         explosion.setPosition(getX(), getY());
         MexicanLogic.getSingleInstance().getBrixplosionGroup().addActor(explosion);
         setVisible(false);
-        MexicanLogic.getSingleInstance().ennemiPool.free(this);
+        MexicanLogic.getSingleInstance().getEnnemiPool().free(this);
         MexicanLogic.getSingleInstance().setEnnemiCount(
                 MexicanLogic.getSingleInstance().getEnnemiCount() - 1
         );
@@ -305,7 +305,7 @@ public class Ennemi extends Actor implements Serializable {
     private void returnWithCash(float delta){
         if (this.getX() == spoonPointX && this.getY() == spoonPointY) {
             //free
-            MexicanLogic.getSingleInstance().ennemiPool.free(this);
+            MexicanLogic.getSingleInstance().getEnnemiPool().free(this);
             MexicanLogic.getSingleInstance().setEnnemiCount(
                     MexicanLogic.getSingleInstance().getEnnemiCount() - 1
             );

@@ -74,4 +74,12 @@ public class Worker extends Actor {
         MexicanLogic.getSingleInstance().doHeal();
     }
 
+    public void hide(){
+        setVisible(false);
+    }
+
+    public void unhide(){
+        setVisible(true);
+    }
+
 }

@@ -14,6 +14,7 @@ import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.Worker;
 import com.fixthewall.game.actors.pools.EnnemiBalezePool;
 import com.fixthewall.game.actors.pools.EnnemiPool;
+import com.fixthewall.game.actors.pools.WorkerPool;
 import com.fixthewall.game.actors.recyclers.DollarRecycler;
 import com.fixthewall.game.upgrades.UpgradeManager;
 
@@ -31,8 +32,9 @@ public class MexicanLogic implements Serializable {
     private transient Group nukeExplosionGroup;
     private transient Sun trump;
     private transient DollarRecycler dollarRecycler;
-    public transient EnnemiPool ennemiPool;
-    public transient EnnemiBalezePool ennemiBalezePool;
+    private transient EnnemiPool ennemiPool;
+    private transient EnnemiBalezePool ennemiBalezePool;
+    private transient WorkerPool workerPool;
     private transient boolean disabledNPCs;
 
     private transient Group dayNightCycleGroup;
@@ -83,6 +85,7 @@ public class MexicanLogic implements Serializable {
         instance.ennemiToRemove = 0;
         instance.ass = ass;
         instance.ennemiPool = new EnnemiPool(ass);
+        instance.workerPool = new WorkerPool(ass);
         instance.ennemiBalezePool = new EnnemiBalezePool(ass);
         instance.dollarRecycler = new DollarRecycler(128);
 
@@ -131,6 +134,7 @@ public class MexicanLogic implements Serializable {
         this.ass = ass;
         ennemiPool = new EnnemiPool(ass);
         ennemiBalezePool = new EnnemiBalezePool(ass);
+        workerPool = new WorkerPool(ass);
         dollarRecycler = new DollarRecycler(128);
         this.ennemiCount = 0;
         this.ennemiBalezeCount = 0;
@@ -166,7 +170,7 @@ public class MexicanLogic implements Serializable {
     }
 
     public void addWorker() {
-        this.workerGroup.addActor(new Worker(ass));
+        this.workerGroup.addActor(workerPool.obtain());
     }
 
     public void doDamage() {
@@ -360,5 +364,9 @@ public class MexicanLogic implements Serializable {
 
     public boolean isDisabledNPCs() {
         return disabledNPCs;
+    }
+
+    public WorkerPool getWorkerPool() {
+        return workerPool;
     }
 }

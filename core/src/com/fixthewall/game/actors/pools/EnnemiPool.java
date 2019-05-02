@@ -7,6 +7,7 @@ import com.fixthewall.game.actors.Ennemi;
 import com.fixthewall.game.logic.MexicanLogic;
 
 public class EnnemiPool {
+
     public static final int MAX_ENNEMI_ON_SCREEN = 100;
     private Array<Ennemi> shown;
     private Array<Ennemi> hidden;
