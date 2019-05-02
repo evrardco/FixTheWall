@@ -3,6 +3,7 @@ package com.fixthewall.game.actors.ui;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -116,6 +117,14 @@ public class BigMenuTable extends Table {
         if (GameLogic.getSingleInstance().isTimeSlowed())
             delta *= GameLogic.SLOW_FACTOR;
         super.act(delta);
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        super.draw(batch, parentAlpha);
+        batch.setColor(color.r, color.g, color.b, parentAlpha);
     }
 
     public void toggle() {

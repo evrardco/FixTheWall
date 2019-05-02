@@ -212,7 +212,7 @@ public class StartScreen implements Screen {
         stage.addActor(moon);
         stage.addActor(nuages);
         Wall wall = new Wall(game.ass);
-        wall.lockTexture(5);
+//        wall.lockTexture(5);
         stage.addActor(wall);
         stage.addActor(ennemiGroup);
         stage.addActor(workerGroup);

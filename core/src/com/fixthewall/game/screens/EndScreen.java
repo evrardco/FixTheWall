@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -83,6 +84,13 @@ public class EndScreen implements Screen {
         });
 
         finalMenu.addEntry(restartButton);
+
+        finalMenu.setColor(finalMenu.getColor().r, finalMenu.getColor().g, finalMenu.getColor().b, 0);
+        finalMenu.addAction(Actions.parallel(
+                Actions.fadeIn(0.5f),
+                Actions.moveTo(finalMenu.getX(), finalMenu.getY(), 0.5f)
+        ));
+        finalMenu.setPosition(finalMenu.getX(), stage.getHeight() / 2f);
 
         stage.addActor(finalMenu);
 
