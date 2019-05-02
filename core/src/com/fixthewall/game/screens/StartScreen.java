@@ -44,7 +44,7 @@ public class StartScreen implements Screen {
 
     private int titleClicks; // to enable cheat
 
-    public StartScreen(final Game game){
+    public StartScreen(final Game game, Boolean isBackToMenu){
         this.game = game;
         titleClicks = 0;
 
@@ -52,8 +52,10 @@ public class StartScreen implements Screen {
         MexicanLogic.getSingleInstance().setDisabledNPCs(true);
 
         //music
-        game.playlist = new MusicLogic(game.ass);
-        game.playlist.runPlaylist();
+        if(!isBackToMenu) {
+            game.playlist = new MusicLogic(game.ass);
+            game.playlist.runPlaylist();
+        }
         //
 
         stage = new Stage(game.viewport);

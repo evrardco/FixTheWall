@@ -46,7 +46,7 @@ public class LoadingScreen implements Screen {
     @Override
     public void render(float delta) {
         if (game.ass.update()) {
-            game.setScreen(new StartScreen(game));
+            game.setScreen(new StartScreen(game, false));
         }
 
         Gdx.gl.glClearColor(0, 0, 0, 1);

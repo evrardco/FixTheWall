@@ -102,7 +102,7 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 Perziztancinator.save();
                 dispose();
-                game.setScreen(new StartScreen(game));
+                game.setScreen(new StartScreen(game, true));
             }
         });
 
