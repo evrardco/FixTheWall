@@ -316,7 +316,7 @@ public class GameScreen implements Screen {
 
         if (GameLogic.getSingleInstance().getHealth() <= 0.0f) {
             dispose();
-            game.setScreen(new EndScreen(game, nuages, dayNightCycleGroup, ennemiGroup));
+            game.setScreen(new EndScreen(game, nuages, ennemiGroup));
         }
     }
 

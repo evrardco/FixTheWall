@@ -6,20 +6,19 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fixthewall.game.Perziztancinator;
 import com.fixthewall.game.actors.DayNightBackground;
-import com.fixthewall.game.actors.Ennemi;
-import com.fixthewall.game.actors.EnnemiBaleze;
+import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Nuages;
+import com.fixthewall.game.actors.Sun;
 import com.fixthewall.game.actors.Wall;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.actors.ui.BigMenuTable;
@@ -33,14 +32,18 @@ public class EndScreen implements Screen {
     private final Game game;
     private Stage stage;
 
-    public EndScreen(final Game game, Nuages nuages, Group dayNightCycleGroup, Group ennemiGroup) {
+    public EndScreen(final Game game, Nuages nuages, Group ennemiGroup) {
         this.game = game;
         stage = new Stage(game.viewport);
 
         DayNightBackground dayNightBackground = new DayNightBackground(game.ass);
         stage.addActor(dayNightBackground);
 
-        stage.addActor(dayNightCycleGroup);
+        Sun sun = new Sun(game.ass);
+        Moon moon = new Moon(game.ass);
+        stage.addActor(sun);
+        stage.addActor(moon);
+        MexicanLogic.getSingleInstance().updateTrumpHead(sun, moon);
 
         Wall wall = new Wall(game.ass);
         stage.addActor(wall);
@@ -87,8 +90,8 @@ public class EndScreen implements Screen {
 
         finalMenu.setColor(finalMenu.getColor().r, finalMenu.getColor().g, finalMenu.getColor().b, 0);
         finalMenu.addAction(Actions.parallel(
-                Actions.fadeIn(0.5f),
-                Actions.moveTo(finalMenu.getX(), finalMenu.getY(), 0.5f)
+                Actions.fadeIn(0.5f, Interpolation.pow2Out),
+                Actions.moveTo(finalMenu.getX(), finalMenu.getY(), 0.5f, Interpolation.pow2Out)
         ));
         finalMenu.setPosition(finalMenu.getX(), stage.getHeight() / 2f);
 

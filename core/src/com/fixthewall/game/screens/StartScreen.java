@@ -58,7 +58,10 @@ public class StartScreen implements Screen {
 
         stage = new Stage(game.viewport);
 
-        workerGroup = MexicanLogic.getSingleInstance().getWorkerGroup();
+        if (GameLogic.getSingleInstance().getHealth() <= 0)
+            workerGroup = new Group();
+        else
+            workerGroup = MexicanLogic.getSingleInstance().getWorkerGroup();
         ennemiGroup = MexicanLogic.getSingleInstance().getEnnemiGroup();
 
         DayNightBackground background = new DayNightBackground(game.ass);
@@ -86,7 +89,10 @@ public class StartScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
-                game.setScreen(new GameScreen(game, nuages));
+                if (GameLogic.getSingleInstance().getHealth() <= 0)
+                    game.setScreen(new EndScreen(game, nuages, ennemiGroup));
+                else
+                    game.setScreen(new GameScreen(game, nuages));
             }
         });
 
