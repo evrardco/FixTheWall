@@ -22,7 +22,6 @@ public class Worker extends Actor {
     private final float hitSpeed = 0.1f;
     private float elapsedTime;
     private float timeOffset; // used to make game loaded with save look more natural (make workers not synchronized)
-    private boolean disabled;
 
     public Worker(AssetManager ass) {
         Texture texture = ass.get("Frames/SheetFrameWorker.png");
@@ -48,12 +47,11 @@ public class Worker extends Actor {
 
         timeOffset = (float) Helpers.getRandom(1);
 
-        disabled = false;
     }
 
     @Override
     public void act(float delta) {
-        if (disabled)
+        if (MexicanLogic.getSingleInstance().isDisabledNPCs())
             return;
         if (timeOffset > 0) {
             timeOffset -= delta;
@@ -76,7 +74,4 @@ public class Worker extends Actor {
         MexicanLogic.getSingleInstance().doHeal();
     }
 
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
-    }
 }

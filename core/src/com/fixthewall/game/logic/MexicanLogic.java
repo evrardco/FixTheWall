@@ -33,6 +33,7 @@ public class MexicanLogic implements Serializable {
     private transient DollarRecycler dollarRecycler;
     public transient EnnemiPool ennemiPool;
     public transient EnnemiBalezePool ennemiBalezePool;
+    private transient boolean disabledNPCs;
 
     private transient Group dayNightCycleGroup;
 
@@ -85,6 +86,7 @@ public class MexicanLogic implements Serializable {
         instance.ennemiBalezePool = new EnnemiBalezePool(ass);
         instance.dollarRecycler = new DollarRecycler(128);
 
+        instance.disabledNPCs = false;
         instance.finishLoading();
     }
 
@@ -123,6 +125,7 @@ public class MexicanLogic implements Serializable {
         nukeExplosionGroup = new Group();
         brixplosionGroup = new Group();
         dayNightCycleGroup = new Group();
+        disabledNPCs = false;
 
         ennemiToRemove = 0;
         this.ass = ass;
@@ -352,15 +355,10 @@ public class MexicanLogic implements Serializable {
     }
 
     public void setDisabledNPCs(boolean disabled) {
-        for (Actor actor : ennemiGroup.getChildren()) {
-            if (actor instanceof Ennemi)
-                ((Ennemi) actor).setDisabled(disabled);
-            else if (actor instanceof EnnemiBaleze)
-                ((EnnemiBaleze) actor).setDisabled(disabled);
-        }
-        for (Actor actor : workerGroup.getChildren()) {
-            if (actor instanceof Worker)
-                ((Worker) actor).setDisabled(disabled);
-        }
+        disabledNPCs = disabled;
+    }
+
+    public boolean isDisabledNPCs() {
+        return disabledNPCs;
     }
 }
