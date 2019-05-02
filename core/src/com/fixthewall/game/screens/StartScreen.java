@@ -148,7 +148,9 @@ public class StartScreen implements Screen {
                 GameLogic.getSingleInstance().setHighScore(highScore);
                 GameLogic.getSingleInstance().setCheatMode(isCheatMode);
                 UpgradeManager.getSingleInstance().init(game.ass);
+                float bestWaveNumber = MexicanLogic.getSingleInstance().getBestWaveNumber();
                 MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);
+                MexicanLogic.getSingleInstance().setBestWaveNumber(bestWaveNumber);
                 Perziztancinator.getSingleInstance().setGameLoaded(false);
                 MexicanLogic.getSingleInstance().updateTrumpHead(sun, moon);
                 ennemiGroup.remove();

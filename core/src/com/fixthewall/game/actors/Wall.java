@@ -43,6 +43,10 @@ public class Wall extends Actor {
             float healthRatio = (float) (gameLogic.getHealth() / gameLogic.getMaxHealth());
             textureIndex = MathUtils.ceil(healthRatio * (textures.length - 1));
         }
+        if (textureIndex < 0)
+            textureIndex = 0;
+        else if (textureIndex > textures.length - 1)
+            textureIndex = textures.length - 1;
     }
 
     @Override

@@ -11,7 +11,6 @@ import com.fixthewall.game.actors.EnnemiBaleze;
 import com.fixthewall.game.actors.Moon;
 import com.fixthewall.game.actors.Nuke;
 import com.fixthewall.game.actors.Sun;
-import com.fixthewall.game.actors.Worker;
 import com.fixthewall.game.actors.pools.EnnemiBalezePool;
 import com.fixthewall.game.actors.pools.EnnemiPool;
 import com.fixthewall.game.actors.pools.WorkerPool;
@@ -46,6 +45,7 @@ public class MexicanLogic implements Serializable {
 
     private float elapsedTime;
     private float waveNumber;
+    private float bestWaveNumber;
 
     private int ennemiToRemove;
     private int ennemiBalezeCount;
@@ -129,6 +129,7 @@ public class MexicanLogic implements Serializable {
         brixplosionGroup = new Group();
         dayNightCycleGroup = new Group();
         disabledNPCs = false;
+        bestWaveNumber = 0;
 
         ennemiToRemove = 0;
         this.ass = ass;
@@ -250,6 +251,8 @@ public class MexicanLogic implements Serializable {
             elapsedTime = 0f;
 
             waveNumber++;
+            if (waveNumber > bestWaveNumber)
+                bestWaveNumber = waveNumber;
             if(waveNumber < 10) {   //PHASE 1
                 for (int i = 0; i < 1 + waveNumber; i++) {
                     ennemiGroup.addActor(ennemiPool.obtain());
@@ -295,6 +298,14 @@ public class MexicanLogic implements Serializable {
 
     public boolean checkTrumpCollision(Rectangle ennemiBounds) {
         return trump.getBounds().overlaps(ennemiBounds);
+    }
+
+    public float getBestWaveNumber() {
+        return bestWaveNumber;
+    }
+
+    public void setBestWaveNumber(float bestWaveNumber) {
+        this.bestWaveNumber = bestWaveNumber;
     }
 
     public Group getWorkerGroup() {
@@ -369,4 +380,9 @@ public class MexicanLogic implements Serializable {
     public WorkerPool getWorkerPool() {
         return workerPool;
     }
+
+    public float getWaveNumber() {
+        return waveNumber;
+    }
+
 }

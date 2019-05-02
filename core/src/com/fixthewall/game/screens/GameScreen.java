@@ -46,6 +46,7 @@ public class GameScreen implements Screen {
     private Image pauseFond;
     private Label bricksLabel;
     private Label scoreLabel;
+    private Label waveLabel;
     private Group dollarGroup;
     private Group nukeExplosionGroup;
     private Group ennemiGroup;
@@ -196,10 +197,13 @@ public class GameScreen implements Screen {
         //
 
         bricksLabel = new Label("Bricks: " + GameLogic.getSingleInstance().getBricksString(), new Label.LabelStyle(fontOutline, null));
-        bricksLabel.setPosition(game.viewport.getWorldWidth() * 0.05f, game.viewport.getWorldHeight() * 0.835f);
+        bricksLabel.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.835f);
 
         scoreLabel = new Label("Score: " + GameLogic.getSingleInstance().getScoreString(), new Label.LabelStyle(fontOutline, null));
         scoreLabel.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.79f);
+
+        waveLabel = new Label("Score: " + GameLogic.getSingleInstance().getScoreString(), new Label.LabelStyle(fontOutline, null));
+        waveLabel.setPosition(0.95f * stage.getWidth() - waveLabel.getWidth(), stage.getHeight() * 0.86f);
 
         final ImageButton.ImageButtonStyle speedButtonStyle = new ImageButton.ImageButtonStyle();
         speedButtonStyle.up = new TextureRegionDrawable(game.ass.get("ui/texture_button_speedymode.png", Texture.class));
@@ -232,6 +236,7 @@ public class GameScreen implements Screen {
         stage.addActor(upgradeButton);
         stage.addActor(bricksLabel);
         stage.addActor(scoreLabel);
+        stage.addActor(waveLabel);
         stage.addActor(healthBar);
         stage.addActor(hammerGroup);
         stage.addActor(menuUpgrade);
@@ -263,7 +268,9 @@ public class GameScreen implements Screen {
 
         bricksLabel.setText("Bricks: " + GameLogic.getSingleInstance().getBricksString());
         scoreLabel.setText("Score: " + GameLogic.getSingleInstance().getScoreString());
-
+        waveLabel.setText("Wave " + (int) MexicanLogic.getSingleInstance().getWaveNumber());
+        waveLabel.setSize(waveLabel.getPrefWidth(), waveLabel.getPrefHeight());
+        waveLabel.setPosition(0.95f * stage.getWidth() - waveLabel.getWidth(), waveLabel.getY());
 
         // DYNAMITE EXPLOSION
         MexicanLogic.getSingleInstance().updateDynamite(dynamite);

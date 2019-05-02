@@ -56,6 +56,8 @@ public class EndScreen implements Screen {
         BigMenuTable finalMenu = new BigMenuTable(game.ass, "You lost!");
         finalMenu.addEntry(new DoubleLabel(font, "High Score: ", GameLogic.getSingleInstance().getHighScoreString()));
         finalMenu.addEntry(new DoubleLabel(font, "Score: ", GameLogic.getSingleInstance().getScoreString()));
+        finalMenu.addEntry(new DoubleLabel(font, "Best wave: ", "" + (int) MexicanLogic.getSingleInstance().getBestWaveNumber()));
+        finalMenu.addEntry(new DoubleLabel(font, "Current wave: ", "" + (int) MexicanLogic.getSingleInstance().getWaveNumber()));
 
 
         // TODO tester avec une table qui est de width égale à la width du bigmenu
@@ -73,7 +75,9 @@ public class EndScreen implements Screen {
                 GameLogic.getSingleInstance().init();
                 GameLogic.getSingleInstance().setHighScore(highScore);
                 UpgradeManager.getSingleInstance().init(game.ass);
+                float bestWaveNumber = MexicanLogic.getSingleInstance().getBestWaveNumber();
                 MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);
+                MexicanLogic.getSingleInstance().setBestWaveNumber(bestWaveNumber);
                 dispose();
                 game.setScreen(new GameScreen(game, null));
                 Perziztancinator.getSingleInstance().setGameLoaded(false);

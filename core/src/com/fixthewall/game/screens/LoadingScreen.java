@@ -56,7 +56,7 @@ public class LoadingScreen implements Screen {
         loadLabel.setText("Loading: " + (int) (progress * 100) + "%");
         loadLabel.setSize(loadLabel.getPrefWidth(), loadLabel.getPrefHeight());
         loadLabel.setPosition(game.viewport.getWorldWidth() / 2 - loadLabel.getWidth() / 2,
-                game.viewport.getWorldHeight() * 0.45f - loadLabel.getHeight() / 2);
+                stage.getHeight() * 0.45f - loadLabel.getHeight() / 2);
         logo.setProgress(progress);
 
         stage.act(delta);
