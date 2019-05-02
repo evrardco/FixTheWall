@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.fixthewall.game.Perziztancinator;
 import com.fixthewall.game.actors.DayNightBackground;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Moon;
@@ -50,6 +51,7 @@ public class GameScreen implements Screen {
     private Group dollarGroup;
     private Group nukeExplosionGroup;
     private Group ennemiGroup;
+    private Group workerGroup;
     private Dynamite dynamite;
     private Group dayNightCycleGroup;
     private Sun trump;
@@ -77,7 +79,7 @@ public class GameScreen implements Screen {
         else
             this.nuages = nuages;
 
-        Wall wall = new Wall(game.ass);
+        final Wall wall = new Wall(game.ass);
         dynamite = new Dynamite(game.ass);
         Group dynamiteGroup = new Group();
         dynamiteGroup.addActor(dynamite);
@@ -86,6 +88,23 @@ public class GameScreen implements Screen {
         dayNightCycleGroup.addActor(moon);
         dayNightCycleGroup.addActor(trump);
         nukeExplosionGroup = MexicanLogic.getSingleInstance().getNukeExplosionGroup();
+
+        ImageTextButton.ImageTextButtonStyle backButtonStyle = new ImageTextButton.ImageTextButtonStyle();
+        backButtonStyle.up = new TextureRegionDrawable(game.ass.get("ui/texture_button.png", Texture.class));
+        backButtonStyle.down = new TextureRegionDrawable(game.ass.get("ui/texture_button_down.png", Texture.class));
+        backButtonStyle.font = game.ass.get("PoetsenOne50.ttf");
+        backButtonStyle.fontColor = Color.BLACK;
+        final ImageTextButton backButton = new ImageTextButton("Back to menu", backButtonStyle);
+        backButton.setPosition(0.5f * stage.getWidth() - backButton.getWidth() / 2f, 0.15f * stage.getHeight() - backButton.getHeight());
+        backButton.setVisible(false);
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Perziztancinator.save();
+                dispose();
+                game.setScreen(new StartScreen(game));
+            }
+        });
 
         pause = new Image(game.ass.get("imgPause.png", Texture.class));
         pause.setPosition(stage.getWidth() * 0.05f, stage.getHeight() * 0.95f - pause.getHeight() / 2f);
@@ -97,12 +116,13 @@ public class GameScreen implements Screen {
                 Dynamite.onPause = GameLogic.getSingleInstance().isPaused();
                 pause.setVisible(true);
                 pauseFond.setVisible(false);
+                backButton.setVisible(false);
             }
         });
         pauseFond.setVisible(false);
 
         ennemiGroup = MexicanLogic.getSingleInstance().getEnnemiGroup();
-        Group workerGroup = MexicanLogic.getSingleInstance().getWorkerGroup();
+        workerGroup = MexicanLogic.getSingleInstance().getWorkerGroup();
         Group laserGroup = MexicanLogic.getSingleInstance().getLaserGroup();
         Group brixplosionGroup = MexicanLogic.getSingleInstance().getBrixplosionGroup();
         dollarGroup = new Group();
@@ -183,6 +203,7 @@ public class GameScreen implements Screen {
             public  void clicked(InputEvent event, float x, float y){
                 pause.setVisible(false);
                 pauseFond.setVisible(true);
+                backButton.setVisible(true);
                 GameLogic.getSingleInstance().togglePaused();
                 Dynamite.onPause =  GameLogic.getSingleInstance().isPaused();
             }
@@ -241,6 +262,7 @@ public class GameScreen implements Screen {
         stage.addActor(hammerGroup);
         stage.addActor(menuUpgrade);
         stage.addActor(pauseFond);
+        stage.addActor(backButton);
         Gdx.input.setInputProcessor(stage);
     }
 
