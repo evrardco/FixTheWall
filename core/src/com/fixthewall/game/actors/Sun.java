@@ -18,7 +18,8 @@ public class Sun extends Actor {
 
     private TextureRegion textureSun;
     private Rectangle bounds;
-    private Boolean isTrump;
+    private boolean isTrump;
+    private boolean wasTrump;
 
     private AssetManager ass;
     private TextureRegion currentFrame;
@@ -37,6 +38,7 @@ public class Sun extends Actor {
 
         Texture sheet = ass.get("Frames/SheetFrameSun.png");
         isTrump = false;
+        wasTrump = false;
         this.setWidth(sheet.getWidth() / (float) FRAME_COLS);
         this.setHeight(sheet.getHeight() / (float) FRAME_ROWS);
         TextureRegion[][] tmp = TextureRegion.split(sheet, sheet.getWidth() / FRAME_COLS, sheet.getHeight() / FRAME_ROWS);
@@ -68,6 +70,7 @@ public class Sun extends Actor {
         if (!isTrumpDisabled && GameLogic.getSingleInstance().getTrumpTime() > 0) {
             elapsedTime += delta;
             elapsedTimeLaser += delta;
+            sunAnimation.setPlayMode(Animation.PlayMode.NORMAL);
             currentFrame = sunAnimation.getKeyFrame(elapsedTime, false);
             if (!isTrump) {
                 isTrump = true;
@@ -82,9 +85,21 @@ public class Sun extends Actor {
                 elapsedTimeLaser = 0;
             }
         } else if (isTrump) {
-            currentFrame = textureSun;
-            elapsedTime = 0;
+            wasTrump = true;
             isTrump = false;
+            elapsedTime = 0;
+        }
+        if (wasTrump) {
+            //animation inverse
+            elapsedTime += delta;
+            sunAnimation.setPlayMode(Animation.PlayMode.REVERSED);
+            currentFrame = sunAnimation.getKeyFrame(elapsedTime, false);
+
+            if (sunAnimation.isAnimationFinished(elapsedTime)) {
+                wasTrump = false;
+                elapsedTime = 0;
+                currentFrame = textureSun;
+            }
         }
     }
 
