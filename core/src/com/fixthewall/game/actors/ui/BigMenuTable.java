@@ -139,4 +139,7 @@ public class BigMenuTable extends Table {
         GameLogic.getSingleInstance().setTimeSlowed(true);
     }
 
+    public boolean isShowed() {
+        return isShowed;
+    }
 }

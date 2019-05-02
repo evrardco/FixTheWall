@@ -181,19 +181,20 @@ public class GameScreen implements Screen {
         wall.addListener( new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
-                if (!GameLogic.getSingleInstance().isPaused()) {
-                    GameLogic instance = GameLogic.getSingleInstance();
-                    double incrementedHealth = instance.getHealth() + instance.getHealingPower();
-                    instance.setHealth(incrementedHealth);
-                    instance.setBricks(instance.getBricks() + instance.getBricksPower());
-                    instance.setScore(instance.getScore() + instance.getBricksPower());
-                    hammer.show(event.getStageX(), event.getStageY());
+                if (menuUpgrade.isShowed())
+                    return;
 
-                    //spawn digit popup here
-                    PopupLabel temp = popupLabels.remove();
-                    temp.show(event.getStageX() - hammer.getWidth(), event.getStageY() + hammer.getHeight() / 2f);
-                    popupLabels.add(temp);
-                }
+                GameLogic instance = GameLogic.getSingleInstance();
+                double incrementedHealth = instance.getHealth() + instance.getHealingPower();
+                instance.setHealth(incrementedHealth);
+                instance.setBricks(instance.getBricks() + instance.getBricksPower());
+                instance.setScore(instance.getScore() + instance.getBricksPower());
+                hammer.show(event.getStageX(), event.getStageY());
+
+                //spawn digit popup here
+                PopupLabel temp = popupLabels.remove();
+                temp.show(event.getStageX() - hammer.getWidth(), event.getStageY() + hammer.getHeight() / 2f);
+                popupLabels.add(temp);
             }
         });
 
@@ -201,6 +202,9 @@ public class GameScreen implements Screen {
         pause.addListener( new ClickListener(){
             @Override
             public  void clicked(InputEvent event, float x, float y){
+                if (menuUpgrade.isShowed())
+                    return;
+
                 pause.setVisible(false);
                 pauseFond.setVisible(true);
                 backButton.setVisible(true);
