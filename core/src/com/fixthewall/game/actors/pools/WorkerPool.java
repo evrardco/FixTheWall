@@ -5,7 +5,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.Array;
 
 import com.fixthewall.game.actors.Worker;
-import com.fixthewall.game.logic.MexicanLogic;
 
 public class WorkerPool {
 
@@ -57,7 +56,6 @@ public class WorkerPool {
     public void clear(){
         hidden = new Array<Worker>(MAX_WORKER_ON_SCREEN);
         shown = new Array<Worker>(MAX_WORKER_ON_SCREEN);
-        MexicanLogic.getSingleInstance().setEnnemiBalezeCount(0);
     }
 
     private Worker createObject(){
