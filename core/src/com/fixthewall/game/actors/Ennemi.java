@@ -104,7 +104,7 @@ public class Ennemi extends Actor implements Serializable {
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 
                 if(MexicanLogic.getSingleInstance().checkTrumpCollision(getBounds())) {
-                    kill();
+                    kill(true);
                 }
                 else {
                     if (isDragged) {
@@ -282,16 +282,18 @@ public class Ennemi extends Actor implements Serializable {
         setVisible(true);
     }
 
-    public void kill() {
-        if(hidden) return;
+    public Ennemi kill(boolean free) {
         Brixplosion explosion = new Brixplosion(32, ass, getX(), getY(), 0f);
         explosion.setPosition(getX(), getY());
         MexicanLogic.getSingleInstance().getBrixplosionGroup().addActor(explosion);
         setVisible(false);
-        MexicanLogic.getSingleInstance().getEnnemiPool().free(this);
+        if (free) {
+            MexicanLogic.getSingleInstance().getEnnemiPool().free(this);
+        }
         MexicanLogic.getSingleInstance().setEnnemiCount(
                 MexicanLogic.getSingleInstance().getEnnemiCount() - 1
         );
+        return this;
     }
 
     public void setPayed(){
@@ -386,7 +388,7 @@ public class Ennemi extends Actor implements Serializable {
         this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ((Ennemi) event.getListenerActor()).kill();
+                ((Ennemi) event.getListenerActor()).kill(true);
             }
 
         });

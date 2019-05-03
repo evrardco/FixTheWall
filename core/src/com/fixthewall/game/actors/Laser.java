@@ -50,7 +50,7 @@ public class Laser extends Actor {
         if (getY() >= 600 || getY() <= 0) return;
         for (Ennemi ennemi : MexicanLogic.getSingleInstance().getEnnemiPool().getShown()) {
             if (ennemi.getBounds().overlaps(getBounds())) {
-                ennemi.kill();
+                ennemi.kill(true);
                 remove();
             }
         }

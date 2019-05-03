@@ -4,6 +4,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.utils.Array;
 import com.fixthewall.game.actors.Dollar;
 import com.fixthewall.game.actors.Dynamite;
 import com.fixthewall.game.actors.Ennemi;
@@ -231,10 +232,15 @@ public class MexicanLogic implements Serializable {
 
     public void updateDynamite(Dynamite dynamite) {
         if (dynamite.hasExploded()) {
-            for (Ennemi ennemi : ennemiPool.getShown()) {
-                if (dynamite.getExplosionRadius().overlaps((ennemi.getBounds()))) {
-                    ennemi.kill();
+            Array<Ennemi> toRemove = new Array<Ennemi>();
+            for (Actor actor : ennemiGroup.getChildren()) {
+                if (actor instanceof Ennemi && dynamite.getExplosionRadius().overlaps((((Ennemi) actor).getBounds()))) {
+                    Ennemi temp = ((Ennemi) actor).kill(false);
+                    toRemove.add(temp);
                 }
+            }
+            for (Ennemi ennemi : toRemove) {
+                ennemiPool.free(ennemi);
             }
         }
     }

@@ -95,6 +95,7 @@ public class EnnemiBaleze extends Actor implements Serializable {
 
         ennemiBalezeAnimation.setFrameDuration(frame1Speed);
         ennemiBalezeAnimationHit.setFrameDuration(frame2Speed);
+        currentFrame = ennemiBalezeAnimation.getKeyFrame(elapsedTime, true);
         setVisible(true);
     }
 
@@ -194,13 +195,14 @@ public class EnnemiBaleze extends Actor implements Serializable {
         setVisible(true);
     }
 
-    public void kill() {
-        if(hidden) return;
+    public void kill(boolean free) {
         Brixplosion explosion = new Brixplosion(32, ass, getX(), getY(), 0f);
         explosion.setPosition(getX(), getY());
         MexicanLogic.getSingleInstance().getBrixplosionGroup().addActor(explosion);
         setVisible(false);
-        MexicanLogic.getSingleInstance().getEnnemiBalezePool().free(this);
+        if (free) {
+            MexicanLogic.getSingleInstance().getEnnemiBalezePool().free(this);
+        }
         MexicanLogic.getSingleInstance().setEnnemiBalezeCount(
                 MexicanLogic.getSingleInstance().getEnnemiBalezeCount() - 1
         );
@@ -260,7 +262,7 @@ public class EnnemiBaleze extends Actor implements Serializable {
         this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                    ((Ennemi) event.getListenerActor()).kill();
+                    ((EnnemiBaleze) event.getListenerActor()).kill(true);
             }
 
         });

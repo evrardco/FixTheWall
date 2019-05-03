@@ -30,8 +30,11 @@ public class EnnemiPool {
     }
 
     public void free(Ennemi ennemi){
-        shown.removeValue(ennemi, true);
-        showOne();
+        if (shown.removeValue(ennemi, true))
+            showOne();
+        else
+            hidden.removeValue(ennemi, true);
+        ennemi.remove();
     }
 
     private void showOne(){

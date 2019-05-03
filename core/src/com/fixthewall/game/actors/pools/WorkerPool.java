@@ -30,9 +30,12 @@ public class WorkerPool {
         return ret;
     }
 
-    public void free(Worker ennemi){
-        shown.removeValue(ennemi, true);
-        showOne();
+    public void free(Worker worker){
+        if (shown.removeValue(worker, true))
+            showOne();
+        else
+            hidden.removeValue(worker, true);
+        worker.remove();
     }
 
     private void showOne(){
