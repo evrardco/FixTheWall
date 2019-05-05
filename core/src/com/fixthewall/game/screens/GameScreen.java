@@ -275,6 +275,9 @@ public class GameScreen implements Screen {
         if (speedyMode)
             delta *= 10;
 
+        if (GameLogic.getSingleInstance().isTimeSlowed())
+            delta /= GameLogic.SLOW_FACTOR;
+
         double dayNightTime = (GameLogic.getSingleInstance().getDayNightTime() + delta) % GameLogic.DAY_NIGHT_CYCLE_LEN;
         GameLogic.getSingleInstance().setDayNightTime(dayNightTime);
 
@@ -285,9 +288,6 @@ public class GameScreen implements Screen {
             stage.draw();
             return;
         }
-
-        if (GameLogic.getSingleInstance().isTimeSlowed())
-            delta /= GameLogic.SLOW_FACTOR;
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
