@@ -236,7 +236,7 @@ public class StartScreen implements Screen {
     public void loadSave() {
         //We see whether we must load the saved game.
         if (!Perziztancinator.isNewGame()) Perziztancinator.load();
-        if (Perziztancinator.isNewGame() || Perziztancinator.isCorrupt()) {
+        if (Perziztancinator.isCorrupt() || Perziztancinator.isNewGame()) {
             UpgradeManager.getSingleInstance().init(game.ass);
             GameLogic.getSingleInstance().init();
             MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);

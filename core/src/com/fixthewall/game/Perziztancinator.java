@@ -43,6 +43,8 @@ public class Perziztancinator implements Serializable {
         } catch (ClassNotFoundException c) {
             c.printStackTrace();
             return;
+        } catch (NullPointerException e){
+            instance = new Perziztancinator();
         }
     }
 
