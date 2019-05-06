@@ -275,8 +275,8 @@ public class GameScreen implements Screen {
         if (speedyMode)
             delta *= 10;
 
-        if (GameLogic.getSingleInstance().isTimeSlowed())
-            delta /= GameLogic.SLOW_FACTOR;
+        if (GameLogic.getSingleInstance().isMenuUpgrade())
+            delta = 0;
 
         double dayNightTime = (GameLogic.getSingleInstance().getDayNightTime() + delta) % GameLogic.DAY_NIGHT_CYCLE_LEN;
         GameLogic.getSingleInstance().setDayNightTime(dayNightTime);

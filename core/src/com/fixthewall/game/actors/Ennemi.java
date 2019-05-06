@@ -164,6 +164,7 @@ public class Ennemi extends Actor implements Serializable {
     public void act(float delta) {
         if (MexicanLogic.getSingleInstance().isDisabledNPCs())
             return;
+        if(GameLogic.getSingleInstance().isMenuUpgrade()) return;
         if (timeOffset > 0) {
             timeOffset -= delta;
             return;

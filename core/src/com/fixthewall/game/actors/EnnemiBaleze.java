@@ -1,6 +1,5 @@
 package com.fixthewall.game.actors;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Pool;
 import com.fixthewall.game.Helpers;
 import com.fixthewall.game.actors.anim.Brixplosion;
 import com.fixthewall.game.logic.GameLogic;
@@ -103,6 +101,7 @@ public class EnnemiBaleze extends Actor implements Serializable {
     public void act(float delta) {
         if (MexicanLogic.getSingleInstance().isDisabledNPCs())
             return;
+        if(GameLogic.getSingleInstance().isMenuUpgrade()) return;
         if (timeOffset > 0) {
             timeOffset -= delta;
             return;

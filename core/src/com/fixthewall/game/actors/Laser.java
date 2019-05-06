@@ -1,15 +1,14 @@
 package com.fixthewall.game.actors;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.logic.MexicanLogic;
 
 public class Laser extends Actor {
@@ -46,6 +45,7 @@ public class Laser extends Actor {
 
     @Override
     public void act(float delta) {
+        if(GameLogic.getSingleInstance().isMenuUpgrade()) return;
         super.act(delta);
         if (getY() >= 600 || getY() <= 0) return;
         for (Ennemi ennemi : MexicanLogic.getSingleInstance().getEnnemiPool().getShown()) {

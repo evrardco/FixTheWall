@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.fixthewall.game.Game;
 import com.fixthewall.game.Helpers;
+import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.logic.MexicanLogic;
 
 public class Worker extends Actor {
@@ -51,6 +52,7 @@ public class Worker extends Actor {
 
     @Override
     public void act(float delta) {
+        if(GameLogic.getSingleInstance().isMenuUpgrade()) return;
         if (MexicanLogic.getSingleInstance().isDisabledNPCs())
             return;
         if (timeOffset > 0) {

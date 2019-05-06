@@ -6,9 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.fixthewall.game.Helpers;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.logic.MexicanLogic;
@@ -59,6 +57,7 @@ public class Sun extends Actor {
 
     @Override
     public void act(float delta) {
+        if(GameLogic.getSingleInstance().isMenuUpgrade()) return;
         super.act(delta);
         if (!GameLogic.getSingleInstance().isDay())
             GameLogic.getSingleInstance().setTrumpTime(0);

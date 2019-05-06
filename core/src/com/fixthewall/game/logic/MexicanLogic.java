@@ -248,6 +248,7 @@ public class MexicanLogic implements Serializable {
     public void resetWaveTime(){elapsedTime = 0f;}
 
     public void updateWave(float delta) {
+        if(GameLogic.getSingleInstance().isMenuUpgrade()) return;
 
         boolean isDay = GameLogic.getSingleInstance().isDay();
 

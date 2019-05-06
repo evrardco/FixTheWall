@@ -10,7 +10,6 @@ import java.io.Serializable;
 
 public class GameLogic implements Serializable {
 
-    public static transient final float SLOW_FACTOR = 4;
     public static transient final float SAVE_INTERVAL = 60f;
     public static transient final int DAY_NIGHT_CYCLE_LEN = 300; // 10 minutes
 
@@ -26,7 +25,7 @@ public class GameLogic implements Serializable {
     private double score;
     private double highScore;
     transient private boolean isPaused;
-    transient private boolean isTimeSlowed;
+    transient private boolean isMenuUpgrade;
     private transient Timer timer;
     private boolean cheatMode;
     private double backupBricks; // before cheatmode
@@ -61,7 +60,7 @@ public class GameLogic implements Serializable {
         trumpTime = 0.0f;
         timer = new Timer();
         isPaused = false;
-        isTimeSlowed = false;
+        isMenuUpgrade = false;
         backupBricks = 0;
         dayNightTime = DAY_NIGHT_CYCLE_LEN / 4f;
 
@@ -177,12 +176,12 @@ public class GameLogic implements Serializable {
         return hammerLevel;
     }
 
-    public boolean isTimeSlowed() {
-        return isTimeSlowed;
+    public boolean isMenuUpgrade() {
+        return isMenuUpgrade;
     }
 
-    public void setTimeSlowed(boolean isTimeSlowed) {
-        this.isTimeSlowed = isTimeSlowed;
+    public void setMenuUpgrade(boolean isMenuUpgrade) {
+        this.isMenuUpgrade = isMenuUpgrade;
     }
 
     public double getHighScore() {

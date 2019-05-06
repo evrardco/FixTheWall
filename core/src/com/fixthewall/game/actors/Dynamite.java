@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.fixthewall.game.actors.anim.Brixplosion;
 import com.fixthewall.game.actors.anim.Explosion;
 import com.fixthewall.game.actors.physics.Constants;
 import com.fixthewall.game.logic.GameLogic;
@@ -85,6 +84,7 @@ public class Dynamite extends Actor{
     @Override
     public void act(float delta) {
         super.act(delta);
+        if(GameLogic.getSingleInstance().isMenuUpgrade()) return;
         if (!isFalling) {
 
             if (visible) {

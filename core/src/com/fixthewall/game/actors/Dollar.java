@@ -63,6 +63,7 @@ public class Dollar extends Actor {
     public void act(float delta) {
         super.act(delta);
         if(!isVisible()) return;
+        if(GameLogic.getSingleInstance().isMenuUpgrade()) return;
 
         elapsedTime += delta;
         currentFrame = dollarAnimation.getKeyFrame(elapsedTime, true);
@@ -123,6 +124,7 @@ public class Dollar extends Actor {
         if(Helpers.getRandom(2) == 1){
             flip();
         }
+        currentFrame = dollarAnimation.getKeyFrame(elapsedTime, true);
     }
 
     public Rectangle getBounds() {

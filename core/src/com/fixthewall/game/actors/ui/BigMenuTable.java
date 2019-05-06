@@ -1,5 +1,6 @@
 package com.fixthewall.game.actors.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -118,8 +119,8 @@ public class BigMenuTable extends Table {
 
     @Override
     public void act(float delta) {
-        if (GameLogic.getSingleInstance().isTimeSlowed())
-            delta *= GameLogic.SLOW_FACTOR;
+        if (GameLogic.getSingleInstance().isMenuUpgrade())
+            delta = Gdx.graphics.getDeltaTime();
         super.act(delta);
         alpha = Math.min(1.0f, alpha + 2*delta);
         Color col1 = this.getColor();
@@ -146,14 +147,14 @@ public class BigMenuTable extends Table {
         isShowed = false;
         addAction(Actions.moveTo(Game.GAME_WIDTH, getY(), POPUP_DURATION));
 
-        GameLogic.getSingleInstance().setTimeSlowed(false);
+        GameLogic.getSingleInstance().setMenuUpgrade(false);
     }
 
     public void show() {
         isShowed = true;
         addAction(Actions.moveTo(Game.GAME_WIDTH / 2f - getWidth() / 2f, getY(), POPUP_DURATION));
 
-        GameLogic.getSingleInstance().setTimeSlowed(true);
+        GameLogic.getSingleInstance().setMenuUpgrade(true);
     }
 
     public boolean isShowed() {

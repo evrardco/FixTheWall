@@ -4,29 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.fixthewall.game.Game;
-import com.fixthewall.game.actors.anim.Explosion;
 import com.fixthewall.game.actors.physics.Constants;
-import com.fixthewall.game.actors.pools.EnnemiPool;
 import com.fixthewall.game.logic.GameLogic;
 import com.fixthewall.game.logic.MexicanLogic;
 import com.fixthewall.game.upgrades.AbstractUpgrade;
-import com.fixthewall.game.upgrades.NukeUpgrade;
-import com.fixthewall.game.upgrades.TrumpUpgrade;
-import com.fixthewall.game.upgrades.UpgradeBricks;
-import com.fixthewall.game.upgrades.UpgradeCashRain;
-import com.fixthewall.game.upgrades.UpgradeHP;
-import com.fixthewall.game.upgrades.UpgradeLife;
 import com.fixthewall.game.upgrades.UpgradeManager;
-import com.fixthewall.game.upgrades.WorkerLevelUpgrade;
-import com.fixthewall.game.upgrades.WorkerUpgrade;
 
 
 public class Nuke extends Actor {
@@ -73,6 +60,7 @@ public class Nuke extends Actor {
 
     @Override
     public void act(float delta){
+        if(GameLogic.getSingleInstance().isMenuUpgrade()) return;
         if(exploded){
 
             Color f = flame.getColor();

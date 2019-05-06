@@ -38,6 +38,12 @@ public class Hammer extends Actor {
     }
 
     @Override
+    public void act(float delta) {
+        if(GameLogic.getSingleInstance().isMenuUpgrade()) return;
+        super.act(delta);
+    }
+
+    @Override
     public void draw(Batch batch, float parentAlpha) {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, getColor().a * parentAlpha);
