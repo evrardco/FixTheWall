@@ -27,7 +27,6 @@ public class Sun extends Actor {
     private static final int FRAME_COLS = 4, FRAME_ROWS = 4;
     private float elapsedTime;
     private float elapsedTimeLaser;
-    private float timeBetweenShots;
     private boolean isTrumpDisabled;
 
     public Sun (AssetManager ass) {
@@ -54,9 +53,6 @@ public class Sun extends Actor {
         elapsedTime = 0;
         elapsedTimeLaser = 0;
         sunAnimation = new Animation<TextureRegion>(0.07f, sunFrames);
-        timeBetweenShots = 10f - 0.25f * UpgradeManager.getSingleInstance().getAllUpgrade()[6].getLevel();
-        if (timeBetweenShots < 0.5f)
-            timeBetweenShots = 0.5f;
 
         isTrumpDisabled = false;
     }
@@ -77,9 +73,9 @@ public class Sun extends Actor {
             }
             GameLogic.getSingleInstance().setTrumpTime(GameLogic.getSingleInstance().getTrumpTime() - delta);
 
-            timeBetweenShots = 10f - 0.25f * UpgradeManager.getSingleInstance().getAllUpgrade()[6].getLevel();
-            if (timeBetweenShots < 0.5f)
-                timeBetweenShots = 0.5f;
+            float timeBetweenShots = 10f - UpgradeManager.getSingleInstance().getAllUpgrade()[6].getLevel();
+            if (timeBetweenShots < 0.25f)
+                timeBetweenShots = 0.25f;
             if (elapsedTimeLaser >= timeBetweenShots) {
                 shootLasers();
                 elapsedTimeLaser = 0;
