@@ -29,11 +29,13 @@ public class BigMenuTable extends Table {
     private boolean wrapContent;
     private boolean isPopup;
     private boolean isShowed;
+    private float alpha;
 
     public BigMenuTable(AssetManager ass, String title) {
         super();
         this.wrapContent = true;
         this.isPopup = false;
+        this.alpha = isPopup ? 0.0f : 1.0f;
         setup(ass, title);
     }
 
@@ -41,7 +43,9 @@ public class BigMenuTable extends Table {
         super();
         this.wrapContent = wrapContent;
         this.isPopup = isPopup;
+        this.alpha = isPopup ? 0.0f : 1.0f;
         setup(ass, title);
+
     }
 
     private void setup(AssetManager ass, String title) {
@@ -117,6 +121,10 @@ public class BigMenuTable extends Table {
         if (GameLogic.getSingleInstance().isTimeSlowed())
             delta *= GameLogic.SLOW_FACTOR;
         super.act(delta);
+        alpha = Math.min(1.0f, alpha + 2*delta);
+        Color col1 = this.getColor();
+        col1.a = alpha;
+        this.setColor(col1);
     }
 
     @Override

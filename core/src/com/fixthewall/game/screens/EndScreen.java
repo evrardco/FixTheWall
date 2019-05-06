@@ -89,10 +89,9 @@ public class EndScreen implements Screen {
         finalMenu.addEntry(restartButton);
 
         finalMenu.setColor(finalMenu.getColor().r, finalMenu.getColor().g, finalMenu.getColor().b, 0);
-        finalMenu.addAction(Actions.parallel(
-                Actions.fadeIn(0.5f, Interpolation.pow2Out),
+        finalMenu.addAction(
                 Actions.moveTo(finalMenu.getX(), finalMenu.getY(), 0.5f, Interpolation.pow2Out)
-        ));
+        );
         finalMenu.setPosition(finalMenu.getX(), stage.getHeight() / 2f);
 
         stage.addActor(finalMenu);
