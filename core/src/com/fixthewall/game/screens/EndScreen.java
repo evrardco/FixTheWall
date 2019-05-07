@@ -76,7 +76,7 @@ public class EndScreen implements Screen {
                 double highScore = GameLogic.getSingleInstance().getHighScore();
                 GameLogic.getSingleInstance().init();
                 GameLogic.getSingleInstance().setHighScore(highScore);
-                UpgradeManager.getSingleInstance().init(game.ass);
+                UpgradeManager.getSingleInstance().init();
                 float bestWaveNumber = MexicanLogic.getSingleInstance().getBestWaveNumber();
                 MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);
                 MexicanLogic.getSingleInstance().setBestWaveNumber(bestWaveNumber);

@@ -29,10 +29,10 @@ public class NukeUpgrade extends AbstractUpgrade{
             public  void clicked(InputEvent event, float x, float y){
 
                 GameLogic Instance = GameLogic.getSingleInstance();
-                if(Instance.getBricks() >= UpgradeManager.getSingleInstance().getAllUpgrade()[7].getCost()) {
+                if(Instance.getBricks() >= UpgradeManager.getSingleInstance().getUpgrade(UpgradeManager.ACTIVE_NUKE).getCost()) {
                     level++;
                     GameLogic.getSingleInstance().setBricks(GameLogic.getSingleInstance().getBricks()
-                            - UpgradeManager.getSingleInstance().getAllUpgrade()[7].getCost());
+                            - UpgradeManager.getSingleInstance().getUpgrade(UpgradeManager.ACTIVE_NUKE).getCost());
                     MexicanLogic.getSingleInstance().launchNuke();
                 }else{
                     Gdx.app.log("Upgrade", "not enough bricks");

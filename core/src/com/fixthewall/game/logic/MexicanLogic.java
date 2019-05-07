@@ -95,7 +95,7 @@ public class MexicanLogic implements Serializable {
     }
 
     public void finishLoading() {
-        int numWorker = UpgradeManager.getSingleInstance().getAllUpgrade()[3].getLevel();
+        int numWorker = UpgradeManager.getSingleInstance().getUpgrade(UpgradeManager.WALL_WORKER).getLevel();
         for(int i = 0; i < numWorker; i++){
             addWorker();
         }
@@ -202,7 +202,7 @@ public class MexicanLogic implements Serializable {
 
     public void updateCashRain(Group dollarGroup) {
         if (ennemiToRemove > 0) {
-            double nbreDollar = UpgradeManager.getSingleInstance().getAllUpgrade()[5].getLevel() * 1.1;
+            double nbreDollar = UpgradeManager.getSingleInstance().getUpgrade(UpgradeManager.ACTIVE_CASH_RAIN).getLevel() * 1.1;
             if(nbreDollar<4) nbreDollar = 4;
             for(int i = 0; i < nbreDollar; i++) {
                 Dollar dol = dollarRecycler.getOne(ass);

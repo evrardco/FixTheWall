@@ -171,7 +171,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 menuUpgrade.toggle();
-                UpgradeManager.getSingleInstance().getAllUpgrade()[7].setCost(
+                UpgradeManager.getSingleInstance().getUpgrade(UpgradeManager.ACTIVE_NUKE).setCost(
                         GameLogic.getSingleInstance().getBricks()
                 );
             }

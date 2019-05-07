@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.fixthewall.game.logic.GameLogic;
+import com.fixthewall.game.upgrades.UpgradeManager;
 
 public class Hammer extends Actor {
 
@@ -47,8 +48,7 @@ public class Hammer extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, getColor().a * parentAlpha);
-        int level = GameLogic.getSingleInstance().getHammerLevel();
-        batch.draw(marteaux[level], getX(), getY(), getOriginX(), getOriginY(), getWidth(),
+        batch.draw(marteaux[getHammerTextureIndex()], getX(), getY(), getOriginX(), getOriginY(), getWidth(),
                 getHeight(), getScaleX(), getScaleY(), getRotation());
         batch.setColor(color.r, color.g, color.b, parentAlpha);
     }
@@ -74,5 +74,17 @@ public class Hammer extends Actor {
                 new TextureRegion(ass.get("Marteaux/marteau_Trump.png", Texture.class))
         };
     }
+
+    private int getHammerTextureIndex() {
+        int level = getHammerLevel();
+        if(level <= (marteaux.length - 1) * 10)
+            return level / 10;
+        return marteaux.length - 1;
+    }
+
+    private int getHammerLevel() {
+        return UpgradeManager.getSingleInstance().getUpgrade(UpgradeManager.HAMMER_BRICKS).getLevel() +
+                UpgradeManager.getSingleInstance().getUpgrade(UpgradeManager.HAMMER_LIFE).getLevel();
+        }
 
 }

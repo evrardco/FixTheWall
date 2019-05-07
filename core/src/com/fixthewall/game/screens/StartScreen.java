@@ -155,7 +155,7 @@ public class StartScreen implements Screen {
                 GameLogic.getSingleInstance().init();
                 GameLogic.getSingleInstance().setHighScore(highScore);
                 GameLogic.getSingleInstance().setCheatMode(isCheatMode);
-                UpgradeManager.getSingleInstance().init(game.ass);
+                UpgradeManager.getSingleInstance().init();
                 float bestWaveNumber = MexicanLogic.getSingleInstance().getBestWaveNumber();
                 MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);
                 MexicanLogic.getSingleInstance().setBestWaveNumber(bestWaveNumber);
@@ -237,7 +237,7 @@ public class StartScreen implements Screen {
         //We see whether we must load the saved game.
         if (!Perziztancinator.isNewGame()) Perziztancinator.load();
         if (Perziztancinator.isCorrupt() || Perziztancinator.isNewGame()) {
-            UpgradeManager.getSingleInstance().init(game.ass);
+            UpgradeManager.getSingleInstance().init();
             GameLogic.getSingleInstance().init();
             MexicanLogic.getSingleInstance().init(1.0, 1.0, 1.0, 1.0, game.ass);
             Perziztancinator.getSingleInstance().init();

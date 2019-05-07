@@ -72,7 +72,7 @@ public class Sun extends Actor {
             }
             GameLogic.getSingleInstance().setTrumpTime(GameLogic.getSingleInstance().getTrumpTime() - delta);
 
-            float timeBetweenShots = 10f - UpgradeManager.getSingleInstance().getAllUpgrade()[6].getLevel();
+            float timeBetweenShots = 10f - UpgradeManager.getSingleInstance().getUpgrade(UpgradeManager.ACTIVE_TRUMP).getLevel();
             if (timeBetweenShots < 0.25f)
                 timeBetweenShots = 0.25f;
             if (elapsedTimeLaser >= timeBetweenShots) {

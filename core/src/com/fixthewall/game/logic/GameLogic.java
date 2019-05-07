@@ -21,7 +21,6 @@ public class GameLogic implements Serializable {
     private double healingPower;
     private float trumpTime;
     private double bricksPower;
-    private int hammerLevel;
     private double score;
     private double highScore;
     transient private boolean isPaused;
@@ -51,7 +50,6 @@ public class GameLogic implements Serializable {
         health = maxHealth;
         bricks = 0;
         cheatMode = false;
-        hammerLevel = 0;// 0 correspond au premier indice de l'array d'images de marteaux.
         healingPower = 1;
         bricksPower = 1;
         score = 0.0;
@@ -164,16 +162,6 @@ public class GameLogic implements Serializable {
 
     public String getHealingPowerString() {
         return Helpers.formatBigNumbers(getHealingPower());
-    }
-
-    public void setHammerLevel(int lvl){
-        if(0<=lvl && lvl<=7){
-            this.hammerLevel=lvl;
-        }
-    }
-
-    public int getHammerLevel(){
-        return hammerLevel;
     }
 
     public boolean isMenuUpgrade() {

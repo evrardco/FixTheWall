@@ -1,7 +1,5 @@
 package com.fixthewall.game.upgrades;
 
-import com.badlogic.gdx.assets.AssetManager;
-import com.fixthewall.game.actors.Worker;
 import com.fixthewall.game.logic.MexicanLogic;
 
 public class WorkerUpgrade extends AbstractUpgrade {

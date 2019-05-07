@@ -140,9 +140,9 @@ public class Nuke extends Actor {
 
     private void resetUpgrades(){
         AbstractUpgrade[] allUpgrade = UpgradeManager.getSingleInstance().getAllUpgrade();
-        allUpgrade[2].reset(0 , 500);
-        allUpgrade[3].reset(0, 200);
-        allUpgrade[4].reset(0, 500);
+        allUpgrade[UpgradeManager.WALL_LIFE].reset(0 , 500);
+        allUpgrade[UpgradeManager.WALL_WORKER].reset(0, 200);
+        allUpgrade[UpgradeManager.WALL_WORKER_LEVEL].reset(0, 500);
         UpgradeManager.getSingleInstance().update();
     }
 

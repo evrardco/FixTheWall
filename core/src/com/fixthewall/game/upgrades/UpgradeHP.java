@@ -16,6 +16,5 @@ public class UpgradeHP extends AbstractUpgrade {
         GameLogic.getSingleInstance().setHealingPower(GameLogic.getSingleInstance().getHealingPower()+4.0);
         //double costUp = this.getCost()/20.0;
         this.setCost(this.getCost()*1.5+this.getLevel()*this.getCost()/120.0);
-        UpgradeManager.getSingleInstance().increaseLevelUpgradeHammer();
     }
 }
